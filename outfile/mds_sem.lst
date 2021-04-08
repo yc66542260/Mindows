@@ -1,0 +1,3096 @@
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 1
+
+
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 2
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 18, 4
+  11              		.file	"mds_sem.c"
+  12              		.section	.debug_abbrev,"",%progbits
+  13              	.Ldebug_abbrev0:
+  14              		.section	.debug_info,"",%progbits
+  15              	.Ldebug_info0:
+  16              		.section	.debug_line,"",%progbits
+  17              	.Ldebug_line0:
+  18 0000 4B010000 		.text
+  18      02005100 
+  18      00000201 
+  18      FB0E0D00 
+  18      01010101 
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.align	2
+  22              		.global	MDS_SemCreate
+  23              		.type	MDS_SemCreate, %function
+  24              	MDS_SemCreate:
+  25              		.fnstart
+  26              	.LFB0:
+  27              		.file 1 "../mindows/mds_sem.c"
+   1:../mindows/mds_sem.c **** 
+   2:../mindows/mds_sem.c **** #include "mindows_inner.h"
+   3:../mindows/mds_sem.c **** 
+   4:../mindows/mds_sem.c **** 
+   5:../mindows/mds_sem.c **** /***********************************************************************************
+   6:../mindows/mds_sem.c **** 函数功能: 创建一个信号量.
+   7:../mindows/mds_sem.c **** 入口参数: pstrSem: 信号量所使用的内存指针.
+   8:../mindows/mds_sem.c ****           uiSemOpt: 创建信号量所用的选项.
+   9:../mindows/mds_sem.c ****                     优先级:
+  10:../mindows/mds_sem.c ****                     SEMPRIO: 信号量队列采用优先级队列, 释放信号量时先激活pend任务中
+  11:../mindows/mds_sem.c ****                              优先级最高的任务.
+  12:../mindows/mds_sem.c ****                     SEMFIFO: 信号量队列采用先进先出队列, 释放信号量时先激活最先被
+  13:../mindows/mds_sem.c ****                              pend的任务.
+  14:../mindows/mds_sem.c ****                     信号量类型:
+  15:../mindows/mds_sem.c ****                     SEMBIN: 创建二进制信号量.
+  16:../mindows/mds_sem.c ****                     SEMCNT: 创建计数信号量.
+  17:../mindows/mds_sem.c ****           uiInitVal: 信号量的初始值.
+  18:../mindows/mds_sem.c ****                      SEMEMPTY: 信号量为空状态, 不可获取.
+  19:../mindows/mds_sem.c ****                      SEMFULL: 信号量为满状态, 可获取.
+  20:../mindows/mds_sem.c **** 返 回 值: RTN_SUCD: 创建信号量成功.
+  21:../mindows/mds_sem.c ****           RTN_FAIL: 创建信号量失败.
+  22:../mindows/mds_sem.c **** ***********************************************************************************/
+  23:../mindows/mds_sem.c **** U32 MDS_SemCreate(M_SEM* pstrSem, U32 uiSemOpt, U32 uiInitVal)
+  24:../mindows/mds_sem.c **** {
+  28              		.loc 1 24 0
+  29              		.cfi_startproc
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 2
+
+
+  30              		@ Function supports interworking.
+  31              		@ args = 0, pretend = 0, frame = 8
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33              	.LVL0:
+  34              		.movsp ip
+  35 0000 0DC0A0E1 		mov	ip, sp
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_register 12
+  38 0004 10D82DE9 		stmfd	sp!, {r4, fp, ip, lr, pc}
+  39              		.pad #4
+  40              		.save {r4, fp, ip, lr}
+  41              		.setfp fp, ip, #-4
+  42 0008 04B04CE2 		sub	fp, ip, #4
+  43              		.cfi_offset 14, -8
+  44              		.cfi_offset 13, -12
+  45              		.cfi_offset 11, -16
+  46              		.cfi_offset 4, -20
+  47              	.LCFI1:
+  48              		.cfi_def_cfa 11, 4
+  49              		.pad #12
+  50 000c 0CD04DE2 		sub	sp, sp, #12
+  25:../mindows/mds_sem.c ****     /* 入口参数检查 */
+  26:../mindows/mds_sem.c ****     if(NULL == pstrSem)
+  51              		.loc 1 26 0
+  52 0010 004050E2 		subs	r4, r0, #0
+  53              		.loc 1 26 0
+  54 0014 0700000A 		beq	.L7
+  27:../mindows/mds_sem.c ****     {
+  28:../mindows/mds_sem.c ****         return RTN_FAIL;
+  29:../mindows/mds_sem.c ****     }
+  30:../mindows/mds_sem.c **** 
+  31:../mindows/mds_sem.c ****     /* 信号量选项检查 */
+  32:../mindows/mds_sem.c ****     if(((SEMBIN != (SEMTYPEMASK & uiSemOpt))
+  55              		.loc 1 32 0
+  56 0018 0C3001E2 		and	r3, r1, #12
+  57 001c 080053E3 		cmp	r3, #8
+  58 0020 04005313 		cmpne	r3, #4
+  59 0024 0300001A 		bne	.L7
+  33:../mindows/mds_sem.c ****         && (SEMCNT != (SEMTYPEMASK & uiSemOpt)))
+  34:../mindows/mds_sem.c ****        || ((SEMFIFO != (SEMSCHEDOPTMASK & uiSemOpt))
+  60              		.loc 1 34 0
+  61 0028 03C001E2 		and	ip, r1, #3
+  35:../mindows/mds_sem.c ****            && (SEMPRIO != (SEMSCHEDOPTMASK & uiSemOpt))))
+  62              		.loc 1 35 0
+  63 002c 01004CE2 		sub	r0, ip, #1
+  64              	.LVL1:
+  34:../mindows/mds_sem.c ****        || ((SEMFIFO != (SEMSCHEDOPTMASK & uiSemOpt))
+  65              		.loc 1 34 0
+  66 0030 010050E3 		cmp	r0, #1
+  67 0034 0300009A 		bls	.L9
+  68              	.L7:
+  36:../mindows/mds_sem.c ****     {
+  37:../mindows/mds_sem.c ****         return RTN_FAIL;
+  38:../mindows/mds_sem.c ****     }
+  39:../mindows/mds_sem.c **** 
+  40:../mindows/mds_sem.c ****     /* 二进制信号量初始值只能是空或者满 */
+  41:../mindows/mds_sem.c ****     if(SEMBIN == (SEMTYPEMASK & uiSemOpt))
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 3
+
+
+  42:../mindows/mds_sem.c ****     {
+  43:../mindows/mds_sem.c ****         if((SEMEMPTY != uiInitVal) && (SEMFULL != uiInitVal))
+  44:../mindows/mds_sem.c ****         {
+  45:../mindows/mds_sem.c ****             return RTN_FAIL;
+  69              		.loc 1 45 0
+  70 0038 0100A0E3 		mov	r0, #1
+  71              	.LVL2:
+  72              	.L2:
+  46:../mindows/mds_sem.c ****         }
+  47:../mindows/mds_sem.c ****     }
+  48:../mindows/mds_sem.c **** 
+  49:../mindows/mds_sem.c ****     /* 初始化信号量调度表 */
+  50:../mindows/mds_sem.c ****     MDS_TaskSchedTabInit(&pstrSem->strSemTab);
+  51:../mindows/mds_sem.c **** 
+  52:../mindows/mds_sem.c ****     /* 初始化信号量初始值 */
+  53:../mindows/mds_sem.c ****     pstrSem->uiCounter = uiInitVal;
+  54:../mindows/mds_sem.c **** 
+  55:../mindows/mds_sem.c ****     /* 初始化信号量参数 */
+  56:../mindows/mds_sem.c ****     pstrSem->uiSemOpt = uiSemOpt;
+  57:../mindows/mds_sem.c **** 
+  58:../mindows/mds_sem.c ****     return RTN_SUCD;
+  59:../mindows/mds_sem.c **** }
+  73              		.loc 1 59 0
+  74 003c 10D04BE2 		sub	sp, fp, #16
+  75 0040 10689DE8 		ldmfd	sp, {r4, fp, sp, lr}
+  76 0044 1EFF2FE1 		bx	lr
+  77              	.LVL3:
+  78              	.L9:
+  41:../mindows/mds_sem.c ****     if(SEMBIN == (SEMTYPEMASK & uiSemOpt))
+  79              		.loc 1 41 0
+  80 0048 040053E3 		cmp	r3, #4
+  81 004c 0900000A 		beq	.L10
+  82              	.L3:
+  50:../mindows/mds_sem.c ****     MDS_TaskSchedTabInit(&pstrSem->strSemTab);
+  83              		.loc 1 50 0
+  84 0050 0400A0E1 		mov	r0, r4
+  85 0054 18100BE5 		str	r1, [fp, #-24]
+  86 0058 1C200BE5 		str	r2, [fp, #-28]
+  87 005c FEFFFFEB 		bl	MDS_TaskSchedTabInit
+  88              	.LVL4:
+  53:../mindows/mds_sem.c ****     pstrSem->uiCounter = uiInitVal;
+  89              		.loc 1 53 0
+  90 0060 1C201BE5 		ldr	r2, [fp, #-28]
+  56:../mindows/mds_sem.c ****     pstrSem->uiSemOpt = uiSemOpt;
+  91              		.loc 1 56 0
+  92 0064 18101BE5 		ldr	r1, [fp, #-24]
+  53:../mindows/mds_sem.c ****     pstrSem->uiCounter = uiInitVal;
+  93              		.loc 1 53 0
+  94 0068 442084E5 		str	r2, [r4, #68]
+  56:../mindows/mds_sem.c ****     pstrSem->uiSemOpt = uiSemOpt;
+  95              		.loc 1 56 0
+  96 006c 481084E5 		str	r1, [r4, #72]
+  58:../mindows/mds_sem.c ****     return RTN_SUCD;
+  97              		.loc 1 58 0
+  98 0070 0000A0E3 		mov	r0, #0
+  99 0074 F0FFFFEA 		b	.L2
+ 100              	.LVL5:
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 4
+
+
+ 101              	.L10:
+  43:../mindows/mds_sem.c ****         if((SEMEMPTY != uiInitVal) && (SEMFULL != uiInitVal))
+ 102              		.loc 1 43 0
+ 103 0078 013042E2 		sub	r3, r2, #1
+ 104 007c 030073E3 		cmn	r3, #3
+ 105 0080 F2FFFF8A 		bhi	.L3
+ 106 0084 EBFFFFEA 		b	.L7
+ 107              		.cfi_endproc
+ 108              	.LFE0:
+ 109              		.fnend
+ 110              		.size	MDS_SemCreate, .-MDS_SemCreate
+ 111              		.align	2
+ 112              		.global	MDS_SemTake
+ 113              		.type	MDS_SemTake, %function
+ 114              	MDS_SemTake:
+ 115              		.fnstart
+ 116              	.LFB1:
+  60:../mindows/mds_sem.c **** 
+  61:../mindows/mds_sem.c **** /***********************************************************************************
+  62:../mindows/mds_sem.c **** 函数功能: 获取一个信号量, 当信号量为满时可获取, 当信号量为空时无法获取, 可能会使任务
+  63:../mindows/mds_sem.c ****           变为pend状态, 发生任务切换.
+  64:../mindows/mds_sem.c **** 入口参数: pstrSem: 要获取的信号量指针.
+  65:../mindows/mds_sem.c ****           uiDelayTick: 获取信号量等待的时间, 单位: tick.
+  66:../mindows/mds_sem.c ****                        SEMNOWAIT: 不等待, 无论是否获取到信号量都继续执行该任务.
+  67:../mindows/mds_sem.c ****                        SEMWAITFEV: 永久等待, 若获取不到信号量则该任务切换为pend状态
+  68:../mindows/mds_sem.c ****                                    一直等待.
+  69:../mindows/mds_sem.c ****                        其它: 若在该时间内获取到信号量则结束该任务的pend状态, 返回
+  70:../mindows/mds_sem.c ****                              RTN_SUCD, 若在该时间内获取不到信号量则结束该任务的pend
+  71:../mindows/mds_sem.c ****                              状态, 返回RTN_SMTKTO.
+  72:../mindows/mds_sem.c **** 返 回 值: RTN_SUCD: 在延迟时间内获取到信号量.
+  73:../mindows/mds_sem.c ****           RTN_FAIL: 获取信号量失败.
+  74:../mindows/mds_sem.c ****           RTN_SMTKTO: 信号量时间耗尽, 超时返回.
+  75:../mindows/mds_sem.c ****           RTN_SMTKRT: 任务延迟状态被中断, 没有获取到信号量.
+  76:../mindows/mds_sem.c ****           RTN_SMTKDL: 信号量被删除.
+  77:../mindows/mds_sem.c **** ***********************************************************************************/
+  78:../mindows/mds_sem.c **** U32 MDS_SemTake(M_SEM* pstrSem, U32 uiDelayTick)
+  79:../mindows/mds_sem.c **** {
+ 117              		.loc 1 79 0
+ 118              		.cfi_startproc
+ 119              		@ Function supports interworking.
+ 120              		@ args = 0, pretend = 0, frame = 0
+ 121              		@ frame_needed = 1, uses_anonymous_args = 0
+ 122              	.LVL6:
+ 123              		.movsp ip
+ 124 0088 0DC0A0E1 		mov	ip, sp
+ 125              	.LCFI2:
+ 126              		.cfi_def_cfa_register 12
+ 127 008c 78D82DE9 		stmfd	sp!, {r3, r4, r5, r6, fp, ip, lr, pc}
+ 128              		.pad #4
+ 129              		.save {r3, r4, r5, r6, fp, ip, lr}
+  80:../mindows/mds_sem.c ****     /* 入口参数检查 */
+  81:../mindows/mds_sem.c ****     if(NULL == pstrSem)
+ 130              		.loc 1 81 0
+ 131 0090 004050E2 		subs	r4, r0, #0
+ 132              		.cfi_offset 14, -8
+ 133              		.cfi_offset 13, -12
+ 134              		.cfi_offset 11, -16
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 5
+
+
+ 135              		.cfi_offset 6, -20
+ 136              		.cfi_offset 5, -24
+ 137              		.cfi_offset 4, -28
+ 138              		.cfi_offset 3, -32
+  79:../mindows/mds_sem.c **** {
+ 139              		.loc 1 79 0
+ 140              		.setfp fp, ip, #-4
+ 141 0094 04B04CE2 		sub	fp, ip, #4
+ 142              	.LCFI3:
+ 143              		.cfi_def_cfa 11, 4
+  79:../mindows/mds_sem.c **** {
+ 144              		.loc 1 79 0
+ 145 0098 0160A0E1 		mov	r6, r1
+  82:../mindows/mds_sem.c ****     {
+  83:../mindows/mds_sem.c ****         return RTN_FAIL;
+ 146              		.loc 1 83 0
+ 147 009c 0100A003 		moveq	r0, #1
+ 148              	.LVL7:
+  81:../mindows/mds_sem.c ****     if(NULL == pstrSem)
+ 149              		.loc 1 81 0
+ 150 00a0 0E00000A 		beq	.L12
+  84:../mindows/mds_sem.c ****     }
+  85:../mindows/mds_sem.c **** 
+  86:../mindows/mds_sem.c ****     (void)MDS_IntLock();
+  87:../mindows/mds_sem.c **** 
+  88:../mindows/mds_sem.c ****     /* 更新与当前任务相关的信号量 */
+  89:../mindows/mds_sem.c ****     gpstrCurTcb->pstrSem = pstrSem;
+ 151              		.loc 1 89 0
+ 152 00a4 E4509FE5 		ldr	r5, .L30
+  86:../mindows/mds_sem.c ****     (void)MDS_IntLock();
+ 153              		.loc 1 86 0
+ 154 00a8 FEFFFFEB 		bl	MDS_IntLock
+ 155              	.LVL8:
+ 156              		.loc 1 89 0
+ 157 00ac 003095E5 		ldr	r3, [r5, #0]
+  90:../mindows/mds_sem.c **** 
+  91:../mindows/mds_sem.c ****     /* 获取信号量时不等待时间 */
+  92:../mindows/mds_sem.c ****     if(SEMNOWAIT == uiDelayTick)
+ 158              		.loc 1 92 0
+ 159 00b0 000056E3 		cmp	r6, #0
+  89:../mindows/mds_sem.c ****     gpstrCurTcb->pstrSem = pstrSem;
+ 160              		.loc 1 89 0
+ 161 00b4 5C4083E5 		str	r4, [r3, #92]
+ 162              		.loc 1 92 0
+ 163 00b8 0B00001A 		bne	.L13
+  93:../mindows/mds_sem.c ****     {
+  94:../mindows/mds_sem.c ****         /* 二进制信号量 */
+  95:../mindows/mds_sem.c ****         if(SEMBIN == (SEMTYPEMASK & pstrSem->uiSemOpt))
+ 164              		.loc 1 95 0
+ 165 00bc 481094E5 		ldr	r1, [r4, #72]
+ 166 00c0 0C0001E2 		and	r0, r1, #12
+ 167 00c4 040050E3 		cmp	r0, #4
+ 168 00c8 2300000A 		beq	.L26
+  96:../mindows/mds_sem.c ****         {
+  97:../mindows/mds_sem.c ****             /* 信号量为满, 可获取到信号量 */
+  98:../mindows/mds_sem.c ****             if(SEMFULL == pstrSem->uiCounter)
+  99:../mindows/mds_sem.c ****             {
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 6
+
+
+ 100:../mindows/mds_sem.c ****                 /* 获取到信号量后将信号量置为空 */
+ 101:../mindows/mds_sem.c ****                 pstrSem->uiCounter = SEMEMPTY;
+ 102:../mindows/mds_sem.c **** 
+ 103:../mindows/mds_sem.c ****                 (void)MDS_IntUnlock();
+ 104:../mindows/mds_sem.c **** 
+ 105:../mindows/mds_sem.c ****                 return RTN_SUCD;
+ 106:../mindows/mds_sem.c ****             }
+ 107:../mindows/mds_sem.c ****             else /* 信号量为空, 无法获取到信号量 */
+ 108:../mindows/mds_sem.c ****             {
+ 109:../mindows/mds_sem.c ****                 (void)MDS_IntUnlock();
+ 110:../mindows/mds_sem.c **** 
+ 111:../mindows/mds_sem.c ****                 return RTN_SMTKRT;
+ 112:../mindows/mds_sem.c ****             }
+ 113:../mindows/mds_sem.c ****         }
+ 114:../mindows/mds_sem.c ****         else /* 计数信号量 */
+ 115:../mindows/mds_sem.c ****         {
+ 116:../mindows/mds_sem.c ****             /* 信号量不为空, 可获取到信号量 */
+ 117:../mindows/mds_sem.c ****             if(SEMEMPTY != pstrSem->uiCounter)
+ 169              		.loc 1 117 0
+ 170 00cc 443094E5 		ldr	r3, [r4, #68]
+ 171 00d0 000053E3 		cmp	r3, #0
+ 172 00d4 1B00001A 		bne	.L27
+ 173              	.L16:
+ 118:../mindows/mds_sem.c ****             {
+ 119:../mindows/mds_sem.c ****                 /* 获取到信号量后将信号量计数值-1 */
+ 120:../mindows/mds_sem.c ****                 pstrSem->uiCounter--;
+ 121:../mindows/mds_sem.c **** 
+ 122:../mindows/mds_sem.c ****                 (void)MDS_IntUnlock();
+ 123:../mindows/mds_sem.c **** 
+ 124:../mindows/mds_sem.c ****                 return RTN_SUCD;
+ 125:../mindows/mds_sem.c ****             }
+ 126:../mindows/mds_sem.c ****             else /* 信号量为空, 无法获取到信号量 */
+ 127:../mindows/mds_sem.c ****             {
+ 128:../mindows/mds_sem.c ****                 (void)MDS_IntUnlock();
+ 174              		.loc 1 128 0
+ 175 00d8 FEFFFFEB 		bl	MDS_IntUnlock
+ 129:../mindows/mds_sem.c **** 
+ 130:../mindows/mds_sem.c ****                 return RTN_SMTKRT;
+ 176              		.loc 1 130 0
+ 177 00dc 0300A0E3 		mov	r0, #3
+ 178              	.LVL9:
+ 179              	.L12:
+ 131:../mindows/mds_sem.c ****             }
+ 132:../mindows/mds_sem.c ****         }
+ 133:../mindows/mds_sem.c ****     }
+ 134:../mindows/mds_sem.c ****     else /* 获取信号量时需要等待时间 */
+ 135:../mindows/mds_sem.c ****     {
+ 136:../mindows/mds_sem.c ****         /* 二进制信号量 */
+ 137:../mindows/mds_sem.c ****         if(SEMBIN == (SEMTYPEMASK & pstrSem->uiSemOpt))
+ 138:../mindows/mds_sem.c ****         {
+ 139:../mindows/mds_sem.c ****             /* 信号量为满, 可获取到信号量 */
+ 140:../mindows/mds_sem.c ****             if(SEMFULL == pstrSem->uiCounter)
+ 141:../mindows/mds_sem.c ****             {
+ 142:../mindows/mds_sem.c ****                 /* 获取到信号量后将信号量置为空 */
+ 143:../mindows/mds_sem.c ****                 pstrSem->uiCounter = SEMEMPTY;
+ 144:../mindows/mds_sem.c **** 
+ 145:../mindows/mds_sem.c ****                 (void)MDS_IntUnlock();
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 7
+
+
+ 146:../mindows/mds_sem.c **** 
+ 147:../mindows/mds_sem.c ****                 return RTN_SUCD;
+ 148:../mindows/mds_sem.c ****             }
+ 149:../mindows/mds_sem.c ****             else /* 信号量为空, 无法获取到信号量, 需要切换任务 */
+ 150:../mindows/mds_sem.c ****             {
+ 151:../mindows/mds_sem.c ****                 /* 将任务置为pend状态 */
+ 152:../mindows/mds_sem.c ****                 if(RTN_FAIL == MDS_TaskPend(pstrSem, uiDelayTick))
+ 153:../mindows/mds_sem.c ****                 {
+ 154:../mindows/mds_sem.c ****                     (void)MDS_IntUnlock();
+ 155:../mindows/mds_sem.c **** 
+ 156:../mindows/mds_sem.c ****                     /* 任务pend失败 */
+ 157:../mindows/mds_sem.c ****                     return RTN_FAIL;
+ 158:../mindows/mds_sem.c ****                 }
+ 159:../mindows/mds_sem.c **** 
+ 160:../mindows/mds_sem.c ****                 (void)MDS_IntUnlock();
+ 161:../mindows/mds_sem.c **** 
+ 162:../mindows/mds_sem.c ****                 /* 使用软中断调度任务 */
+ 163:../mindows/mds_sem.c ****                 MDS_TaskSwiSched();
+ 164:../mindows/mds_sem.c **** 
+ 165:../mindows/mds_sem.c ****                 /* 任务pend返回值, 该值在任务pend状态结束时被保存在uiDelayTick中 */
+ 166:../mindows/mds_sem.c ****                 return gpstrCurTcb->strTaskOpt.uiDelayTick;
+ 167:../mindows/mds_sem.c ****             }
+ 168:../mindows/mds_sem.c ****         }
+ 169:../mindows/mds_sem.c ****         else /* 计数信号量 */
+ 170:../mindows/mds_sem.c ****         {
+ 171:../mindows/mds_sem.c ****             /* 信号量不为空, 可获取到信号量 */
+ 172:../mindows/mds_sem.c ****             if(SEMEMPTY != pstrSem->uiCounter)
+ 173:../mindows/mds_sem.c ****             {
+ 174:../mindows/mds_sem.c ****                 /* 获取到信号量后将信号量计数值-1 */
+ 175:../mindows/mds_sem.c ****                 pstrSem->uiCounter--;
+ 176:../mindows/mds_sem.c **** 
+ 177:../mindows/mds_sem.c ****                 (void)MDS_IntUnlock();
+ 178:../mindows/mds_sem.c **** 
+ 179:../mindows/mds_sem.c ****                 return RTN_SUCD;
+ 180:../mindows/mds_sem.c ****             }
+ 181:../mindows/mds_sem.c ****             else /* 信号量为空, 无法获取到信号量, 需要切换任务 */
+ 182:../mindows/mds_sem.c ****             {
+ 183:../mindows/mds_sem.c ****                 /* 将任务置为pend状态 */
+ 184:../mindows/mds_sem.c ****                 if(RTN_FAIL == MDS_TaskPend(pstrSem, uiDelayTick))
+ 185:../mindows/mds_sem.c ****                 {
+ 186:../mindows/mds_sem.c ****                     (void)MDS_IntUnlock();
+ 187:../mindows/mds_sem.c **** 
+ 188:../mindows/mds_sem.c ****                     /* 任务pend失败 */
+ 189:../mindows/mds_sem.c ****                     return RTN_FAIL;
+ 190:../mindows/mds_sem.c ****                 }
+ 191:../mindows/mds_sem.c **** 
+ 192:../mindows/mds_sem.c ****                 (void)MDS_IntUnlock();
+ 193:../mindows/mds_sem.c **** 
+ 194:../mindows/mds_sem.c ****                 /* 使用软中断调度任务 */
+ 195:../mindows/mds_sem.c ****                 MDS_TaskSwiSched();
+ 196:../mindows/mds_sem.c **** 
+ 197:../mindows/mds_sem.c ****                 /* 任务pend返回值, 该值在任务pend状态结束时被保存在uiDelayTick中 */
+ 198:../mindows/mds_sem.c ****                 return gpstrCurTcb->strTaskOpt.uiDelayTick;
+ 199:../mindows/mds_sem.c ****             }
+ 200:../mindows/mds_sem.c ****         }
+ 201:../mindows/mds_sem.c ****     }
+ 202:../mindows/mds_sem.c **** }
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 8
+
+
+ 180              		.loc 1 202 0
+ 181 00e0 1CD04BE2 		sub	sp, fp, #28
+ 182 00e4 78689DE8 		ldmfd	sp, {r3, r4, r5, r6, fp, sp, lr}
+ 183 00e8 1EFF2FE1 		bx	lr
+ 184              	.LVL10:
+ 185              	.L13:
+ 137:../mindows/mds_sem.c ****         if(SEMBIN == (SEMTYPEMASK & pstrSem->uiSemOpt))
+ 186              		.loc 1 137 0
+ 187 00ec 483094E5 		ldr	r3, [r4, #72]
+ 188 00f0 0CE003E2 		and	lr, r3, #12
+ 189 00f4 04005EE3 		cmp	lr, #4
+ 190 00f8 1E00000A 		beq	.L28
+ 172:../mindows/mds_sem.c ****             if(SEMEMPTY != pstrSem->uiCounter)
+ 191              		.loc 1 172 0
+ 192 00fc 443094E5 		ldr	r3, [r4, #68]
+ 193 0100 000053E3 		cmp	r3, #0
+ 194 0104 0A00001A 		bne	.L29
+ 195              	.L20:
+ 184:../mindows/mds_sem.c ****                 if(RTN_FAIL == MDS_TaskPend(pstrSem, uiDelayTick))
+ 196              		.loc 1 184 0
+ 197 0108 0610A0E1 		mov	r1, r6
+ 198 010c 0400A0E1 		mov	r0, r4
+ 199 0110 FEFFFFEB 		bl	MDS_TaskPend
+ 200 0114 010050E3 		cmp	r0, #1
+ 201 0118 0060A0E1 		mov	r6, r0
+ 202              	.LVL11:
+ 203 011c 1200000A 		beq	.L24
+ 192:../mindows/mds_sem.c ****                 (void)MDS_IntUnlock();
+ 204              		.loc 1 192 0
+ 205 0120 FEFFFFEB 		bl	MDS_IntUnlock
+ 195:../mindows/mds_sem.c ****                 MDS_TaskSwiSched();
+ 206              		.loc 1 195 0
+ 207 0124 FEFFFFEB 		bl	MDS_TaskSwiSched
+ 198:../mindows/mds_sem.c ****                 return gpstrCurTcb->strTaskOpt.uiDelayTick;
+ 208              		.loc 1 198 0
+ 209 0128 002095E5 		ldr	r2, [r5, #0]
+ 210 012c 700092E5 		ldr	r0, [r2, #112]
+ 211 0130 EAFFFFEA 		b	.L12
+ 212              	.LVL12:
+ 213              	.L29:
+ 175:../mindows/mds_sem.c ****                 pstrSem->uiCounter--;
+ 214              		.loc 1 175 0
+ 215 0134 011043E2 		sub	r1, r3, #1
+ 216 0138 441084E5 		str	r1, [r4, #68]
+ 177:../mindows/mds_sem.c ****                 (void)MDS_IntUnlock();
+ 217              		.loc 1 177 0
+ 218 013c FEFFFFEB 		bl	MDS_IntUnlock
+ 179:../mindows/mds_sem.c ****                 return RTN_SUCD;
+ 219              		.loc 1 179 0
+ 220 0140 0000A0E3 		mov	r0, #0
+ 221 0144 E5FFFFEA 		b	.L12
+ 222              	.L27:
+ 120:../mindows/mds_sem.c ****                 pstrSem->uiCounter--;
+ 223              		.loc 1 120 0
+ 224 0148 01C043E2 		sub	ip, r3, #1
+ 225 014c 44C084E5 		str	ip, [r4, #68]
+ 122:../mindows/mds_sem.c ****                 (void)MDS_IntUnlock();
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 9
+
+
+ 226              		.loc 1 122 0
+ 227 0150 FEFFFFEB 		bl	MDS_IntUnlock
+ 124:../mindows/mds_sem.c ****                 return RTN_SUCD;
+ 228              		.loc 1 124 0
+ 229 0154 0600A0E1 		mov	r0, r6
+ 230 0158 E0FFFFEA 		b	.L12
+ 231              	.L26:
+  98:../mindows/mds_sem.c ****             if(SEMFULL == pstrSem->uiCounter)
+ 232              		.loc 1 98 0
+ 233 015c 442094E5 		ldr	r2, [r4, #68]
+ 234 0160 010072E3 		cmn	r2, #1
+ 235 0164 DBFFFF1A 		bne	.L16
+ 143:../mindows/mds_sem.c ****                 pstrSem->uiCounter = SEMEMPTY;
+ 236              		.loc 1 143 0
+ 237 0168 446084E5 		str	r6, [r4, #68]
+ 238              	.LVL13:
+ 239              	.L24:
+ 145:../mindows/mds_sem.c ****                 (void)MDS_IntUnlock();
+ 240              		.loc 1 145 0
+ 241 016c FEFFFFEB 		bl	MDS_IntUnlock
+ 147:../mindows/mds_sem.c ****                 return RTN_SUCD;
+ 242              		.loc 1 147 0
+ 243 0170 0600A0E1 		mov	r0, r6
+ 244 0174 D9FFFFEA 		b	.L12
+ 245              	.LVL14:
+ 246              	.L28:
+ 140:../mindows/mds_sem.c ****             if(SEMFULL == pstrSem->uiCounter)
+ 247              		.loc 1 140 0
+ 248 0178 440094E5 		ldr	r0, [r4, #68]
+ 249 017c 010070E3 		cmn	r0, #1
+ 250 0180 E0FFFF1A 		bne	.L20
+ 143:../mindows/mds_sem.c ****                 pstrSem->uiCounter = SEMEMPTY;
+ 251              		.loc 1 143 0
+ 252 0184 0060A0E3 		mov	r6, #0
+ 253              	.LVL15:
+ 254 0188 446084E5 		str	r6, [r4, #68]
+ 255 018c F6FFFFEA 		b	.L24
+ 256              	.L31:
+ 257              		.align	2
+ 258              	.L30:
+ 259 0190 00000000 		.word	gpstrCurTcb
+ 260              		.cfi_endproc
+ 261              	.LFE1:
+ 262              		.fnend
+ 263              		.size	MDS_SemTake, .-MDS_SemTake
+ 264              		.align	2
+ 265              		.global	MDS_SemGive
+ 266              		.type	MDS_SemGive, %function
+ 267              	MDS_SemGive:
+ 268              		.fnstart
+ 269              	.LFB2:
+ 203:../mindows/mds_sem.c **** 
+ 204:../mindows/mds_sem.c **** /***********************************************************************************
+ 205:../mindows/mds_sem.c **** 函数功能: 释放一个信号量, 当信号量为满时任务不受影响, 当信号量为空时, 若信号量阻塞了
+ 206:../mindows/mds_sem.c ****           任务则将任务置为ready态, 若信号量没有阻塞任务则将信号量置为满.
+ 207:../mindows/mds_sem.c **** 入口参数: pstrSem: 要释放的信号量指针.
+ 208:../mindows/mds_sem.c **** 返 回 值: RTN_SUCD: 释放信号量成功.
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 10
+
+
+ 209:../mindows/mds_sem.c ****           RTN_FAIL: 释放信号量失败.
+ 210:../mindows/mds_sem.c **** ***********************************************************************************/
+ 211:../mindows/mds_sem.c **** U32 MDS_SemGive(M_SEM* pstrSem)
+ 212:../mindows/mds_sem.c **** {
+ 270              		.loc 1 212 0
+ 271              		.cfi_startproc
+ 272              		@ Function supports interworking.
+ 273              		@ args = 0, pretend = 0, frame = 0
+ 274              		@ frame_needed = 1, uses_anonymous_args = 0
+ 275              	.LVL16:
+ 276              		.movsp ip
+ 277 0194 0DC0A0E1 		mov	ip, sp
+ 278              	.LCFI4:
+ 279              		.cfi_def_cfa_register 12
+ 280 0198 30D82DE9 		stmfd	sp!, {r4, r5, fp, ip, lr, pc}
+ 281              		.pad #4
+ 282              		.save {r4, r5, fp, ip, lr}
+ 213:../mindows/mds_sem.c ****     M_TCB* pstrTcb;
+ 214:../mindows/mds_sem.c ****     M_CHAIN* pstrChain;
+ 215:../mindows/mds_sem.c ****     M_CHAIN* pstrNode;
+ 216:../mindows/mds_sem.c ****     M_PRIOFLAG* pstrPrioFlag;
+ 217:../mindows/mds_sem.c ****     U32 uiRtn;
+ 218:../mindows/mds_sem.c ****     U8 ucTaskPrio;
+ 219:../mindows/mds_sem.c **** 
+ 220:../mindows/mds_sem.c ****     /* 入口参数检查 */
+ 221:../mindows/mds_sem.c ****     if(NULL == pstrSem)
+ 283              		.loc 1 221 0
+ 284 019c 005050E2 		subs	r5, r0, #0
+ 285              		.cfi_offset 14, -8
+ 286              		.cfi_offset 13, -12
+ 287              		.cfi_offset 11, -16
+ 288              		.cfi_offset 5, -20
+ 289              		.cfi_offset 4, -24
+ 212:../mindows/mds_sem.c **** {
+ 290              		.loc 1 212 0
+ 291              		.setfp fp, ip, #-4
+ 292 01a0 04B04CE2 		sub	fp, ip, #4
+ 293              	.LCFI5:
+ 294              		.cfi_def_cfa 11, 4
+ 222:../mindows/mds_sem.c ****     {
+ 223:../mindows/mds_sem.c ****         return RTN_FAIL;
+ 295              		.loc 1 223 0
+ 296 01a4 0150A003 		moveq	r5, #1
+ 221:../mindows/mds_sem.c ****     if(NULL == pstrSem)
+ 297              		.loc 1 221 0
+ 298 01a8 0900000A 		beq	.L33
+ 299              	.LVL17:
+ 224:../mindows/mds_sem.c ****     }
+ 225:../mindows/mds_sem.c **** 
+ 226:../mindows/mds_sem.c ****     uiRtn = RTN_SUCD;
+ 227:../mindows/mds_sem.c **** 
+ 228:../mindows/mds_sem.c ****     (void)MDS_IntLock();
+ 300              		.loc 1 228 0
+ 301 01ac FEFFFFEB 		bl	MDS_IntLock
+ 302              	.LVL18:
+ 229:../mindows/mds_sem.c **** 
+ 230:../mindows/mds_sem.c ****     /* 信号量为空 */
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 11
+
+
+ 231:../mindows/mds_sem.c ****     if(SEMEMPTY == pstrSem->uiCounter)
+ 303              		.loc 1 231 0
+ 304 01b0 443095E5 		ldr	r3, [r5, #68]
+ 305 01b4 000053E3 		cmp	r3, #0
+ 306 01b8 0900000A 		beq	.L42
+ 232:../mindows/mds_sem.c ****     {
+ 233:../mindows/mds_sem.c ****         /* 在被该信号量阻塞的任务中获取需要释放的任务 */
+ 234:../mindows/mds_sem.c ****         pstrTcb = MDS_SemGetActiveTask(pstrSem);
+ 235:../mindows/mds_sem.c **** 
+ 236:../mindows/mds_sem.c ****         /* 有阻塞的任务, 释放任务 */
+ 237:../mindows/mds_sem.c ****         if(NULL != pstrTcb)
+ 238:../mindows/mds_sem.c ****         {
+ 239:../mindows/mds_sem.c ****             /* 从信号量调度表拆除该任务 */
+ 240:../mindows/mds_sem.c ****             (void)MDS_TaskDelFromSemTab(pstrTcb);
+ 241:../mindows/mds_sem.c **** 
+ 242:../mindows/mds_sem.c ****             /* 任务在delay表则从delay表拆除 */
+ 243:../mindows/mds_sem.c ****             if(DELAYQUEFLAG == (pstrTcb->uiTaskFlag & DELAYQUEFLAG))
+ 244:../mindows/mds_sem.c ****             {
+ 245:../mindows/mds_sem.c ****                 pstrNode = &pstrTcb->strDelayQue.strQueHead;
+ 246:../mindows/mds_sem.c ****                 (void)MDS_ChainCurNodeDelete(&gstrDelayTab, pstrNode);
+ 247:../mindows/mds_sem.c **** 
+ 248:../mindows/mds_sem.c ****                 /* 置任务不在delay表标志 */
+ 249:../mindows/mds_sem.c ****                 pstrTcb->uiTaskFlag &= (~((U32)DELAYQUEFLAG));
+ 250:../mindows/mds_sem.c ****             }
+ 251:../mindows/mds_sem.c **** 
+ 252:../mindows/mds_sem.c ****             /* 清除任务的pend状态 */
+ 253:../mindows/mds_sem.c ****             pstrTcb->strTaskOpt.ucTaskSta &= ~((U8)TASKPEND);
+ 254:../mindows/mds_sem.c **** 
+ 255:../mindows/mds_sem.c ****             /* 借用uiDelayTick变量保存pend任务的返回值 */
+ 256:../mindows/mds_sem.c ****             pstrTcb->strTaskOpt.uiDelayTick = RTN_SUCD;
+ 257:../mindows/mds_sem.c **** 
+ 258:../mindows/mds_sem.c ****             /* 将该任务添加到ready表中 */
+ 259:../mindows/mds_sem.c ****             pstrNode = &pstrTcb->strTcbQue.strQueHead;
+ 260:../mindows/mds_sem.c ****             ucTaskPrio = pstrTcb->ucTaskPrio;
+ 261:../mindows/mds_sem.c ****             pstrChain = &gstrReadyTab.astrChain[ucTaskPrio];
+ 262:../mindows/mds_sem.c ****             pstrPrioFlag = &gstrReadyTab.strFlag;
+ 263:../mindows/mds_sem.c **** 
+ 264:../mindows/mds_sem.c ****             MDS_TaskAddToSchedTab(pstrChain, pstrNode, pstrPrioFlag, ucTaskPrio);
+ 265:../mindows/mds_sem.c **** 
+ 266:../mindows/mds_sem.c ****             /* 增加任务的ready状态 */
+ 267:../mindows/mds_sem.c ****             pstrTcb->strTaskOpt.ucTaskSta |= TASKREADY;
+ 268:../mindows/mds_sem.c **** 
+ 269:../mindows/mds_sem.c ****             (void)MDS_IntUnlock();
+ 270:../mindows/mds_sem.c **** 
+ 271:../mindows/mds_sem.c ****             /* 使用软中断调度任务 */
+ 272:../mindows/mds_sem.c ****             MDS_TaskSwiSched();
+ 273:../mindows/mds_sem.c **** 
+ 274:../mindows/mds_sem.c ****             return uiRtn;
+ 275:../mindows/mds_sem.c ****         }
+ 276:../mindows/mds_sem.c ****         else /* 没有阻塞的任务 */
+ 277:../mindows/mds_sem.c ****         {
+ 278:../mindows/mds_sem.c ****             /* 二进制信号量 */
+ 279:../mindows/mds_sem.c ****             if(SEMBIN == (SEMTYPEMASK & pstrSem->uiSemOpt))
+ 280:../mindows/mds_sem.c ****             {
+ 281:../mindows/mds_sem.c ****                 /* 释放信号量后将信号量置为满 */
+ 282:../mindows/mds_sem.c ****                 pstrSem->uiCounter = SEMFULL;
+ 283:../mindows/mds_sem.c ****             }
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 12
+
+
+ 284:../mindows/mds_sem.c ****             else /* 计数信号量 */
+ 285:../mindows/mds_sem.c ****             {
+ 286:../mindows/mds_sem.c ****                 /* 释放信号量后将信号量+1. 走此分支信号量+1不会溢出 */
+ 287:../mindows/mds_sem.c ****                 pstrSem->uiCounter++;
+ 288:../mindows/mds_sem.c ****             }
+ 289:../mindows/mds_sem.c ****         }
+ 290:../mindows/mds_sem.c ****     }
+ 291:../mindows/mds_sem.c ****     else /* 信号量非空 */
+ 292:../mindows/mds_sem.c ****     {
+ 293:../mindows/mds_sem.c ****         /* 计数信号量 */
+ 294:../mindows/mds_sem.c ****         if(SEMCNT == (SEMTYPEMASK & pstrSem->uiSemOpt))
+ 307              		.loc 1 294 0
+ 308 01bc 48C095E5 		ldr	ip, [r5, #72]
+ 309 01c0 0C200CE2 		and	r2, ip, #12
+ 310 01c4 080052E3 		cmp	r2, #8
+ 226:../mindows/mds_sem.c ****     uiRtn = RTN_SUCD;
+ 311              		.loc 1 226 0
+ 312 01c8 0050A013 		movne	r5, #0
+ 313              		.loc 1 294 0
+ 314 01cc 2400000A 		beq	.L43
+ 315              	.L38:
+ 316              	.LVL19:
+ 295:../mindows/mds_sem.c ****         {
+ 296:../mindows/mds_sem.c ****             /* 信号量未满 */
+ 297:../mindows/mds_sem.c ****             if(SEMFULL != pstrSem->uiCounter)
+ 298:../mindows/mds_sem.c ****             {
+ 299:../mindows/mds_sem.c ****                 /* 释放信号量后将信号量+1 */
+ 300:../mindows/mds_sem.c ****                 pstrSem->uiCounter++;
+ 301:../mindows/mds_sem.c ****             }
+ 302:../mindows/mds_sem.c ****             else /* 信号量已满 */
+ 303:../mindows/mds_sem.c ****             {
+ 304:../mindows/mds_sem.c ****                 uiRtn = RTN_SMGVOV;
+ 305:../mindows/mds_sem.c ****             }
+ 306:../mindows/mds_sem.c ****         }
+ 307:../mindows/mds_sem.c ****     }
+ 308:../mindows/mds_sem.c **** 
+ 309:../mindows/mds_sem.c ****     (void)MDS_IntUnlock();
+ 317              		.loc 1 309 0
+ 318 01d0 FEFFFFEB 		bl	MDS_IntUnlock
+ 319              	.LVL20:
+ 320              	.L33:
+ 310:../mindows/mds_sem.c **** 
+ 311:../mindows/mds_sem.c ****     return uiRtn;
+ 312:../mindows/mds_sem.c **** }
+ 321              		.loc 1 312 0
+ 322 01d4 0500A0E1 		mov	r0, r5
+ 323 01d8 14D04BE2 		sub	sp, fp, #20
+ 324 01dc 30689DE8 		ldmfd	sp, {r4, r5, fp, sp, lr}
+ 325 01e0 1EFF2FE1 		bx	lr
+ 326              	.LVL21:
+ 327              	.L42:
+ 234:../mindows/mds_sem.c ****         pstrTcb = MDS_SemGetActiveTask(pstrSem);
+ 328              		.loc 1 234 0
+ 329 01e4 0500A0E1 		mov	r0, r5
+ 330 01e8 FEFFFFEB 		bl	MDS_SemGetActiveTask
+ 331              	.LVL22:
+ 237:../mindows/mds_sem.c ****         if(NULL != pstrTcb)
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 13
+
+
+ 332              		.loc 1 237 0
+ 333 01ec 004050E2 		subs	r4, r0, #0
+ 334 01f0 2100000A 		beq	.L35
+ 240:../mindows/mds_sem.c ****             (void)MDS_TaskDelFromSemTab(pstrTcb);
+ 335              		.loc 1 240 0
+ 336 01f4 FEFFFFEB 		bl	MDS_TaskDelFromSemTab
+ 337              	.LVL23:
+ 243:../mindows/mds_sem.c ****             if(DELAYQUEFLAG == (pstrTcb->uiTaskFlag & DELAYQUEFLAG))
+ 338              		.loc 1 243 0
+ 339 01f8 643094E5 		ldr	r3, [r4, #100]
+ 340 01fc 010013E3 		tst	r3, #1
+ 341 0200 0500000A 		beq	.L36
+ 342              	.LVL24:
+ 246:../mindows/mds_sem.c ****                 (void)MDS_ChainCurNodeDelete(&gstrDelayTab, pstrNode);
+ 343              		.loc 1 246 0
+ 344 0204 501084E2 		add	r1, r4, #80
+ 345 0208 90009FE5 		ldr	r0, .L44
+ 346 020c FEFFFFEB 		bl	MDS_ChainCurNodeDelete
+ 249:../mindows/mds_sem.c ****                 pstrTcb->uiTaskFlag &= (~((U32)DELAYQUEFLAG));
+ 347              		.loc 1 249 0
+ 348 0210 641094E5 		ldr	r1, [r4, #100]
+ 349 0214 0100C1E3 		bic	r0, r1, #1
+ 350 0218 640084E5 		str	r0, [r4, #100]
+ 351              	.LVL25:
+ 352              	.L36:
+ 253:../mindows/mds_sem.c ****             pstrTcb->strTaskOpt.ucTaskSta &= ~((U8)TASKPEND);
+ 353              		.loc 1 253 0
+ 354 021c 6C50D4E5 		ldrb	r5, [r4, #108]	@ zero_extendqisi2
+ 260:../mindows/mds_sem.c ****             ucTaskPrio = pstrTcb->ucTaskPrio;
+ 355              		.loc 1 260 0
+ 356 0220 68E0D4E5 		ldrb	lr, [r4, #104]	@ zero_extendqisi2
+ 261:../mindows/mds_sem.c ****             pstrChain = &gstrReadyTab.astrChain[ucTaskPrio];
+ 357              		.loc 1 261 0
+ 358 0224 78009FE5 		ldr	r0, .L44+4
+ 253:../mindows/mds_sem.c ****             pstrTcb->strTaskOpt.ucTaskSta &= ~((U8)TASKPEND);
+ 359              		.loc 1 253 0
+ 360 0228 08C0C5E3 		bic	ip, r5, #8
+ 256:../mindows/mds_sem.c ****             pstrTcb->strTaskOpt.uiDelayTick = RTN_SUCD;
+ 361              		.loc 1 256 0
+ 362 022c 0050A0E3 		mov	r5, #0
+ 264:../mindows/mds_sem.c ****             MDS_TaskAddToSchedTab(pstrChain, pstrNode, pstrPrioFlag, ucTaskPrio);
+ 363              		.loc 1 264 0
+ 364 0230 441084E2 		add	r1, r4, #68
+ 365 0234 402080E2 		add	r2, r0, #64
+ 366 0238 0E30A0E1 		mov	r3, lr
+ 367 023c 8E0180E0 		add	r0, r0, lr, asl #3
+ 253:../mindows/mds_sem.c ****             pstrTcb->strTaskOpt.ucTaskSta &= ~((U8)TASKPEND);
+ 368              		.loc 1 253 0
+ 369 0240 6CC0C4E5 		strb	ip, [r4, #108]
+ 256:../mindows/mds_sem.c ****             pstrTcb->strTaskOpt.uiDelayTick = RTN_SUCD;
+ 370              		.loc 1 256 0
+ 371 0244 705084E5 		str	r5, [r4, #112]
+ 372              	.LVL26:
+ 264:../mindows/mds_sem.c ****             MDS_TaskAddToSchedTab(pstrChain, pstrNode, pstrPrioFlag, ucTaskPrio);
+ 373              		.loc 1 264 0
+ 374 0248 FEFFFFEB 		bl	MDS_TaskAddToSchedTab
+ 375              	.LVL27:
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 14
+
+
+ 267:../mindows/mds_sem.c ****             pstrTcb->strTaskOpt.ucTaskSta |= TASKREADY;
+ 376              		.loc 1 267 0
+ 377 024c 6CC0D4E5 		ldrb	ip, [r4, #108]	@ zero_extendqisi2
+ 378 0250 02208CE3 		orr	r2, ip, #2
+ 379 0254 6C20C4E5 		strb	r2, [r4, #108]
+ 269:../mindows/mds_sem.c ****             (void)MDS_IntUnlock();
+ 380              		.loc 1 269 0
+ 381 0258 FEFFFFEB 		bl	MDS_IntUnlock
+ 272:../mindows/mds_sem.c ****             MDS_TaskSwiSched();
+ 382              		.loc 1 272 0
+ 383 025c FEFFFFEB 		bl	MDS_TaskSwiSched
+ 274:../mindows/mds_sem.c ****             return uiRtn;
+ 384              		.loc 1 274 0
+ 385 0260 DBFFFFEA 		b	.L33
+ 386              	.LVL28:
+ 387              	.L43:
+ 297:../mindows/mds_sem.c ****             if(SEMFULL != pstrSem->uiCounter)
+ 388              		.loc 1 297 0
+ 389 0264 010073E3 		cmn	r3, #1
+ 300:../mindows/mds_sem.c ****                 pstrSem->uiCounter++;
+ 390              		.loc 1 300 0
+ 391 0268 01308312 		addne	r3, r3, #1
+ 392 026c 44308515 		strne	r3, [r5, #68]
+ 304:../mindows/mds_sem.c ****                 uiRtn = RTN_SMGVOV;
+ 393              		.loc 1 304 0
+ 394 0270 0250A003 		moveq	r5, #2
+ 226:../mindows/mds_sem.c ****     uiRtn = RTN_SUCD;
+ 395              		.loc 1 226 0
+ 396 0274 0050A013 		movne	r5, #0
+ 397 0278 D4FFFFEA 		b	.L38
+ 398              	.LVL29:
+ 399              	.L35:
+ 279:../mindows/mds_sem.c ****             if(SEMBIN == (SEMTYPEMASK & pstrSem->uiSemOpt))
+ 400              		.loc 1 279 0
+ 401 027c 481095E5 		ldr	r1, [r5, #72]
+ 402 0280 0C3001E2 		and	r3, r1, #12
+ 403 0284 040053E3 		cmp	r3, #4
+ 287:../mindows/mds_sem.c ****                 pstrSem->uiCounter++;
+ 404              		.loc 1 287 0
+ 405 0288 44309515 		ldrne	r3, [r5, #68]
+ 282:../mindows/mds_sem.c ****                 pstrSem->uiCounter = SEMFULL;
+ 406              		.loc 1 282 0
+ 407 028c 0030E003 		mvneq	r3, #0
+ 287:../mindows/mds_sem.c ****                 pstrSem->uiCounter++;
+ 408              		.loc 1 287 0
+ 409 0290 01308312 		addne	r3, r3, #1
+ 410 0294 443085E5 		str	r3, [r5, #68]
+ 226:../mindows/mds_sem.c ****     uiRtn = RTN_SUCD;
+ 411              		.loc 1 226 0
+ 412 0298 0450A0E1 		mov	r5, r4
+ 413 029c CBFFFFEA 		b	.L38
+ 414              	.L45:
+ 415              		.align	2
+ 416              	.L44:
+ 417 02a0 00000000 		.word	gstrDelayTab
+ 418 02a4 00000000 		.word	gstrReadyTab
+ 419              		.cfi_endproc
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 15
+
+
+ 420              	.LFE2:
+ 421              		.fnend
+ 422              		.size	MDS_SemGive, .-MDS_SemGive
+ 423              		.align	2
+ 424              		.global	MDS_SemFlushValue
+ 425              		.type	MDS_SemFlushValue, %function
+ 426              	MDS_SemFlushValue:
+ 427              		.fnstart
+ 428              	.LFB3:
+ 313:../mindows/mds_sem.c **** 
+ 314:../mindows/mds_sem.c **** /***********************************************************************************
+ 315:../mindows/mds_sem.c **** 函数功能: 释放被该信号量所阻塞的所有任务, 去掉这些任务的pend状态, 并指定被阻塞任务的
+ 316:../mindows/mds_sem.c ****           返回值.
+ 317:../mindows/mds_sem.c **** 入口参数: pstrSem: 要释放的信号量指针.
+ 318:../mindows/mds_sem.c ****           uiRtnValue: 指定被阻塞任务的返回值
+ 319:../mindows/mds_sem.c **** 返 回 值: RTN_SUCD: 释放信号量成功.
+ 320:../mindows/mds_sem.c ****           RTN_FAIL: 释放信号量失败.
+ 321:../mindows/mds_sem.c **** ***********************************************************************************/
+ 322:../mindows/mds_sem.c **** U32 MDS_SemFlushValue(M_SEM* pstrSem, U32 uiRtnValue)
+ 323:../mindows/mds_sem.c **** {
+ 429              		.loc 1 323 0
+ 430              		.cfi_startproc
+ 431              		@ Function supports interworking.
+ 432              		@ args = 0, pretend = 0, frame = 0
+ 433              		@ frame_needed = 1, uses_anonymous_args = 0
+ 434              	.LVL30:
+ 435              		.movsp ip
+ 436 02a8 0DC0A0E1 		mov	ip, sp
+ 437              	.LCFI6:
+ 438              		.cfi_def_cfa_register 12
+ 439 02ac F0D82DE9 		stmfd	sp!, {r4, r5, r6, r7, fp, ip, lr, pc}
+ 440              		.pad #4
+ 441              		.save {r4, r5, r6, r7, fp, ip, lr}
+ 324:../mindows/mds_sem.c ****     M_TCB* pstrTcb;
+ 325:../mindows/mds_sem.c ****     M_CHAIN* pstrChain;
+ 326:../mindows/mds_sem.c ****     M_CHAIN* pstrNode;
+ 327:../mindows/mds_sem.c ****     M_PRIOFLAG* pstrPrioFlag;
+ 328:../mindows/mds_sem.c ****     U8 ucTaskPrio;
+ 329:../mindows/mds_sem.c **** 
+ 330:../mindows/mds_sem.c ****     /* 入口参数检查 */
+ 331:../mindows/mds_sem.c ****     if(NULL == pstrSem)
+ 442              		.loc 1 331 0
+ 443 02b0 005050E2 		subs	r5, r0, #0
+ 444              		.cfi_offset 14, -8
+ 445              		.cfi_offset 13, -12
+ 446              		.cfi_offset 11, -16
+ 447              		.cfi_offset 7, -20
+ 448              		.cfi_offset 6, -24
+ 449              		.cfi_offset 5, -28
+ 450              		.cfi_offset 4, -32
+ 323:../mindows/mds_sem.c **** {
+ 451              		.loc 1 323 0
+ 452              		.setfp fp, ip, #-4
+ 453 02b4 04B04CE2 		sub	fp, ip, #4
+ 454              	.LCFI7:
+ 455              		.cfi_def_cfa 11, 4
+ 323:../mindows/mds_sem.c **** {
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 16
+
+
+ 456              		.loc 1 323 0
+ 457 02b8 0160A0E1 		mov	r6, r1
+ 332:../mindows/mds_sem.c ****     {
+ 333:../mindows/mds_sem.c ****         return RTN_FAIL;
+ 458              		.loc 1 333 0
+ 459 02bc 0100A003 		moveq	r0, #1
+ 460              	.LVL31:
+ 331:../mindows/mds_sem.c ****     if(NULL == pstrSem)
+ 461              		.loc 1 331 0
+ 462 02c0 2100000A 		beq	.L47
+ 334:../mindows/mds_sem.c ****     }
+ 335:../mindows/mds_sem.c **** 
+ 336:../mindows/mds_sem.c ****     (void)MDS_IntLock();
+ 463              		.loc 1 336 0
+ 464 02c4 FEFFFFEB 		bl	MDS_IntLock
+ 465              	.LVL32:
+ 337:../mindows/mds_sem.c **** 
+ 338:../mindows/mds_sem.c ****     /* 在被该信号量阻塞的任务中获取需要释放的任务 */
+ 339:../mindows/mds_sem.c ****     while(1)
+ 340:../mindows/mds_sem.c ****     {
+ 341:../mindows/mds_sem.c ****         pstrTcb = MDS_SemGetActiveTask(pstrSem);
+ 342:../mindows/mds_sem.c **** 
+ 343:../mindows/mds_sem.c ****         /* 有阻塞的任务, 释放任务 */
+ 344:../mindows/mds_sem.c ****         if(NULL != pstrTcb)
+ 345:../mindows/mds_sem.c ****         {
+ 346:../mindows/mds_sem.c ****             /* 从信号量调度表拆除该任务 */
+ 347:../mindows/mds_sem.c ****             (void)MDS_TaskDelFromSemTab(pstrTcb);
+ 348:../mindows/mds_sem.c **** 
+ 349:../mindows/mds_sem.c ****             /* 任务在delay表则从delay表拆除 */
+ 350:../mindows/mds_sem.c ****             if(DELAYQUEFLAG == (pstrTcb->uiTaskFlag & DELAYQUEFLAG))
+ 351:../mindows/mds_sem.c ****             {
+ 352:../mindows/mds_sem.c ****                 pstrNode = &pstrTcb->strDelayQue.strQueHead;
+ 353:../mindows/mds_sem.c ****                 (void)MDS_ChainCurNodeDelete(&gstrDelayTab, pstrNode);
+ 354:../mindows/mds_sem.c **** 
+ 355:../mindows/mds_sem.c ****                 /* 置任务不在delay表标志 */
+ 356:../mindows/mds_sem.c ****                 pstrTcb->uiTaskFlag &= (~((U32)DELAYQUEFLAG));
+ 357:../mindows/mds_sem.c ****             }
+ 358:../mindows/mds_sem.c **** 
+ 359:../mindows/mds_sem.c ****             /* 清除任务的pend状态 */
+ 360:../mindows/mds_sem.c ****             pstrTcb->strTaskOpt.ucTaskSta &= ~((U8)TASKPEND);
+ 361:../mindows/mds_sem.c **** 
+ 362:../mindows/mds_sem.c ****             /* 借用uiDelayTick变量保存pend任务的返回值 */
+ 363:../mindows/mds_sem.c ****             pstrTcb->strTaskOpt.uiDelayTick = uiRtnValue;
+ 364:../mindows/mds_sem.c **** 
+ 365:../mindows/mds_sem.c ****             /* 将该任务添加到ready表中 */
+ 366:../mindows/mds_sem.c ****             pstrNode = &pstrTcb->strTcbQue.strQueHead;
+ 367:../mindows/mds_sem.c ****             ucTaskPrio = pstrTcb->ucTaskPrio;
+ 368:../mindows/mds_sem.c ****             pstrChain = &gstrReadyTab.astrChain[ucTaskPrio];
+ 466              		.loc 1 368 0
+ 467 02c8 88709FE5 		ldr	r7, .L52
+ 468 02cc 0B0000EA 		b	.L50
+ 469              	.LVL33:
+ 470              	.L49:
+ 360:../mindows/mds_sem.c ****             pstrTcb->strTaskOpt.ucTaskSta &= ~((U8)TASKPEND);
+ 471              		.loc 1 360 0
+ 472 02d0 6C00D4E5 		ldrb	r0, [r4, #108]	@ zero_extendqisi2
+ 367:../mindows/mds_sem.c ****             ucTaskPrio = pstrTcb->ucTaskPrio;
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 17
+
+
+ 473              		.loc 1 367 0
+ 474 02d4 6830D4E5 		ldrb	r3, [r4, #104]	@ zero_extendqisi2
+ 360:../mindows/mds_sem.c ****             pstrTcb->strTaskOpt.ucTaskSta &= ~((U8)TASKPEND);
+ 475              		.loc 1 360 0
+ 476 02d8 08E0C0E3 		bic	lr, r0, #8
+ 369:../mindows/mds_sem.c ****             pstrPrioFlag = &gstrReadyTab.strFlag;
+ 370:../mindows/mds_sem.c **** 
+ 371:../mindows/mds_sem.c ****             MDS_TaskAddToSchedTab(pstrChain, pstrNode, pstrPrioFlag, ucTaskPrio);
+ 477              		.loc 1 371 0
+ 478 02dc 78209FE5 		ldr	r2, .L52+4
+ 360:../mindows/mds_sem.c ****             pstrTcb->strTaskOpt.ucTaskSta &= ~((U8)TASKPEND);
+ 479              		.loc 1 360 0
+ 480 02e0 6CE0C4E5 		strb	lr, [r4, #108]
+ 363:../mindows/mds_sem.c ****             pstrTcb->strTaskOpt.uiDelayTick = uiRtnValue;
+ 481              		.loc 1 363 0
+ 482 02e4 706084E5 		str	r6, [r4, #112]
+ 483              	.LVL34:
+ 484              		.loc 1 371 0
+ 485 02e8 830187E0 		add	r0, r7, r3, asl #3
+ 486 02ec 441084E2 		add	r1, r4, #68
+ 487 02f0 FEFFFFEB 		bl	MDS_TaskAddToSchedTab
+ 488              	.LVL35:
+ 372:../mindows/mds_sem.c **** 
+ 373:../mindows/mds_sem.c ****             /* 增加任务的ready状态 */
+ 374:../mindows/mds_sem.c ****             pstrTcb->strTaskOpt.ucTaskSta |= TASKREADY;
+ 489              		.loc 1 374 0
+ 490 02f4 6CC0D4E5 		ldrb	ip, [r4, #108]	@ zero_extendqisi2
+ 491 02f8 02208CE3 		orr	r2, ip, #2
+ 492 02fc 6C20C4E5 		strb	r2, [r4, #108]
+ 493              	.LVL36:
+ 494              	.L50:
+ 341:../mindows/mds_sem.c ****         pstrTcb = MDS_SemGetActiveTask(pstrSem);
+ 495              		.loc 1 341 0
+ 496 0300 0500A0E1 		mov	r0, r5
+ 497 0304 FEFFFFEB 		bl	MDS_SemGetActiveTask
+ 498              	.LVL37:
+ 344:../mindows/mds_sem.c ****         if(NULL != pstrTcb)
+ 499              		.loc 1 344 0
+ 500 0308 004050E2 		subs	r4, r0, #0
+ 501 030c 0A00000A 		beq	.L48
+ 347:../mindows/mds_sem.c ****             (void)MDS_TaskDelFromSemTab(pstrTcb);
+ 502              		.loc 1 347 0
+ 503 0310 FEFFFFEB 		bl	MDS_TaskDelFromSemTab
+ 504              	.LVL38:
+ 350:../mindows/mds_sem.c ****             if(DELAYQUEFLAG == (pstrTcb->uiTaskFlag & DELAYQUEFLAG))
+ 505              		.loc 1 350 0
+ 506 0314 643094E5 		ldr	r3, [r4, #100]
+ 507 0318 010013E3 		tst	r3, #1
+ 508 031c EBFFFF0A 		beq	.L49
+ 509              	.LVL39:
+ 353:../mindows/mds_sem.c ****                 (void)MDS_ChainCurNodeDelete(&gstrDelayTab, pstrNode);
+ 510              		.loc 1 353 0
+ 511 0320 501084E2 		add	r1, r4, #80
+ 512 0324 34009FE5 		ldr	r0, .L52+8
+ 513 0328 FEFFFFEB 		bl	MDS_ChainCurNodeDelete
+ 356:../mindows/mds_sem.c ****                 pstrTcb->uiTaskFlag &= (~((U32)DELAYQUEFLAG));
+ 514              		.loc 1 356 0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 18
+
+
+ 515 032c 641094E5 		ldr	r1, [r4, #100]
+ 516 0330 0100C1E3 		bic	r0, r1, #1
+ 517 0334 640084E5 		str	r0, [r4, #100]
+ 518 0338 E4FFFFEA 		b	.L49
+ 519              	.LVL40:
+ 520              	.L48:
+ 375:../mindows/mds_sem.c ****         }
+ 376:../mindows/mds_sem.c ****         else /* 没有阻塞的任务, 跳出循环操作 */
+ 377:../mindows/mds_sem.c ****         {
+ 378:../mindows/mds_sem.c ****             break;
+ 379:../mindows/mds_sem.c ****         }
+ 380:../mindows/mds_sem.c ****     }
+ 381:../mindows/mds_sem.c **** 
+ 382:../mindows/mds_sem.c ****     /* 将信号量置为空 */
+ 383:../mindows/mds_sem.c ****     pstrSem->uiCounter = SEMEMPTY;
+ 521              		.loc 1 383 0
+ 522 033c 444085E5 		str	r4, [r5, #68]
+ 384:../mindows/mds_sem.c **** 
+ 385:../mindows/mds_sem.c ****     (void)MDS_IntUnlock();
+ 523              		.loc 1 385 0
+ 524 0340 FEFFFFEB 		bl	MDS_IntUnlock
+ 386:../mindows/mds_sem.c **** 
+ 387:../mindows/mds_sem.c ****     /* 使用软中断调度任务 */
+ 388:../mindows/mds_sem.c ****     MDS_TaskSwiSched();
+ 525              		.loc 1 388 0
+ 526 0344 FEFFFFEB 		bl	MDS_TaskSwiSched
+ 389:../mindows/mds_sem.c **** 
+ 390:../mindows/mds_sem.c ****     return RTN_SUCD;
+ 527              		.loc 1 390 0
+ 528 0348 0400A0E1 		mov	r0, r4
+ 529              	.LVL41:
+ 530              	.L47:
+ 391:../mindows/mds_sem.c **** }
+ 531              		.loc 1 391 0
+ 532 034c 1CD04BE2 		sub	sp, fp, #28
+ 533 0350 F0689DE8 		ldmfd	sp, {r4, r5, r6, r7, fp, sp, lr}
+ 534 0354 1EFF2FE1 		bx	lr
+ 535              	.L53:
+ 536              		.align	2
+ 537              	.L52:
+ 538 0358 00000000 		.word	gstrReadyTab
+ 539 035c 40000000 		.word	gstrReadyTab+64
+ 540 0360 00000000 		.word	gstrDelayTab
+ 541              		.cfi_endproc
+ 542              	.LFE3:
+ 543              		.fnend
+ 544              		.size	MDS_SemFlushValue, .-MDS_SemFlushValue
+ 545              		.align	2
+ 546              		.global	MDS_SemFlush
+ 547              		.type	MDS_SemFlush, %function
+ 548              	MDS_SemFlush:
+ 549              		.fnstart
+ 550              	.LFB4:
+ 392:../mindows/mds_sem.c **** 
+ 393:../mindows/mds_sem.c **** /***********************************************************************************
+ 394:../mindows/mds_sem.c **** 函数功能: 释放被该信号量所阻塞的所有任务, 去掉这些任务的pend状态.
+ 395:../mindows/mds_sem.c **** 入口参数: pstrSem: 要释放的信号量指针.
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 19
+
+
+ 396:../mindows/mds_sem.c **** 返 回 值: RTN_SUCD: 释放信号量成功.
+ 397:../mindows/mds_sem.c ****           RTN_FAIL: 释放信号量失败.
+ 398:../mindows/mds_sem.c **** ***********************************************************************************/
+ 399:../mindows/mds_sem.c **** U32 MDS_SemFlush(M_SEM* pstrSem)
+ 400:../mindows/mds_sem.c **** {
+ 551              		.loc 1 400 0
+ 552              		.cfi_startproc
+ 553              		@ Function supports interworking.
+ 554              		@ args = 0, pretend = 0, frame = 0
+ 555              		@ frame_needed = 0, uses_anonymous_args = 0
+ 556              		@ link register save eliminated.
+ 557              	.LVL42:
+ 401:../mindows/mds_sem.c ****     /* 释放信号量所阻塞的所有任务, 被MDS_SemFlush释放的阻塞任务返回成功 */
+ 402:../mindows/mds_sem.c ****     return MDS_SemFlushValue(pstrSem, RTN_SUCD);
+ 558              		.loc 1 402 0
+ 559 0364 0010A0E3 		mov	r1, #0
+ 403:../mindows/mds_sem.c **** }
+ 560              		.loc 1 403 0
+ 402:../mindows/mds_sem.c ****     return MDS_SemFlushValue(pstrSem, RTN_SUCD);
+ 561              		.loc 1 402 0
+ 562 0368 FEFFFFEA 		b	MDS_SemFlushValue
+ 563              		.cfi_endproc
+ 564              	.LFE4:
+ 565              		.fnend
+ 566              		.size	MDS_SemFlush, .-MDS_SemFlush
+ 567              		.align	2
+ 568              		.global	MDS_SemDelete
+ 569              		.type	MDS_SemDelete, %function
+ 570              	MDS_SemDelete:
+ 571              		.fnstart
+ 572              	.LFB5:
+ 404:../mindows/mds_sem.c **** 
+ 405:../mindows/mds_sem.c **** /***********************************************************************************
+ 406:../mindows/mds_sem.c **** 函数功能: 删除一个信号量.
+ 407:../mindows/mds_sem.c **** 入口参数: pstrSem: 要删除的信号量指针.
+ 408:../mindows/mds_sem.c **** 返 回 值: RTN_SUCD: 删除信号量成功.
+ 409:../mindows/mds_sem.c ****           RTN_FAIL: 删除信号量失败.
+ 410:../mindows/mds_sem.c **** ***********************************************************************************/
+ 411:../mindows/mds_sem.c **** U32 MDS_SemDelete(M_SEM* pstrSem)
+ 412:../mindows/mds_sem.c **** {
+ 573              		.loc 1 412 0
+ 574              		.cfi_startproc
+ 575              		@ Function supports interworking.
+ 576              		@ args = 0, pretend = 0, frame = 0
+ 577              		@ frame_needed = 1, uses_anonymous_args = 0
+ 578              	.LVL43:
+ 579              		.movsp ip
+ 580 036c 0DC0A0E1 		mov	ip, sp
+ 581              	.LCFI8:
+ 582              		.cfi_def_cfa_register 12
+ 413:../mindows/mds_sem.c ****     /* 入口参数检查 */
+ 414:../mindows/mds_sem.c ****     if(NULL == pstrSem)
+ 583              		.loc 1 414 0
+ 584 0370 000050E3 		cmp	r0, #0
+ 412:../mindows/mds_sem.c **** {
+ 585              		.loc 1 412 0
+ 586 0374 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 20
+
+
+ 587              		.pad #4
+ 588              		.save {fp, ip, lr}
+ 415:../mindows/mds_sem.c ****     {
+ 416:../mindows/mds_sem.c ****         return RTN_FAIL;
+ 589              		.loc 1 416 0
+ 590 0378 0100A003 		moveq	r0, #1
+ 591              	.LVL44:
+ 412:../mindows/mds_sem.c **** {
+ 592              		.loc 1 412 0
+ 593              		.setfp fp, ip, #-4
+ 594 037c 04B04CE2 		sub	fp, ip, #4
+ 595              		.cfi_offset 14, -8
+ 596              		.cfi_offset 13, -12
+ 597              		.cfi_offset 11, -16
+ 598              	.LCFI9:
+ 599              		.cfi_def_cfa 11, 4
+ 414:../mindows/mds_sem.c ****     if(NULL == pstrSem)
+ 600              		.loc 1 414 0
+ 601 0380 0300000A 		beq	.L56
+ 417:../mindows/mds_sem.c ****     }
+ 418:../mindows/mds_sem.c **** 
+ 419:../mindows/mds_sem.c ****     /* 释放信号量所阻塞的所有任务, 被MDS_SemDelete释放的阻塞任务返回信号量被删除 */
+ 420:../mindows/mds_sem.c ****     if(RTN_SUCD != MDS_SemFlushValue(pstrSem, RTN_SMTKDL))
+ 602              		.loc 1 420 0
+ 603 0384 0410A0E3 		mov	r1, #4
+ 604 0388 FEFFFFEB 		bl	MDS_SemFlushValue
+ 416:../mindows/mds_sem.c ****         return RTN_FAIL;
+ 605              		.loc 1 416 0
+ 606 038c 000050E2 		subs	r0, r0, #0
+ 607 0390 0100A013 		movne	r0, #1
+ 608              	.L56:
+ 421:../mindows/mds_sem.c ****     {
+ 422:../mindows/mds_sem.c ****         return RTN_FAIL;
+ 423:../mindows/mds_sem.c ****     }
+ 424:../mindows/mds_sem.c **** 
+ 425:../mindows/mds_sem.c ****     return RTN_SUCD;
+ 426:../mindows/mds_sem.c **** }
+ 609              		.loc 1 426 0
+ 610 0394 0CD04BE2 		sub	sp, fp, #12
+ 611 0398 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 612 039c 1EFF2FE1 		bx	lr
+ 613              		.cfi_endproc
+ 614              	.LFE5:
+ 615              		.fnend
+ 616              		.size	MDS_SemDelete, .-MDS_SemDelete
+ 617              	.Letext0:
+ 618              		.section	.debug_loc,"",%progbits
+ 619              	.Ldebug_loc0:
+ 620              	.LLST0:
+ 621 0000 00000000 		.4byte	.LFB0-.Ltext0
+ 622 0004 04000000 		.4byte	.LCFI0-.Ltext0
+ 623 0008 0200     		.2byte	0x2
+ 624 000a 7D       		.byte	0x7d
+ 625 000b 00       		.sleb128 0
+ 626 000c 04000000 		.4byte	.LCFI0-.Ltext0
+ 627 0010 0C000000 		.4byte	.LCFI1-.Ltext0
+ 628 0014 0200     		.2byte	0x2
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 21
+
+
+ 629 0016 7C       		.byte	0x7c
+ 630 0017 00       		.sleb128 0
+ 631 0018 0C000000 		.4byte	.LCFI1-.Ltext0
+ 632 001c 88000000 		.4byte	.LFE0-.Ltext0
+ 633 0020 0200     		.2byte	0x2
+ 634 0022 7B       		.byte	0x7b
+ 635 0023 04       		.sleb128 4
+ 636 0024 00000000 		.4byte	0x0
+ 637 0028 00000000 		.4byte	0x0
+ 638              	.LLST1:
+ 639 002c 00000000 		.4byte	.LVL0-.Ltext0
+ 640 0030 30000000 		.4byte	.LVL1-.Ltext0
+ 641 0034 0100     		.2byte	0x1
+ 642 0036 50       		.byte	0x50
+ 643 0037 30000000 		.4byte	.LVL1-.Ltext0
+ 644 003b 88000000 		.4byte	.LFE0-.Ltext0
+ 645 003f 0100     		.2byte	0x1
+ 646 0041 54       		.byte	0x54
+ 647 0042 00000000 		.4byte	0x0
+ 648 0046 00000000 		.4byte	0x0
+ 649              	.LLST2:
+ 650 004a 00000000 		.4byte	.LVL0-.Ltext0
+ 651 004e 3C000000 		.4byte	.LVL2-.Ltext0
+ 652 0052 0100     		.2byte	0x1
+ 653 0054 51       		.byte	0x51
+ 654 0055 48000000 		.4byte	.LVL3-.Ltext0
+ 655 0059 5F000000 		.4byte	.LVL4-1-.Ltext0
+ 656 005d 0100     		.2byte	0x1
+ 657 005f 51       		.byte	0x51
+ 658 0060 78000000 		.4byte	.LVL5-.Ltext0
+ 659 0064 88000000 		.4byte	.LFE0-.Ltext0
+ 660 0068 0100     		.2byte	0x1
+ 661 006a 51       		.byte	0x51
+ 662 006b 00000000 		.4byte	0x0
+ 663 006f 00000000 		.4byte	0x0
+ 664              	.LLST3:
+ 665 0073 00000000 		.4byte	.LVL0-.Ltext0
+ 666 0077 3C000000 		.4byte	.LVL2-.Ltext0
+ 667 007b 0100     		.2byte	0x1
+ 668 007d 52       		.byte	0x52
+ 669 007e 48000000 		.4byte	.LVL3-.Ltext0
+ 670 0082 5F000000 		.4byte	.LVL4-1-.Ltext0
+ 671 0086 0100     		.2byte	0x1
+ 672 0088 52       		.byte	0x52
+ 673 0089 78000000 		.4byte	.LVL5-.Ltext0
+ 674 008d 88000000 		.4byte	.LFE0-.Ltext0
+ 675 0091 0100     		.2byte	0x1
+ 676 0093 52       		.byte	0x52
+ 677 0094 00000000 		.4byte	0x0
+ 678 0098 00000000 		.4byte	0x0
+ 679              	.LLST4:
+ 680 009c 88000000 		.4byte	.LFB1-.Ltext0
+ 681 00a0 8C000000 		.4byte	.LCFI2-.Ltext0
+ 682 00a4 0200     		.2byte	0x2
+ 683 00a6 7D       		.byte	0x7d
+ 684 00a7 00       		.sleb128 0
+ 685 00a8 8C000000 		.4byte	.LCFI2-.Ltext0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 22
+
+
+ 686 00ac 98000000 		.4byte	.LCFI3-.Ltext0
+ 687 00b0 0200     		.2byte	0x2
+ 688 00b2 7C       		.byte	0x7c
+ 689 00b3 00       		.sleb128 0
+ 690 00b4 98000000 		.4byte	.LCFI3-.Ltext0
+ 691 00b8 94010000 		.4byte	.LFE1-.Ltext0
+ 692 00bc 0200     		.2byte	0x2
+ 693 00be 7B       		.byte	0x7b
+ 694 00bf 04       		.sleb128 4
+ 695 00c0 00000000 		.4byte	0x0
+ 696 00c4 00000000 		.4byte	0x0
+ 697              	.LLST5:
+ 698 00c8 88000000 		.4byte	.LVL6-.Ltext0
+ 699 00cc A0000000 		.4byte	.LVL7-.Ltext0
+ 700 00d0 0100     		.2byte	0x1
+ 701 00d2 50       		.byte	0x50
+ 702 00d3 A0000000 		.4byte	.LVL7-.Ltext0
+ 703 00d7 94010000 		.4byte	.LFE1-.Ltext0
+ 704 00db 0100     		.2byte	0x1
+ 705 00dd 54       		.byte	0x54
+ 706 00de 00000000 		.4byte	0x0
+ 707 00e2 00000000 		.4byte	0x0
+ 708              	.LLST6:
+ 709 00e6 88000000 		.4byte	.LVL6-.Ltext0
+ 710 00ea AB000000 		.4byte	.LVL8-1-.Ltext0
+ 711 00ee 0100     		.2byte	0x1
+ 712 00f0 51       		.byte	0x51
+ 713 00f1 AB000000 		.4byte	.LVL8-1-.Ltext0
+ 714 00f5 E0000000 		.4byte	.LVL9-.Ltext0
+ 715 00f9 0100     		.2byte	0x1
+ 716 00fb 56       		.byte	0x56
+ 717 00fc EC000000 		.4byte	.LVL10-.Ltext0
+ 718 0100 1C010000 		.4byte	.LVL11-.Ltext0
+ 719 0104 0100     		.2byte	0x1
+ 720 0106 56       		.byte	0x56
+ 721 0107 34010000 		.4byte	.LVL12-.Ltext0
+ 722 010b 6C010000 		.4byte	.LVL13-.Ltext0
+ 723 010f 0100     		.2byte	0x1
+ 724 0111 56       		.byte	0x56
+ 725 0112 78010000 		.4byte	.LVL14-.Ltext0
+ 726 0116 88010000 		.4byte	.LVL15-.Ltext0
+ 727 011a 0100     		.2byte	0x1
+ 728 011c 56       		.byte	0x56
+ 729 011d 00000000 		.4byte	0x0
+ 730 0121 00000000 		.4byte	0x0
+ 731              	.LLST7:
+ 732 0125 94010000 		.4byte	.LFB2-.Ltext0
+ 733 0129 98010000 		.4byte	.LCFI4-.Ltext0
+ 734 012d 0200     		.2byte	0x2
+ 735 012f 7D       		.byte	0x7d
+ 736 0130 00       		.sleb128 0
+ 737 0131 98010000 		.4byte	.LCFI4-.Ltext0
+ 738 0135 A4010000 		.4byte	.LCFI5-.Ltext0
+ 739 0139 0200     		.2byte	0x2
+ 740 013b 7C       		.byte	0x7c
+ 741 013c 00       		.sleb128 0
+ 742 013d A4010000 		.4byte	.LCFI5-.Ltext0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 23
+
+
+ 743 0141 A8020000 		.4byte	.LFE2-.Ltext0
+ 744 0145 0200     		.2byte	0x2
+ 745 0147 7B       		.byte	0x7b
+ 746 0148 04       		.sleb128 4
+ 747 0149 00000000 		.4byte	0x0
+ 748 014d 00000000 		.4byte	0x0
+ 749              	.LLST8:
+ 750 0151 94010000 		.4byte	.LVL16-.Ltext0
+ 751 0155 AF010000 		.4byte	.LVL18-1-.Ltext0
+ 752 0159 0100     		.2byte	0x1
+ 753 015b 50       		.byte	0x50
+ 754 015c 00000000 		.4byte	0x0
+ 755 0160 00000000 		.4byte	0x0
+ 756              	.LLST9:
+ 757 0164 EC010000 		.4byte	.LVL22-.Ltext0
+ 758 0168 F7010000 		.4byte	.LVL23-1-.Ltext0
+ 759 016c 0100     		.2byte	0x1
+ 760 016e 50       		.byte	0x50
+ 761 016f F7010000 		.4byte	.LVL23-1-.Ltext0
+ 762 0173 64020000 		.4byte	.LVL28-.Ltext0
+ 763 0177 0100     		.2byte	0x1
+ 764 0179 54       		.byte	0x54
+ 765 017a 7C020000 		.4byte	.LVL29-.Ltext0
+ 766 017e A8020000 		.4byte	.LFE2-.Ltext0
+ 767 0182 0100     		.2byte	0x1
+ 768 0184 50       		.byte	0x50
+ 769 0185 00000000 		.4byte	0x0
+ 770 0189 00000000 		.4byte	0x0
+ 771              	.LLST10:
+ 772 018d 04020000 		.4byte	.LVL24-.Ltext0
+ 773 0191 1C020000 		.4byte	.LVL25-.Ltext0
+ 774 0195 0400     		.2byte	0x4
+ 775 0197 74       		.byte	0x74
+ 776 0198 D000     		.sleb128 80
+ 777 019a 9F       		.byte	0x9f
+ 778 019b 48020000 		.4byte	.LVL26-.Ltext0
+ 779 019f 4B020000 		.4byte	.LVL27-1-.Ltext0
+ 780 01a3 0100     		.2byte	0x1
+ 781 01a5 51       		.byte	0x51
+ 782 01a6 00000000 		.4byte	0x0
+ 783 01aa 00000000 		.4byte	0x0
+ 784              	.LLST11:
+ 785 01ae AC010000 		.4byte	.LVL17-.Ltext0
+ 786 01b2 D0010000 		.4byte	.LVL19-.Ltext0
+ 787 01b6 0200     		.2byte	0x2
+ 788 01b8 30       		.byte	0x30
+ 789 01b9 9F       		.byte	0x9f
+ 790 01ba D0010000 		.4byte	.LVL19-.Ltext0
+ 791 01be D4010000 		.4byte	.LVL20-.Ltext0
+ 792 01c2 0100     		.2byte	0x1
+ 793 01c4 55       		.byte	0x55
+ 794 01c5 E4010000 		.4byte	.LVL21-.Ltext0
+ 795 01c9 A8020000 		.4byte	.LFE2-.Ltext0
+ 796 01cd 0200     		.2byte	0x2
+ 797 01cf 30       		.byte	0x30
+ 798 01d0 9F       		.byte	0x9f
+ 799 01d1 00000000 		.4byte	0x0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 24
+
+
+ 800 01d5 00000000 		.4byte	0x0
+ 801              	.LLST12:
+ 802 01d9 A8020000 		.4byte	.LFB3-.Ltext0
+ 803 01dd AC020000 		.4byte	.LCFI6-.Ltext0
+ 804 01e1 0200     		.2byte	0x2
+ 805 01e3 7D       		.byte	0x7d
+ 806 01e4 00       		.sleb128 0
+ 807 01e5 AC020000 		.4byte	.LCFI6-.Ltext0
+ 808 01e9 B8020000 		.4byte	.LCFI7-.Ltext0
+ 809 01ed 0200     		.2byte	0x2
+ 810 01ef 7C       		.byte	0x7c
+ 811 01f0 00       		.sleb128 0
+ 812 01f1 B8020000 		.4byte	.LCFI7-.Ltext0
+ 813 01f5 64030000 		.4byte	.LFE3-.Ltext0
+ 814 01f9 0200     		.2byte	0x2
+ 815 01fb 7B       		.byte	0x7b
+ 816 01fc 04       		.sleb128 4
+ 817 01fd 00000000 		.4byte	0x0
+ 818 0201 00000000 		.4byte	0x0
+ 819              	.LLST13:
+ 820 0205 A8020000 		.4byte	.LVL30-.Ltext0
+ 821 0209 C0020000 		.4byte	.LVL31-.Ltext0
+ 822 020d 0100     		.2byte	0x1
+ 823 020f 50       		.byte	0x50
+ 824 0210 C0020000 		.4byte	.LVL31-.Ltext0
+ 825 0214 64030000 		.4byte	.LFE3-.Ltext0
+ 826 0218 0100     		.2byte	0x1
+ 827 021a 55       		.byte	0x55
+ 828 021b 00000000 		.4byte	0x0
+ 829 021f 00000000 		.4byte	0x0
+ 830              	.LLST14:
+ 831 0223 A8020000 		.4byte	.LVL30-.Ltext0
+ 832 0227 C7020000 		.4byte	.LVL32-1-.Ltext0
+ 833 022b 0100     		.2byte	0x1
+ 834 022d 51       		.byte	0x51
+ 835 022e C7020000 		.4byte	.LVL32-1-.Ltext0
+ 836 0232 64030000 		.4byte	.LFE3-.Ltext0
+ 837 0236 0100     		.2byte	0x1
+ 838 0238 56       		.byte	0x56
+ 839 0239 00000000 		.4byte	0x0
+ 840 023d 00000000 		.4byte	0x0
+ 841              	.LLST15:
+ 842 0241 D0020000 		.4byte	.LVL33-.Ltext0
+ 843 0245 00030000 		.4byte	.LVL36-.Ltext0
+ 844 0249 0100     		.2byte	0x1
+ 845 024b 54       		.byte	0x54
+ 846 024c 08030000 		.4byte	.LVL37-.Ltext0
+ 847 0250 13030000 		.4byte	.LVL38-1-.Ltext0
+ 848 0254 0100     		.2byte	0x1
+ 849 0256 50       		.byte	0x50
+ 850 0257 13030000 		.4byte	.LVL38-1-.Ltext0
+ 851 025b 4C030000 		.4byte	.LVL41-.Ltext0
+ 852 025f 0100     		.2byte	0x1
+ 853 0261 54       		.byte	0x54
+ 854 0262 00000000 		.4byte	0x0
+ 855 0266 00000000 		.4byte	0x0
+ 856              	.LLST16:
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 25
+
+
+ 857 026a E8020000 		.4byte	.LVL34-.Ltext0
+ 858 026e F3020000 		.4byte	.LVL35-1-.Ltext0
+ 859 0272 0900     		.2byte	0x9
+ 860 0274 73       		.byte	0x73
+ 861 0275 00       		.sleb128 0
+ 862 0276 48       		.byte	0x48
+ 863 0277 24       		.byte	0x24
+ 864 0278 48       		.byte	0x48
+ 865 0279 25       		.byte	0x25
+ 866 027a 33       		.byte	0x33
+ 867 027b 24       		.byte	0x24
+ 868 027c 9F       		.byte	0x9f
+ 869 027d 00000000 		.4byte	0x0
+ 870 0281 00000000 		.4byte	0x0
+ 871              	.LLST17:
+ 872 0285 E8020000 		.4byte	.LVL34-.Ltext0
+ 873 0289 00030000 		.4byte	.LVL36-.Ltext0
+ 874 028d 0400     		.2byte	0x4
+ 875 028f 74       		.byte	0x74
+ 876 0290 C400     		.sleb128 68
+ 877 0292 9F       		.byte	0x9f
+ 878 0293 20030000 		.4byte	.LVL39-.Ltext0
+ 879 0297 3C030000 		.4byte	.LVL40-.Ltext0
+ 880 029b 0400     		.2byte	0x4
+ 881 029d 74       		.byte	0x74
+ 882 029e D000     		.sleb128 80
+ 883 02a0 9F       		.byte	0x9f
+ 884 02a1 00000000 		.4byte	0x0
+ 885 02a5 00000000 		.4byte	0x0
+ 886              	.LLST18:
+ 887 02a9 E8020000 		.4byte	.LVL34-.Ltext0
+ 888 02ad F3020000 		.4byte	.LVL35-1-.Ltext0
+ 889 02b1 0100     		.2byte	0x1
+ 890 02b3 52       		.byte	0x52
+ 891 02b4 00000000 		.4byte	0x0
+ 892 02b8 00000000 		.4byte	0x0
+ 893              	.LLST19:
+ 894 02bc E8020000 		.4byte	.LVL34-.Ltext0
+ 895 02c0 F3020000 		.4byte	.LVL35-1-.Ltext0
+ 896 02c4 0100     		.2byte	0x1
+ 897 02c6 53       		.byte	0x53
+ 898 02c7 00000000 		.4byte	0x0
+ 899 02cb 00000000 		.4byte	0x0
+ 900              	.LLST20:
+ 901 02cf 6C030000 		.4byte	.LFB5-.Ltext0
+ 902 02d3 70030000 		.4byte	.LCFI8-.Ltext0
+ 903 02d7 0200     		.2byte	0x2
+ 904 02d9 7D       		.byte	0x7d
+ 905 02da 00       		.sleb128 0
+ 906 02db 70030000 		.4byte	.LCFI8-.Ltext0
+ 907 02df 80030000 		.4byte	.LCFI9-.Ltext0
+ 908 02e3 0200     		.2byte	0x2
+ 909 02e5 7C       		.byte	0x7c
+ 910 02e6 00       		.sleb128 0
+ 911 02e7 80030000 		.4byte	.LCFI9-.Ltext0
+ 912 02eb A0030000 		.4byte	.LFE5-.Ltext0
+ 913 02ef 0200     		.2byte	0x2
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 26
+
+
+ 914 02f1 7B       		.byte	0x7b
+ 915 02f2 04       		.sleb128 4
+ 916 02f3 00000000 		.4byte	0x0
+ 917 02f7 00000000 		.4byte	0x0
+ 918              	.LLST21:
+ 919 02fb 6C030000 		.4byte	.LVL43-.Ltext0
+ 920 02ff 7C030000 		.4byte	.LVL44-.Ltext0
+ 921 0303 0100     		.2byte	0x1
+ 922 0305 50       		.byte	0x50
+ 923 0306 00000000 		.4byte	0x0
+ 924 030a 00000000 		.4byte	0x0
+ 925              		.file 2 "../mindows/mds_mdsdef.h"
+ 926              		.file 3 "../mindows/mds_core_c_inner.h"
+ 927              		.section	.debug_info
+ 928 0000 B2050000 		.4byte	0x5b2
+ 929 0004 0200     		.2byte	0x2
+ 930 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 931 000a 04       		.byte	0x4
+ 932 000b 01       		.uleb128 0x1
+ 933 000c 75020000 		.4byte	.LASF75
+ 934 0010 01       		.byte	0x1
+ 935 0011 A3020000 		.4byte	.LASF76
+ 936 0015 FB010000 		.4byte	.LASF77
+ 937 0019 00000000 		.4byte	.Ltext0
+ 938 001d A0030000 		.4byte	.Letext0
+ 939 0021 00000000 		.4byte	.Ldebug_line0
+ 940 0025 02       		.uleb128 0x2
+ 941 0026 553800   		.ascii	"U8\000"
+ 942 0029 02       		.byte	0x2
+ 943 002a 07       		.byte	0x7
+ 944 002b 2F000000 		.4byte	0x2f
+ 945 002f 03       		.uleb128 0x3
+ 946 0030 01       		.byte	0x1
+ 947 0031 08       		.byte	0x8
+ 948 0032 46010000 		.4byte	.LASF0
+ 949 0036 03       		.uleb128 0x3
+ 950 0037 02       		.byte	0x2
+ 951 0038 07       		.byte	0x7
+ 952 0039 C6010000 		.4byte	.LASF1
+ 953 003d 02       		.uleb128 0x2
+ 954 003e 55333200 		.ascii	"U32\000"
+ 955 0042 02       		.byte	0x2
+ 956 0043 09       		.byte	0x9
+ 957 0044 48000000 		.4byte	0x48
+ 958 0048 03       		.uleb128 0x3
+ 959 0049 04       		.byte	0x4
+ 960 004a 07       		.byte	0x7
+ 961 004b 74010000 		.4byte	.LASF2
+ 962 004f 03       		.uleb128 0x3
+ 963 0050 01       		.byte	0x1
+ 964 0051 08       		.byte	0x8
+ 965 0052 E3010000 		.4byte	.LASF3
+ 966 0056 03       		.uleb128 0x3
+ 967 0057 02       		.byte	0x2
+ 968 0058 05       		.byte	0x5
+ 969 0059 4B000000 		.4byte	.LASF4
+ 970 005d 04       		.uleb128 0x4
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 27
+
+
+ 971 005e 04       		.byte	0x4
+ 972 005f 05       		.byte	0x5
+ 973 0060 696E7400 		.ascii	"int\000"
+ 974 0064 05       		.uleb128 0x5
+ 975 0065 55000000 		.4byte	.LASF23
+ 976 0069 44       		.byte	0x44
+ 977 006a 02       		.byte	0x2
+ 978 006b 46       		.byte	0x46
+ 979 006c 5F010000 		.4byte	0x15f
+ 980 0070 06       		.uleb128 0x6
+ 981 0071 F2000000 		.4byte	.LASF5
+ 982 0075 02       		.byte	0x2
+ 983 0076 48       		.byte	0x48
+ 984 0077 3D000000 		.4byte	0x3d
+ 985 007b 02       		.byte	0x2
+ 986 007c 23       		.byte	0x23
+ 987 007d 00       		.uleb128 0x0
+ 988 007e 06       		.uleb128 0x6
+ 989 007f 01010000 		.4byte	.LASF6
+ 990 0083 02       		.byte	0x2
+ 991 0084 49       		.byte	0x49
+ 992 0085 3D000000 		.4byte	0x3d
+ 993 0089 02       		.byte	0x2
+ 994 008a 23       		.byte	0x23
+ 995 008b 04       		.uleb128 0x4
+ 996 008c 06       		.uleb128 0x6
+ 997 008d 06010000 		.4byte	.LASF7
+ 998 0091 02       		.byte	0x2
+ 999 0092 4A       		.byte	0x4a
+ 1000 0093 3D000000 		.4byte	0x3d
+ 1001 0097 02       		.byte	0x2
+ 1002 0098 23       		.byte	0x23
+ 1003 0099 08       		.uleb128 0x8
+ 1004 009a 06       		.uleb128 0x6
+ 1005 009b 0B010000 		.4byte	.LASF8
+ 1006 009f 02       		.byte	0x2
+ 1007 00a0 4B       		.byte	0x4b
+ 1008 00a1 3D000000 		.4byte	0x3d
+ 1009 00a5 02       		.byte	0x2
+ 1010 00a6 23       		.byte	0x23
+ 1011 00a7 0C       		.uleb128 0xc
+ 1012 00a8 06       		.uleb128 0x6
+ 1013 00a9 10010000 		.4byte	.LASF9
+ 1014 00ad 02       		.byte	0x2
+ 1015 00ae 4C       		.byte	0x4c
+ 1016 00af 3D000000 		.4byte	0x3d
+ 1017 00b3 02       		.byte	0x2
+ 1018 00b4 23       		.byte	0x23
+ 1019 00b5 10       		.uleb128 0x10
+ 1020 00b6 06       		.uleb128 0x6
+ 1021 00b7 15010000 		.4byte	.LASF10
+ 1022 00bb 02       		.byte	0x2
+ 1023 00bc 4D       		.byte	0x4d
+ 1024 00bd 3D000000 		.4byte	0x3d
+ 1025 00c1 02       		.byte	0x2
+ 1026 00c2 23       		.byte	0x23
+ 1027 00c3 14       		.uleb128 0x14
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 28
+
+
+ 1028 00c4 06       		.uleb128 0x6
+ 1029 00c5 1A010000 		.4byte	.LASF11
+ 1030 00c9 02       		.byte	0x2
+ 1031 00ca 4E       		.byte	0x4e
+ 1032 00cb 3D000000 		.4byte	0x3d
+ 1033 00cf 02       		.byte	0x2
+ 1034 00d0 23       		.byte	0x23
+ 1035 00d1 18       		.uleb128 0x18
+ 1036 00d2 06       		.uleb128 0x6
+ 1037 00d3 1F010000 		.4byte	.LASF12
+ 1038 00d7 02       		.byte	0x2
+ 1039 00d8 4F       		.byte	0x4f
+ 1040 00d9 3D000000 		.4byte	0x3d
+ 1041 00dd 02       		.byte	0x2
+ 1042 00de 23       		.byte	0x23
+ 1043 00df 1C       		.uleb128 0x1c
+ 1044 00e0 06       		.uleb128 0x6
+ 1045 00e1 24010000 		.4byte	.LASF13
+ 1046 00e5 02       		.byte	0x2
+ 1047 00e6 50       		.byte	0x50
+ 1048 00e7 3D000000 		.4byte	0x3d
+ 1049 00eb 02       		.byte	0x2
+ 1050 00ec 23       		.byte	0x23
+ 1051 00ed 20       		.uleb128 0x20
+ 1052 00ee 06       		.uleb128 0x6
+ 1053 00ef 29010000 		.4byte	.LASF14
+ 1054 00f3 02       		.byte	0x2
+ 1055 00f4 51       		.byte	0x51
+ 1056 00f5 3D000000 		.4byte	0x3d
+ 1057 00f9 02       		.byte	0x2
+ 1058 00fa 23       		.byte	0x23
+ 1059 00fb 24       		.uleb128 0x24
+ 1060 00fc 06       		.uleb128 0x6
+ 1061 00fd 2E010000 		.4byte	.LASF15
+ 1062 0101 02       		.byte	0x2
+ 1063 0102 52       		.byte	0x52
+ 1064 0103 3D000000 		.4byte	0x3d
+ 1065 0107 02       		.byte	0x2
+ 1066 0108 23       		.byte	0x23
+ 1067 0109 28       		.uleb128 0x28
+ 1068 010a 06       		.uleb128 0x6
+ 1069 010b 8B010000 		.4byte	.LASF16
+ 1070 010f 02       		.byte	0x2
+ 1071 0110 53       		.byte	0x53
+ 1072 0111 3D000000 		.4byte	0x3d
+ 1073 0115 02       		.byte	0x2
+ 1074 0116 23       		.byte	0x23
+ 1075 0117 2C       		.uleb128 0x2c
+ 1076 0118 06       		.uleb128 0x6
+ 1077 0119 91010000 		.4byte	.LASF17
+ 1078 011d 02       		.byte	0x2
+ 1079 011e 54       		.byte	0x54
+ 1080 011f 3D000000 		.4byte	0x3d
+ 1081 0123 02       		.byte	0x2
+ 1082 0124 23       		.byte	0x23
+ 1083 0125 30       		.uleb128 0x30
+ 1084 0126 06       		.uleb128 0x6
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 29
+
+
+ 1085 0127 97010000 		.4byte	.LASF18
+ 1086 012b 02       		.byte	0x2
+ 1087 012c 55       		.byte	0x55
+ 1088 012d 3D000000 		.4byte	0x3d
+ 1089 0131 02       		.byte	0x2
+ 1090 0132 23       		.byte	0x23
+ 1091 0133 34       		.uleb128 0x34
+ 1092 0134 06       		.uleb128 0x6
+ 1093 0135 9D010000 		.4byte	.LASF19
+ 1094 0139 02       		.byte	0x2
+ 1095 013a 56       		.byte	0x56
+ 1096 013b 3D000000 		.4byte	0x3d
+ 1097 013f 02       		.byte	0x2
+ 1098 0140 23       		.byte	0x23
+ 1099 0141 38       		.uleb128 0x38
+ 1100 0142 06       		.uleb128 0x6
+ 1101 0143 A3010000 		.4byte	.LASF20
+ 1102 0147 02       		.byte	0x2
+ 1103 0148 57       		.byte	0x57
+ 1104 0149 3D000000 		.4byte	0x3d
+ 1105 014d 02       		.byte	0x2
+ 1106 014e 23       		.byte	0x23
+ 1107 014f 3C       		.uleb128 0x3c
+ 1108 0150 06       		.uleb128 0x6
+ 1109 0151 A9010000 		.4byte	.LASF21
+ 1110 0155 02       		.byte	0x2
+ 1111 0156 58       		.byte	0x58
+ 1112 0157 3D000000 		.4byte	0x3d
+ 1113 015b 02       		.byte	0x2
+ 1114 015c 23       		.byte	0x23
+ 1115 015d 40       		.uleb128 0x40
+ 1116 015e 00       		.byte	0x0
+ 1117 015f 07       		.uleb128 0x7
+ 1118 0160 3D010000 		.4byte	.LASF22
+ 1119 0164 02       		.byte	0x2
+ 1120 0165 59       		.byte	0x59
+ 1121 0166 64000000 		.4byte	0x64
+ 1122 016a 05       		.uleb128 0x5
+ 1123 016b F9000000 		.4byte	.LASF24
+ 1124 016f 08       		.byte	0x8
+ 1125 0170 02       		.byte	0x2
+ 1126 0171 5B       		.byte	0x5b
+ 1127 0172 93010000 		.4byte	0x193
+ 1128 0176 06       		.uleb128 0x6
+ 1129 0177 00000000 		.4byte	.LASF25
+ 1130 017b 02       		.byte	0x2
+ 1131 017c 5D       		.byte	0x5d
+ 1132 017d 93010000 		.4byte	0x193
+ 1133 0181 02       		.byte	0x2
+ 1134 0182 23       		.byte	0x23
+ 1135 0183 00       		.uleb128 0x0
+ 1136 0184 06       		.uleb128 0x6
+ 1137 0185 46020000 		.4byte	.LASF26
+ 1138 0189 02       		.byte	0x2
+ 1139 018a 5E       		.byte	0x5e
+ 1140 018b 93010000 		.4byte	0x193
+ 1141 018f 02       		.byte	0x2
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 30
+
+
+ 1142 0190 23       		.byte	0x23
+ 1143 0191 04       		.uleb128 0x4
+ 1144 0192 00       		.byte	0x0
+ 1145 0193 08       		.uleb128 0x8
+ 1146 0194 04       		.byte	0x4
+ 1147 0195 6A010000 		.4byte	0x16a
+ 1148 0199 07       		.uleb128 0x7
+ 1149 019a 33000000 		.4byte	.LASF27
+ 1150 019e 02       		.byte	0x2
+ 1151 019f 5F       		.byte	0x5f
+ 1152 01a0 6A010000 		.4byte	0x16a
+ 1153 01a4 05       		.uleb128 0x5
+ 1154 01a5 2A000000 		.4byte	.LASF28
+ 1155 01a9 0C       		.byte	0xc
+ 1156 01aa 02       		.byte	0x2
+ 1157 01ab 61       		.byte	0x61
+ 1158 01ac CD010000 		.4byte	0x1cd
+ 1159 01b0 06       		.uleb128 0x6
+ 1160 01b1 BB010000 		.4byte	.LASF29
+ 1161 01b5 02       		.byte	0x2
+ 1162 01b6 63       		.byte	0x63
+ 1163 01b7 99010000 		.4byte	0x199
+ 1164 01bb 02       		.byte	0x2
+ 1165 01bc 23       		.byte	0x23
+ 1166 01bd 00       		.uleb128 0x0
+ 1167 01be 06       		.uleb128 0x6
+ 1168 01bf B8000000 		.4byte	.LASF30
+ 1169 01c3 02       		.byte	0x2
+ 1170 01c4 64       		.byte	0x64
+ 1171 01c5 58020000 		.4byte	0x258
+ 1172 01c9 02       		.byte	0x2
+ 1173 01ca 23       		.byte	0x23
+ 1174 01cb 08       		.uleb128 0x8
+ 1175 01cc 00       		.byte	0x0
+ 1176 01cd 05       		.uleb128 0x5
+ 1177 01ce 9A000000 		.4byte	.LASF31
+ 1178 01d2 78       		.byte	0x78
+ 1179 01d3 02       		.byte	0x2
+ 1180 01d4 8A       		.byte	0x8a
+ 1181 01d5 58020000 		.4byte	0x258
+ 1182 01d9 06       		.uleb128 0x6
+ 1183 01da 8A020000 		.4byte	.LASF32
+ 1184 01de 02       		.byte	0x2
+ 1185 01df 8C       		.byte	0x8c
+ 1186 01e0 5F010000 		.4byte	0x15f
+ 1187 01e4 02       		.byte	0x2
+ 1188 01e5 23       		.byte	0x23
+ 1189 01e6 00       		.uleb128 0x0
+ 1190 01e7 06       		.uleb128 0x6
+ 1191 01e8 59020000 		.4byte	.LASF33
+ 1192 01ec 02       		.byte	0x2
+ 1193 01ed 8D       		.byte	0x8d
+ 1194 01ee 5E020000 		.4byte	0x25e
+ 1195 01f2 02       		.byte	0x2
+ 1196 01f3 23       		.byte	0x23
+ 1197 01f4 44       		.uleb128 0x44
+ 1198 01f5 06       		.uleb128 0x6
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 31
+
+
+ 1199 01f6 63020000 		.4byte	.LASF34
+ 1200 01fa 02       		.byte	0x2
+ 1201 01fb 8E       		.byte	0x8e
+ 1202 01fc 5E020000 		.4byte	0x25e
+ 1203 0200 02       		.byte	0x2
+ 1204 0201 23       		.byte	0x23
+ 1205 0202 50       		.uleb128 0x50
+ 1206 0203 06       		.uleb128 0x6
+ 1207 0204 09030000 		.4byte	.LASF35
+ 1208 0208 02       		.byte	0x2
+ 1209 0209 8F       		.byte	0x8f
+ 1210 020a 49030000 		.4byte	0x349
+ 1211 020e 02       		.byte	0x2
+ 1212 020f 23       		.byte	0x23
+ 1213 0210 5C       		.uleb128 0x5c
+ 1214 0211 06       		.uleb128 0x6
+ 1215 0212 AF010000 		.4byte	.LASF36
+ 1216 0216 02       		.byte	0x2
+ 1217 0217 90       		.byte	0x90
+ 1218 0218 4F030000 		.4byte	0x34f
+ 1219 021c 02       		.byte	0x2
+ 1220 021d 23       		.byte	0x23
+ 1221 021e 60       		.uleb128 0x60
+ 1222 021f 06       		.uleb128 0x6
+ 1223 0220 5E000000 		.4byte	.LASF37
+ 1224 0224 02       		.byte	0x2
+ 1225 0225 91       		.byte	0x91
+ 1226 0226 3D000000 		.4byte	0x3d
+ 1227 022a 02       		.byte	0x2
+ 1228 022b 23       		.byte	0x23
+ 1229 022c 64       		.uleb128 0x64
+ 1230 022d 06       		.uleb128 0x6
+ 1231 022e 15000000 		.4byte	.LASF38
+ 1232 0232 02       		.byte	0x2
+ 1233 0233 92       		.byte	0x92
+ 1234 0234 25000000 		.4byte	0x25
+ 1235 0238 02       		.byte	0x2
+ 1236 0239 23       		.byte	0x23
+ 1237 023a 68       		.uleb128 0x68
+ 1238 023b 06       		.uleb128 0x6
+ 1239 023c DC020000 		.4byte	.LASF39
+ 1240 0240 02       		.byte	0x2
+ 1241 0241 93       		.byte	0x93
+ 1242 0242 92020000 		.4byte	0x292
+ 1243 0246 02       		.byte	0x2
+ 1244 0247 23       		.byte	0x23
+ 1245 0248 6C       		.uleb128 0x6c
+ 1246 0249 06       		.uleb128 0x6
+ 1247 024a 21020000 		.4byte	.LASF40
+ 1248 024e 02       		.byte	0x2
+ 1249 024f 94       		.byte	0x94
+ 1250 0250 3D000000 		.4byte	0x3d
+ 1251 0254 02       		.byte	0x2
+ 1252 0255 23       		.byte	0x23
+ 1253 0256 74       		.uleb128 0x74
+ 1254 0257 00       		.byte	0x0
+ 1255 0258 08       		.uleb128 0x8
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 32
+
+
+ 1256 0259 04       		.byte	0x4
+ 1257 025a CD010000 		.4byte	0x1cd
+ 1258 025e 07       		.uleb128 0x7
+ 1259 025f 81020000 		.4byte	.LASF41
+ 1260 0263 02       		.byte	0x2
+ 1261 0264 65       		.byte	0x65
+ 1262 0265 A4010000 		.4byte	0x1a4
+ 1263 0269 05       		.uleb128 0x5
+ 1264 026a 20000000 		.4byte	.LASF42
+ 1265 026e 08       		.byte	0x8
+ 1266 026f 02       		.byte	0x2
+ 1267 0270 67       		.byte	0x67
+ 1268 0271 92020000 		.4byte	0x292
+ 1269 0275 06       		.uleb128 0x6
+ 1270 0276 81010000 		.4byte	.LASF43
+ 1271 027a 02       		.byte	0x2
+ 1272 027b 69       		.byte	0x69
+ 1273 027c 25000000 		.4byte	0x25
+ 1274 0280 02       		.byte	0x2
+ 1275 0281 23       		.byte	0x23
+ 1276 0282 00       		.uleb128 0x0
+ 1277 0283 06       		.uleb128 0x6
+ 1278 0284 09000000 		.4byte	.LASF44
+ 1279 0288 02       		.byte	0x2
+ 1280 0289 6A       		.byte	0x6a
+ 1281 028a 3D000000 		.4byte	0x3d
+ 1282 028e 02       		.byte	0x2
+ 1283 028f 23       		.byte	0x23
+ 1284 0290 04       		.uleb128 0x4
+ 1285 0291 00       		.byte	0x0
+ 1286 0292 07       		.uleb128 0x7
+ 1287 0293 4F020000 		.4byte	.LASF45
+ 1288 0297 02       		.byte	0x2
+ 1289 0298 6B       		.byte	0x6b
+ 1290 0299 69020000 		.4byte	0x269
+ 1291 029d 05       		.uleb128 0x5
+ 1292 029e 69000000 		.4byte	.LASF46
+ 1293 02a2 01       		.byte	0x1
+ 1294 02a3 02       		.byte	0x2
+ 1295 02a4 6D       		.byte	0x6d
+ 1296 02a5 B8020000 		.4byte	0x2b8
+ 1297 02a9 06       		.uleb128 0x6
+ 1298 02aa 8B000000 		.4byte	.LASF47
+ 1299 02ae 02       		.byte	0x2
+ 1300 02af 77       		.byte	0x77
+ 1301 02b0 25000000 		.4byte	0x25
+ 1302 02b4 02       		.byte	0x2
+ 1303 02b5 23       		.byte	0x23
+ 1304 02b6 00       		.uleb128 0x0
+ 1305 02b7 00       		.byte	0x0
+ 1306 02b8 07       		.uleb128 0x7
+ 1307 02b9 80000000 		.4byte	.LASF48
+ 1308 02bd 02       		.byte	0x2
+ 1309 02be 79       		.byte	0x79
+ 1310 02bf 9D020000 		.4byte	0x29d
+ 1311 02c3 05       		.uleb128 0x5
+ 1312 02c4 C4020000 		.4byte	.LASF49
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 33
+
+
+ 1313 02c8 44       		.byte	0x44
+ 1314 02c9 02       		.byte	0x2
+ 1315 02ca 7B       		.byte	0x7b
+ 1316 02cb EC020000 		.4byte	0x2ec
+ 1317 02cf 06       		.uleb128 0x6
+ 1318 02d0 33010000 		.4byte	.LASF50
+ 1319 02d4 02       		.byte	0x2
+ 1320 02d5 7D       		.byte	0x7d
+ 1321 02d6 EC020000 		.4byte	0x2ec
+ 1322 02da 02       		.byte	0x2
+ 1323 02db 23       		.byte	0x23
+ 1324 02dc 00       		.uleb128 0x0
+ 1325 02dd 06       		.uleb128 0x6
+ 1326 02de 6C010000 		.4byte	.LASF51
+ 1327 02e2 02       		.byte	0x2
+ 1328 02e3 7E       		.byte	0x7e
+ 1329 02e4 B8020000 		.4byte	0x2b8
+ 1330 02e8 02       		.byte	0x2
+ 1331 02e9 23       		.byte	0x23
+ 1332 02ea 40       		.uleb128 0x40
+ 1333 02eb 00       		.byte	0x0
+ 1334 02ec 09       		.uleb128 0x9
+ 1335 02ed 99010000 		.4byte	0x199
+ 1336 02f1 FC020000 		.4byte	0x2fc
+ 1337 02f5 0A       		.uleb128 0xa
+ 1338 02f6 48000000 		.4byte	0x48
+ 1339 02fa 07       		.byte	0x7
+ 1340 02fb 00       		.byte	0x0
+ 1341 02fc 07       		.uleb128 0x7
+ 1342 02fd F4020000 		.4byte	.LASF52
+ 1343 0301 02       		.byte	0x2
+ 1344 0302 7F       		.byte	0x7f
+ 1345 0303 C3020000 		.4byte	0x2c3
+ 1346 0307 05       		.uleb128 0x5
+ 1347 0308 03030000 		.4byte	.LASF53
+ 1348 030c 4C       		.byte	0x4c
+ 1349 030d 02       		.byte	0x2
+ 1350 030e 82       		.byte	0x82
+ 1351 030f 3E030000 		.4byte	0x33e
+ 1352 0313 06       		.uleb128 0x6
+ 1353 0314 D9010000 		.4byte	.LASF54
+ 1354 0318 02       		.byte	0x2
+ 1355 0319 84       		.byte	0x84
+ 1356 031a FC020000 		.4byte	0x2fc
+ 1357 031e 02       		.byte	0x2
+ 1358 031f 23       		.byte	0x23
+ 1359 0320 00       		.uleb128 0x0
+ 1360 0321 06       		.uleb128 0x6
+ 1361 0322 3B000000 		.4byte	.LASF55
+ 1362 0326 02       		.byte	0x2
+ 1363 0327 85       		.byte	0x85
+ 1364 0328 3D000000 		.4byte	0x3d
+ 1365 032c 02       		.byte	0x2
+ 1366 032d 23       		.byte	0x23
+ 1367 032e 44       		.uleb128 0x44
+ 1368 032f 06       		.uleb128 0x6
+ 1369 0330 F2010000 		.4byte	.LASF56
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 34
+
+
+ 1370 0334 02       		.byte	0x2
+ 1371 0335 86       		.byte	0x86
+ 1372 0336 3D000000 		.4byte	0x3d
+ 1373 033a 02       		.byte	0x2
+ 1374 033b 23       		.byte	0x23
+ 1375 033c 48       		.uleb128 0x48
+ 1376 033d 00       		.byte	0x0
+ 1377 033e 07       		.uleb128 0x7
+ 1378 033f 6F020000 		.4byte	.LASF57
+ 1379 0343 02       		.byte	0x2
+ 1380 0344 87       		.byte	0x87
+ 1381 0345 07030000 		.4byte	0x307
+ 1382 0349 08       		.uleb128 0x8
+ 1383 034a 04       		.byte	0x4
+ 1384 034b 3E030000 		.4byte	0x33e
+ 1385 034f 08       		.uleb128 0x8
+ 1386 0350 04       		.byte	0x4
+ 1387 0351 25000000 		.4byte	0x25
+ 1388 0355 07       		.uleb128 0x7
+ 1389 0356 45000000 		.4byte	.LASF58
+ 1390 035a 02       		.byte	0x2
+ 1391 035b 95       		.byte	0x95
+ 1392 035c CD010000 		.4byte	0x1cd
+ 1393 0360 08       		.uleb128 0x8
+ 1394 0361 04       		.byte	0x4
+ 1395 0362 55030000 		.4byte	0x355
+ 1396 0366 03       		.uleb128 0x3
+ 1397 0367 04       		.byte	0x4
+ 1398 0368 07       		.byte	0x7
+ 1399 0369 E0000000 		.4byte	.LASF59
+ 1400 036d 0B       		.uleb128 0xb
+ 1401 036e 01       		.byte	0x1
+ 1402 036f C0000000 		.4byte	.LASF61
+ 1403 0373 01       		.byte	0x1
+ 1404 0374 17       		.byte	0x17
+ 1405 0375 01       		.byte	0x1
+ 1406 0376 3D000000 		.4byte	0x3d
+ 1407 037a 00000000 		.4byte	.LFB0
+ 1408 037e 88000000 		.4byte	.LFE0
+ 1409 0382 00000000 		.4byte	.LLST0
+ 1410 0386 B8030000 		.4byte	0x3b8
+ 1411 038a 0C       		.uleb128 0xc
+ 1412 038b 09030000 		.4byte	.LASF35
+ 1413 038f 01       		.byte	0x1
+ 1414 0390 17       		.byte	0x17
+ 1415 0391 49030000 		.4byte	0x349
+ 1416 0395 2C000000 		.4byte	.LLST1
+ 1417 0399 0C       		.uleb128 0xc
+ 1418 039a F2010000 		.4byte	.LASF56
+ 1419 039e 01       		.byte	0x1
+ 1420 039f 17       		.byte	0x17
+ 1421 03a0 3D000000 		.4byte	0x3d
+ 1422 03a4 4A000000 		.4byte	.LLST2
+ 1423 03a8 0C       		.uleb128 0xc
+ 1424 03a9 54010000 		.4byte	.LASF60
+ 1425 03ad 01       		.byte	0x1
+ 1426 03ae 17       		.byte	0x17
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 35
+
+
+ 1427 03af 3D000000 		.4byte	0x3d
+ 1428 03b3 73000000 		.4byte	.LLST3
+ 1429 03b7 00       		.byte	0x0
+ 1430 03b8 0B       		.uleb128 0xb
+ 1431 03b9 01       		.byte	0x1
+ 1432 03ba 74000000 		.4byte	.LASF62
+ 1433 03be 01       		.byte	0x1
+ 1434 03bf 4E       		.byte	0x4e
+ 1435 03c0 01       		.byte	0x1
+ 1436 03c1 3D000000 		.4byte	0x3d
+ 1437 03c5 88000000 		.4byte	.LFB1
+ 1438 03c9 94010000 		.4byte	.LFE1
+ 1439 03cd 9C000000 		.4byte	.LLST4
+ 1440 03d1 F4030000 		.4byte	0x3f4
+ 1441 03d5 0C       		.uleb128 0xc
+ 1442 03d6 09030000 		.4byte	.LASF35
+ 1443 03da 01       		.byte	0x1
+ 1444 03db 4E       		.byte	0x4e
+ 1445 03dc 49030000 		.4byte	0x349
+ 1446 03e0 C8000000 		.4byte	.LLST5
+ 1447 03e4 0C       		.uleb128 0xc
+ 1448 03e5 09000000 		.4byte	.LASF44
+ 1449 03e9 01       		.byte	0x1
+ 1450 03ea 4E       		.byte	0x4e
+ 1451 03eb 3D000000 		.4byte	0x3d
+ 1452 03ef E6000000 		.4byte	.LLST6
+ 1453 03f3 00       		.byte	0x0
+ 1454 03f4 0B       		.uleb128 0xb
+ 1455 03f5 01       		.byte	0x1
+ 1456 03f6 B8020000 		.4byte	.LASF63
+ 1457 03fa 01       		.byte	0x1
+ 1458 03fb D3       		.byte	0xd3
+ 1459 03fc 01       		.byte	0x1
+ 1460 03fd 3D000000 		.4byte	0x3d
+ 1461 0401 94010000 		.4byte	.LFB2
+ 1462 0405 A8020000 		.4byte	.LFE2
+ 1463 0409 25010000 		.4byte	.LLST7
+ 1464 040d 71040000 		.4byte	0x471
+ 1465 0411 0C       		.uleb128 0xc
+ 1466 0412 09030000 		.4byte	.LASF35
+ 1467 0416 01       		.byte	0x1
+ 1468 0417 D3       		.byte	0xd3
+ 1469 0418 49030000 		.4byte	0x349
+ 1470 041c 51010000 		.4byte	.LLST8
+ 1471 0420 0D       		.uleb128 0xd
+ 1472 0421 B8000000 		.4byte	.LASF30
+ 1473 0425 01       		.byte	0x1
+ 1474 0426 D5       		.byte	0xd5
+ 1475 0427 60030000 		.4byte	0x360
+ 1476 042b 64010000 		.4byte	.LLST9
+ 1477 042f 0E       		.uleb128 0xe
+ 1478 0430 E8010000 		.4byte	.LASF65
+ 1479 0434 01       		.byte	0x1
+ 1480 0435 D6       		.byte	0xd6
+ 1481 0436 71040000 		.4byte	0x471
+ 1482 043a 0D       		.uleb128 0xd
+ 1483 043b D3020000 		.4byte	.LASF64
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 36
+
+
+ 1484 043f 01       		.byte	0x1
+ 1485 0440 D7       		.byte	0xd7
+ 1486 0441 71040000 		.4byte	0x471
+ 1487 0445 8D010000 		.4byte	.LLST10
+ 1488 0449 0E       		.uleb128 0xe
+ 1489 044a E7020000 		.4byte	.LASF66
+ 1490 044e 01       		.byte	0x1
+ 1491 044f D8       		.byte	0xd8
+ 1492 0450 77040000 		.4byte	0x477
+ 1493 0454 0D       		.uleb128 0xd
+ 1494 0455 1B020000 		.4byte	.LASF67
+ 1495 0459 01       		.byte	0x1
+ 1496 045a D9       		.byte	0xd9
+ 1497 045b 3D000000 		.4byte	0x3d
+ 1498 045f AE010000 		.4byte	.LLST11
+ 1499 0463 0F       		.uleb128 0xf
+ 1500 0464 15000000 		.4byte	.LASF38
+ 1501 0468 01       		.byte	0x1
+ 1502 0469 DA       		.byte	0xda
+ 1503 046a 25000000 		.4byte	0x25
+ 1504 046e 01       		.byte	0x1
+ 1505 046f 5E       		.byte	0x5e
+ 1506 0470 00       		.byte	0x0
+ 1507 0471 08       		.uleb128 0x8
+ 1508 0472 04       		.byte	0x4
+ 1509 0473 99010000 		.4byte	0x199
+ 1510 0477 08       		.uleb128 0x8
+ 1511 0478 04       		.byte	0x4
+ 1512 0479 B8020000 		.4byte	0x2b8
+ 1513 047d 10       		.uleb128 0x10
+ 1514 047e 01       		.byte	0x1
+ 1515 047f CE000000 		.4byte	.LASF68
+ 1516 0483 01       		.byte	0x1
+ 1517 0484 4201     		.2byte	0x142
+ 1518 0486 01       		.byte	0x1
+ 1519 0487 3D000000 		.4byte	0x3d
+ 1520 048b A8020000 		.4byte	.LFB3
+ 1521 048f 64030000 		.4byte	.LFE3
+ 1522 0493 D9010000 		.4byte	.LLST12
+ 1523 0497 0C050000 		.4byte	0x50c
+ 1524 049b 11       		.uleb128 0x11
+ 1525 049c 09030000 		.4byte	.LASF35
+ 1526 04a0 01       		.byte	0x1
+ 1527 04a1 4201     		.2byte	0x142
+ 1528 04a3 49030000 		.4byte	0x349
+ 1529 04a7 05020000 		.4byte	.LLST13
+ 1530 04ab 11       		.uleb128 0x11
+ 1531 04ac A0000000 		.4byte	.LASF69
+ 1532 04b0 01       		.byte	0x1
+ 1533 04b1 4201     		.2byte	0x142
+ 1534 04b3 3D000000 		.4byte	0x3d
+ 1535 04b7 23020000 		.4byte	.LLST14
+ 1536 04bb 12       		.uleb128 0x12
+ 1537 04bc B8000000 		.4byte	.LASF30
+ 1538 04c0 01       		.byte	0x1
+ 1539 04c1 4401     		.2byte	0x144
+ 1540 04c3 60030000 		.4byte	0x360
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 37
+
+
+ 1541 04c7 41020000 		.4byte	.LLST15
+ 1542 04cb 12       		.uleb128 0x12
+ 1543 04cc E8010000 		.4byte	.LASF65
+ 1544 04d0 01       		.byte	0x1
+ 1545 04d1 4501     		.2byte	0x145
+ 1546 04d3 71040000 		.4byte	0x471
+ 1547 04d7 6A020000 		.4byte	.LLST16
+ 1548 04db 12       		.uleb128 0x12
+ 1549 04dc D3020000 		.4byte	.LASF64
+ 1550 04e0 01       		.byte	0x1
+ 1551 04e1 4601     		.2byte	0x146
+ 1552 04e3 71040000 		.4byte	0x471
+ 1553 04e7 85020000 		.4byte	.LLST17
+ 1554 04eb 12       		.uleb128 0x12
+ 1555 04ec E7020000 		.4byte	.LASF66
+ 1556 04f0 01       		.byte	0x1
+ 1557 04f1 4701     		.2byte	0x147
+ 1558 04f3 77040000 		.4byte	0x477
+ 1559 04f7 A9020000 		.4byte	.LLST18
+ 1560 04fb 12       		.uleb128 0x12
+ 1561 04fc 15000000 		.4byte	.LASF38
+ 1562 0500 01       		.byte	0x1
+ 1563 0501 4801     		.2byte	0x148
+ 1564 0503 25000000 		.4byte	0x25
+ 1565 0507 BC020000 		.4byte	.LLST19
+ 1566 050b 00       		.byte	0x0
+ 1567 050c 13       		.uleb128 0x13
+ 1568 050d 01       		.byte	0x1
+ 1569 050e AB000000 		.4byte	.LASF70
+ 1570 0512 01       		.byte	0x1
+ 1571 0513 8F01     		.2byte	0x18f
+ 1572 0515 01       		.byte	0x1
+ 1573 0516 3D000000 		.4byte	0x3d
+ 1574 051a 64030000 		.4byte	.LFB4
+ 1575 051e 6C030000 		.4byte	.LFE4
+ 1576 0522 02       		.byte	0x2
+ 1577 0523 7D       		.byte	0x7d
+ 1578 0524 00       		.sleb128 0
+ 1579 0525 38050000 		.4byte	0x538
+ 1580 0529 14       		.uleb128 0x14
+ 1581 052a 09030000 		.4byte	.LASF35
+ 1582 052e 01       		.byte	0x1
+ 1583 052f 8F01     		.2byte	0x18f
+ 1584 0531 49030000 		.4byte	0x349
+ 1585 0535 01       		.byte	0x1
+ 1586 0536 50       		.byte	0x50
+ 1587 0537 00       		.byte	0x0
+ 1588 0538 10       		.uleb128 0x10
+ 1589 0539 01       		.byte	0x1
+ 1590 053a 5E010000 		.4byte	.LASF71
+ 1591 053e 01       		.byte	0x1
+ 1592 053f 9B01     		.2byte	0x19b
+ 1593 0541 01       		.byte	0x1
+ 1594 0542 3D000000 		.4byte	0x3d
+ 1595 0546 6C030000 		.4byte	.LFB5
+ 1596 054a A0030000 		.4byte	.LFE5
+ 1597 054e CF020000 		.4byte	.LLST20
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 38
+
+
+ 1598 0552 67050000 		.4byte	0x567
+ 1599 0556 11       		.uleb128 0x11
+ 1600 0557 09030000 		.4byte	.LASF35
+ 1601 055b 01       		.byte	0x1
+ 1602 055c 9B01     		.2byte	0x19b
+ 1603 055e 49030000 		.4byte	0x349
+ 1604 0562 FB020000 		.4byte	.LLST21
+ 1605 0566 00       		.byte	0x0
+ 1606 0567 15       		.uleb128 0x15
+ 1607 0568 96020000 		.4byte	.LASF72
+ 1608 056c 03       		.byte	0x3
+ 1609 056d 09       		.byte	0x9
+ 1610 056e FC020000 		.4byte	0x2fc
+ 1611 0572 01       		.byte	0x1
+ 1612 0573 01       		.byte	0x1
+ 1613 0574 15       		.uleb128 0x15
+ 1614 0575 39020000 		.4byte	.LASF73
+ 1615 0579 03       		.byte	0x3
+ 1616 057a 0A       		.byte	0xa
+ 1617 057b 99010000 		.4byte	0x199
+ 1618 057f 01       		.byte	0x1
+ 1619 0580 01       		.byte	0x1
+ 1620 0581 15       		.uleb128 0x15
+ 1621 0582 2D020000 		.4byte	.LASF74
+ 1622 0586 03       		.byte	0x3
+ 1623 0587 0E       		.byte	0xe
+ 1624 0588 60030000 		.4byte	0x360
+ 1625 058c 01       		.byte	0x1
+ 1626 058d 01       		.byte	0x1
+ 1627 058e 15       		.uleb128 0x15
+ 1628 058f 96020000 		.4byte	.LASF72
+ 1629 0593 03       		.byte	0x3
+ 1630 0594 09       		.byte	0x9
+ 1631 0595 FC020000 		.4byte	0x2fc
+ 1632 0599 01       		.byte	0x1
+ 1633 059a 01       		.byte	0x1
+ 1634 059b 15       		.uleb128 0x15
+ 1635 059c 39020000 		.4byte	.LASF73
+ 1636 05a0 03       		.byte	0x3
+ 1637 05a1 0A       		.byte	0xa
+ 1638 05a2 99010000 		.4byte	0x199
+ 1639 05a6 01       		.byte	0x1
+ 1640 05a7 01       		.byte	0x1
+ 1641 05a8 15       		.uleb128 0x15
+ 1642 05a9 2D020000 		.4byte	.LASF74
+ 1643 05ad 03       		.byte	0x3
+ 1644 05ae 0E       		.byte	0xe
+ 1645 05af 60030000 		.4byte	0x360
+ 1646 05b3 01       		.byte	0x1
+ 1647 05b4 01       		.byte	0x1
+ 1648 05b5 00       		.byte	0x0
+ 1649              		.section	.debug_abbrev
+ 1650 0000 01       		.uleb128 0x1
+ 1651 0001 11       		.uleb128 0x11
+ 1652 0002 01       		.byte	0x1
+ 1653 0003 25       		.uleb128 0x25
+ 1654 0004 0E       		.uleb128 0xe
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 39
+
+
+ 1655 0005 13       		.uleb128 0x13
+ 1656 0006 0B       		.uleb128 0xb
+ 1657 0007 03       		.uleb128 0x3
+ 1658 0008 0E       		.uleb128 0xe
+ 1659 0009 1B       		.uleb128 0x1b
+ 1660 000a 0E       		.uleb128 0xe
+ 1661 000b 11       		.uleb128 0x11
+ 1662 000c 01       		.uleb128 0x1
+ 1663 000d 12       		.uleb128 0x12
+ 1664 000e 01       		.uleb128 0x1
+ 1665 000f 10       		.uleb128 0x10
+ 1666 0010 06       		.uleb128 0x6
+ 1667 0011 00       		.byte	0x0
+ 1668 0012 00       		.byte	0x0
+ 1669 0013 02       		.uleb128 0x2
+ 1670 0014 16       		.uleb128 0x16
+ 1671 0015 00       		.byte	0x0
+ 1672 0016 03       		.uleb128 0x3
+ 1673 0017 08       		.uleb128 0x8
+ 1674 0018 3A       		.uleb128 0x3a
+ 1675 0019 0B       		.uleb128 0xb
+ 1676 001a 3B       		.uleb128 0x3b
+ 1677 001b 0B       		.uleb128 0xb
+ 1678 001c 49       		.uleb128 0x49
+ 1679 001d 13       		.uleb128 0x13
+ 1680 001e 00       		.byte	0x0
+ 1681 001f 00       		.byte	0x0
+ 1682 0020 03       		.uleb128 0x3
+ 1683 0021 24       		.uleb128 0x24
+ 1684 0022 00       		.byte	0x0
+ 1685 0023 0B       		.uleb128 0xb
+ 1686 0024 0B       		.uleb128 0xb
+ 1687 0025 3E       		.uleb128 0x3e
+ 1688 0026 0B       		.uleb128 0xb
+ 1689 0027 03       		.uleb128 0x3
+ 1690 0028 0E       		.uleb128 0xe
+ 1691 0029 00       		.byte	0x0
+ 1692 002a 00       		.byte	0x0
+ 1693 002b 04       		.uleb128 0x4
+ 1694 002c 24       		.uleb128 0x24
+ 1695 002d 00       		.byte	0x0
+ 1696 002e 0B       		.uleb128 0xb
+ 1697 002f 0B       		.uleb128 0xb
+ 1698 0030 3E       		.uleb128 0x3e
+ 1699 0031 0B       		.uleb128 0xb
+ 1700 0032 03       		.uleb128 0x3
+ 1701 0033 08       		.uleb128 0x8
+ 1702 0034 00       		.byte	0x0
+ 1703 0035 00       		.byte	0x0
+ 1704 0036 05       		.uleb128 0x5
+ 1705 0037 13       		.uleb128 0x13
+ 1706 0038 01       		.byte	0x1
+ 1707 0039 03       		.uleb128 0x3
+ 1708 003a 0E       		.uleb128 0xe
+ 1709 003b 0B       		.uleb128 0xb
+ 1710 003c 0B       		.uleb128 0xb
+ 1711 003d 3A       		.uleb128 0x3a
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 40
+
+
+ 1712 003e 0B       		.uleb128 0xb
+ 1713 003f 3B       		.uleb128 0x3b
+ 1714 0040 0B       		.uleb128 0xb
+ 1715 0041 01       		.uleb128 0x1
+ 1716 0042 13       		.uleb128 0x13
+ 1717 0043 00       		.byte	0x0
+ 1718 0044 00       		.byte	0x0
+ 1719 0045 06       		.uleb128 0x6
+ 1720 0046 0D       		.uleb128 0xd
+ 1721 0047 00       		.byte	0x0
+ 1722 0048 03       		.uleb128 0x3
+ 1723 0049 0E       		.uleb128 0xe
+ 1724 004a 3A       		.uleb128 0x3a
+ 1725 004b 0B       		.uleb128 0xb
+ 1726 004c 3B       		.uleb128 0x3b
+ 1727 004d 0B       		.uleb128 0xb
+ 1728 004e 49       		.uleb128 0x49
+ 1729 004f 13       		.uleb128 0x13
+ 1730 0050 38       		.uleb128 0x38
+ 1731 0051 0A       		.uleb128 0xa
+ 1732 0052 00       		.byte	0x0
+ 1733 0053 00       		.byte	0x0
+ 1734 0054 07       		.uleb128 0x7
+ 1735 0055 16       		.uleb128 0x16
+ 1736 0056 00       		.byte	0x0
+ 1737 0057 03       		.uleb128 0x3
+ 1738 0058 0E       		.uleb128 0xe
+ 1739 0059 3A       		.uleb128 0x3a
+ 1740 005a 0B       		.uleb128 0xb
+ 1741 005b 3B       		.uleb128 0x3b
+ 1742 005c 0B       		.uleb128 0xb
+ 1743 005d 49       		.uleb128 0x49
+ 1744 005e 13       		.uleb128 0x13
+ 1745 005f 00       		.byte	0x0
+ 1746 0060 00       		.byte	0x0
+ 1747 0061 08       		.uleb128 0x8
+ 1748 0062 0F       		.uleb128 0xf
+ 1749 0063 00       		.byte	0x0
+ 1750 0064 0B       		.uleb128 0xb
+ 1751 0065 0B       		.uleb128 0xb
+ 1752 0066 49       		.uleb128 0x49
+ 1753 0067 13       		.uleb128 0x13
+ 1754 0068 00       		.byte	0x0
+ 1755 0069 00       		.byte	0x0
+ 1756 006a 09       		.uleb128 0x9
+ 1757 006b 01       		.uleb128 0x1
+ 1758 006c 01       		.byte	0x1
+ 1759 006d 49       		.uleb128 0x49
+ 1760 006e 13       		.uleb128 0x13
+ 1761 006f 01       		.uleb128 0x1
+ 1762 0070 13       		.uleb128 0x13
+ 1763 0071 00       		.byte	0x0
+ 1764 0072 00       		.byte	0x0
+ 1765 0073 0A       		.uleb128 0xa
+ 1766 0074 21       		.uleb128 0x21
+ 1767 0075 00       		.byte	0x0
+ 1768 0076 49       		.uleb128 0x49
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 41
+
+
+ 1769 0077 13       		.uleb128 0x13
+ 1770 0078 2F       		.uleb128 0x2f
+ 1771 0079 0B       		.uleb128 0xb
+ 1772 007a 00       		.byte	0x0
+ 1773 007b 00       		.byte	0x0
+ 1774 007c 0B       		.uleb128 0xb
+ 1775 007d 2E       		.uleb128 0x2e
+ 1776 007e 01       		.byte	0x1
+ 1777 007f 3F       		.uleb128 0x3f
+ 1778 0080 0C       		.uleb128 0xc
+ 1779 0081 03       		.uleb128 0x3
+ 1780 0082 0E       		.uleb128 0xe
+ 1781 0083 3A       		.uleb128 0x3a
+ 1782 0084 0B       		.uleb128 0xb
+ 1783 0085 3B       		.uleb128 0x3b
+ 1784 0086 0B       		.uleb128 0xb
+ 1785 0087 27       		.uleb128 0x27
+ 1786 0088 0C       		.uleb128 0xc
+ 1787 0089 49       		.uleb128 0x49
+ 1788 008a 13       		.uleb128 0x13
+ 1789 008b 11       		.uleb128 0x11
+ 1790 008c 01       		.uleb128 0x1
+ 1791 008d 12       		.uleb128 0x12
+ 1792 008e 01       		.uleb128 0x1
+ 1793 008f 40       		.uleb128 0x40
+ 1794 0090 06       		.uleb128 0x6
+ 1795 0091 01       		.uleb128 0x1
+ 1796 0092 13       		.uleb128 0x13
+ 1797 0093 00       		.byte	0x0
+ 1798 0094 00       		.byte	0x0
+ 1799 0095 0C       		.uleb128 0xc
+ 1800 0096 05       		.uleb128 0x5
+ 1801 0097 00       		.byte	0x0
+ 1802 0098 03       		.uleb128 0x3
+ 1803 0099 0E       		.uleb128 0xe
+ 1804 009a 3A       		.uleb128 0x3a
+ 1805 009b 0B       		.uleb128 0xb
+ 1806 009c 3B       		.uleb128 0x3b
+ 1807 009d 0B       		.uleb128 0xb
+ 1808 009e 49       		.uleb128 0x49
+ 1809 009f 13       		.uleb128 0x13
+ 1810 00a0 02       		.uleb128 0x2
+ 1811 00a1 06       		.uleb128 0x6
+ 1812 00a2 00       		.byte	0x0
+ 1813 00a3 00       		.byte	0x0
+ 1814 00a4 0D       		.uleb128 0xd
+ 1815 00a5 34       		.uleb128 0x34
+ 1816 00a6 00       		.byte	0x0
+ 1817 00a7 03       		.uleb128 0x3
+ 1818 00a8 0E       		.uleb128 0xe
+ 1819 00a9 3A       		.uleb128 0x3a
+ 1820 00aa 0B       		.uleb128 0xb
+ 1821 00ab 3B       		.uleb128 0x3b
+ 1822 00ac 0B       		.uleb128 0xb
+ 1823 00ad 49       		.uleb128 0x49
+ 1824 00ae 13       		.uleb128 0x13
+ 1825 00af 02       		.uleb128 0x2
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 42
+
+
+ 1826 00b0 06       		.uleb128 0x6
+ 1827 00b1 00       		.byte	0x0
+ 1828 00b2 00       		.byte	0x0
+ 1829 00b3 0E       		.uleb128 0xe
+ 1830 00b4 34       		.uleb128 0x34
+ 1831 00b5 00       		.byte	0x0
+ 1832 00b6 03       		.uleb128 0x3
+ 1833 00b7 0E       		.uleb128 0xe
+ 1834 00b8 3A       		.uleb128 0x3a
+ 1835 00b9 0B       		.uleb128 0xb
+ 1836 00ba 3B       		.uleb128 0x3b
+ 1837 00bb 0B       		.uleb128 0xb
+ 1838 00bc 49       		.uleb128 0x49
+ 1839 00bd 13       		.uleb128 0x13
+ 1840 00be 00       		.byte	0x0
+ 1841 00bf 00       		.byte	0x0
+ 1842 00c0 0F       		.uleb128 0xf
+ 1843 00c1 34       		.uleb128 0x34
+ 1844 00c2 00       		.byte	0x0
+ 1845 00c3 03       		.uleb128 0x3
+ 1846 00c4 0E       		.uleb128 0xe
+ 1847 00c5 3A       		.uleb128 0x3a
+ 1848 00c6 0B       		.uleb128 0xb
+ 1849 00c7 3B       		.uleb128 0x3b
+ 1850 00c8 0B       		.uleb128 0xb
+ 1851 00c9 49       		.uleb128 0x49
+ 1852 00ca 13       		.uleb128 0x13
+ 1853 00cb 02       		.uleb128 0x2
+ 1854 00cc 0A       		.uleb128 0xa
+ 1855 00cd 00       		.byte	0x0
+ 1856 00ce 00       		.byte	0x0
+ 1857 00cf 10       		.uleb128 0x10
+ 1858 00d0 2E       		.uleb128 0x2e
+ 1859 00d1 01       		.byte	0x1
+ 1860 00d2 3F       		.uleb128 0x3f
+ 1861 00d3 0C       		.uleb128 0xc
+ 1862 00d4 03       		.uleb128 0x3
+ 1863 00d5 0E       		.uleb128 0xe
+ 1864 00d6 3A       		.uleb128 0x3a
+ 1865 00d7 0B       		.uleb128 0xb
+ 1866 00d8 3B       		.uleb128 0x3b
+ 1867 00d9 05       		.uleb128 0x5
+ 1868 00da 27       		.uleb128 0x27
+ 1869 00db 0C       		.uleb128 0xc
+ 1870 00dc 49       		.uleb128 0x49
+ 1871 00dd 13       		.uleb128 0x13
+ 1872 00de 11       		.uleb128 0x11
+ 1873 00df 01       		.uleb128 0x1
+ 1874 00e0 12       		.uleb128 0x12
+ 1875 00e1 01       		.uleb128 0x1
+ 1876 00e2 40       		.uleb128 0x40
+ 1877 00e3 06       		.uleb128 0x6
+ 1878 00e4 01       		.uleb128 0x1
+ 1879 00e5 13       		.uleb128 0x13
+ 1880 00e6 00       		.byte	0x0
+ 1881 00e7 00       		.byte	0x0
+ 1882 00e8 11       		.uleb128 0x11
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 43
+
+
+ 1883 00e9 05       		.uleb128 0x5
+ 1884 00ea 00       		.byte	0x0
+ 1885 00eb 03       		.uleb128 0x3
+ 1886 00ec 0E       		.uleb128 0xe
+ 1887 00ed 3A       		.uleb128 0x3a
+ 1888 00ee 0B       		.uleb128 0xb
+ 1889 00ef 3B       		.uleb128 0x3b
+ 1890 00f0 05       		.uleb128 0x5
+ 1891 00f1 49       		.uleb128 0x49
+ 1892 00f2 13       		.uleb128 0x13
+ 1893 00f3 02       		.uleb128 0x2
+ 1894 00f4 06       		.uleb128 0x6
+ 1895 00f5 00       		.byte	0x0
+ 1896 00f6 00       		.byte	0x0
+ 1897 00f7 12       		.uleb128 0x12
+ 1898 00f8 34       		.uleb128 0x34
+ 1899 00f9 00       		.byte	0x0
+ 1900 00fa 03       		.uleb128 0x3
+ 1901 00fb 0E       		.uleb128 0xe
+ 1902 00fc 3A       		.uleb128 0x3a
+ 1903 00fd 0B       		.uleb128 0xb
+ 1904 00fe 3B       		.uleb128 0x3b
+ 1905 00ff 05       		.uleb128 0x5
+ 1906 0100 49       		.uleb128 0x49
+ 1907 0101 13       		.uleb128 0x13
+ 1908 0102 02       		.uleb128 0x2
+ 1909 0103 06       		.uleb128 0x6
+ 1910 0104 00       		.byte	0x0
+ 1911 0105 00       		.byte	0x0
+ 1912 0106 13       		.uleb128 0x13
+ 1913 0107 2E       		.uleb128 0x2e
+ 1914 0108 01       		.byte	0x1
+ 1915 0109 3F       		.uleb128 0x3f
+ 1916 010a 0C       		.uleb128 0xc
+ 1917 010b 03       		.uleb128 0x3
+ 1918 010c 0E       		.uleb128 0xe
+ 1919 010d 3A       		.uleb128 0x3a
+ 1920 010e 0B       		.uleb128 0xb
+ 1921 010f 3B       		.uleb128 0x3b
+ 1922 0110 05       		.uleb128 0x5
+ 1923 0111 27       		.uleb128 0x27
+ 1924 0112 0C       		.uleb128 0xc
+ 1925 0113 49       		.uleb128 0x49
+ 1926 0114 13       		.uleb128 0x13
+ 1927 0115 11       		.uleb128 0x11
+ 1928 0116 01       		.uleb128 0x1
+ 1929 0117 12       		.uleb128 0x12
+ 1930 0118 01       		.uleb128 0x1
+ 1931 0119 40       		.uleb128 0x40
+ 1932 011a 0A       		.uleb128 0xa
+ 1933 011b 01       		.uleb128 0x1
+ 1934 011c 13       		.uleb128 0x13
+ 1935 011d 00       		.byte	0x0
+ 1936 011e 00       		.byte	0x0
+ 1937 011f 14       		.uleb128 0x14
+ 1938 0120 05       		.uleb128 0x5
+ 1939 0121 00       		.byte	0x0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 44
+
+
+ 1940 0122 03       		.uleb128 0x3
+ 1941 0123 0E       		.uleb128 0xe
+ 1942 0124 3A       		.uleb128 0x3a
+ 1943 0125 0B       		.uleb128 0xb
+ 1944 0126 3B       		.uleb128 0x3b
+ 1945 0127 05       		.uleb128 0x5
+ 1946 0128 49       		.uleb128 0x49
+ 1947 0129 13       		.uleb128 0x13
+ 1948 012a 02       		.uleb128 0x2
+ 1949 012b 0A       		.uleb128 0xa
+ 1950 012c 00       		.byte	0x0
+ 1951 012d 00       		.byte	0x0
+ 1952 012e 15       		.uleb128 0x15
+ 1953 012f 34       		.uleb128 0x34
+ 1954 0130 00       		.byte	0x0
+ 1955 0131 03       		.uleb128 0x3
+ 1956 0132 0E       		.uleb128 0xe
+ 1957 0133 3A       		.uleb128 0x3a
+ 1958 0134 0B       		.uleb128 0xb
+ 1959 0135 3B       		.uleb128 0x3b
+ 1960 0136 0B       		.uleb128 0xb
+ 1961 0137 49       		.uleb128 0x49
+ 1962 0138 13       		.uleb128 0x13
+ 1963 0139 3F       		.uleb128 0x3f
+ 1964 013a 0C       		.uleb128 0xc
+ 1965 013b 3C       		.uleb128 0x3c
+ 1966 013c 0C       		.uleb128 0xc
+ 1967 013d 00       		.byte	0x0
+ 1968 013e 00       		.byte	0x0
+ 1969 013f 00       		.byte	0x0
+ 1970              		.section	.debug_pubnames,"",%progbits
+ 1971 0000 79000000 		.4byte	0x79
+ 1972 0004 0200     		.2byte	0x2
+ 1973 0006 00000000 		.4byte	.Ldebug_info0
+ 1974 000a B6050000 		.4byte	0x5b6
+ 1975 000e 6D030000 		.4byte	0x36d
+ 1976 0012 4D44535F 		.ascii	"MDS_SemCreate\000"
+ 1976      53656D43 
+ 1976      72656174 
+ 1976      6500
+ 1977 0020 B8030000 		.4byte	0x3b8
+ 1978 0024 4D44535F 		.ascii	"MDS_SemTake\000"
+ 1978      53656D54 
+ 1978      616B6500 
+ 1979 0030 F4030000 		.4byte	0x3f4
+ 1980 0034 4D44535F 		.ascii	"MDS_SemGive\000"
+ 1980      53656D47 
+ 1980      69766500 
+ 1981 0040 7D040000 		.4byte	0x47d
+ 1982 0044 4D44535F 		.ascii	"MDS_SemFlushValue\000"
+ 1982      53656D46 
+ 1982      6C757368 
+ 1982      56616C75 
+ 1982      6500
+ 1983 0056 0C050000 		.4byte	0x50c
+ 1984 005a 4D44535F 		.ascii	"MDS_SemFlush\000"
+ 1984      53656D46 
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 45
+
+
+ 1984      6C757368 
+ 1984      00
+ 1985 0067 38050000 		.4byte	0x538
+ 1986 006b 4D44535F 		.ascii	"MDS_SemDelete\000"
+ 1986      53656D44 
+ 1986      656C6574 
+ 1986      6500
+ 1987 0079 00000000 		.4byte	0x0
+ 1988              		.section	.debug_pubtypes,"",%progbits
+ 1989 0000 F1000000 		.4byte	0xf1
+ 1990 0004 0200     		.2byte	0x2
+ 1991 0006 00000000 		.4byte	.Ldebug_info0
+ 1992 000a B6050000 		.4byte	0x5b6
+ 1993 000e 25000000 		.4byte	0x25
+ 1994 0012 553800   		.ascii	"U8\000"
+ 1995 0015 3D000000 		.4byte	0x3d
+ 1996 0019 55333200 		.ascii	"U32\000"
+ 1997 001d 64000000 		.4byte	0x64
+ 1998 0021 73746163 		.ascii	"stackreg\000"
+ 1998      6B726567 
+ 1998      00
+ 1999 002a 5F010000 		.4byte	0x15f
+ 2000 002e 53544143 		.ascii	"STACKREG\000"
+ 2000      4B524547 
+ 2000      00
+ 2001 0037 6A010000 		.4byte	0x16a
+ 2002 003b 6D5F6368 		.ascii	"m_chain\000"
+ 2002      61696E00 
+ 2003 0043 99010000 		.4byte	0x199
+ 2004 0047 4D5F4348 		.ascii	"M_CHAIN\000"
+ 2004      41494E00 
+ 2005 004f A4010000 		.4byte	0x1a4
+ 2006 0053 6D5F7463 		.ascii	"m_tcbque\000"
+ 2006      62717565 
+ 2006      00
+ 2007 005c 5E020000 		.4byte	0x25e
+ 2008 0060 4D5F5443 		.ascii	"M_TCBQUE\000"
+ 2008      42515545 
+ 2008      00
+ 2009 0069 69020000 		.4byte	0x269
+ 2010 006d 6D5F7461 		.ascii	"m_taskopt\000"
+ 2010      736B6F70 
+ 2010      7400
+ 2011 0077 92020000 		.4byte	0x292
+ 2012 007b 4D5F5441 		.ascii	"M_TASKOPT\000"
+ 2012      534B4F50 
+ 2012      5400
+ 2013 0085 9D020000 		.4byte	0x29d
+ 2014 0089 6D5F7072 		.ascii	"m_prioflag\000"
+ 2014      696F666C 
+ 2014      616700
+ 2015 0094 B8020000 		.4byte	0x2b8
+ 2016 0098 4D5F5052 		.ascii	"M_PRIOFLAG\000"
+ 2016      494F464C 
+ 2016      414700
+ 2017 00a3 C3020000 		.4byte	0x2c3
+ 2018 00a7 6D5F7461 		.ascii	"m_taskschedtab\000"
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 46
+
+
+ 2018      736B7363 
+ 2018      68656474 
+ 2018      616200
+ 2019 00b6 FC020000 		.4byte	0x2fc
+ 2020 00ba 4D5F5441 		.ascii	"M_TASKSCHEDTAB\000"
+ 2020      534B5343 
+ 2020      48454454 
+ 2020      414200
+ 2021 00c9 07030000 		.4byte	0x307
+ 2022 00cd 6D5F7365 		.ascii	"m_sem\000"
+ 2022      6D00
+ 2023 00d3 3E030000 		.4byte	0x33e
+ 2024 00d7 4D5F5345 		.ascii	"M_SEM\000"
+ 2024      4D00
+ 2025 00dd CD010000 		.4byte	0x1cd
+ 2026 00e1 6D5F7463 		.ascii	"m_tcb\000"
+ 2026      6200
+ 2027 00e7 55030000 		.4byte	0x355
+ 2028 00eb 4D5F5443 		.ascii	"M_TCB\000"
+ 2028      4200
+ 2029 00f1 00000000 		.4byte	0x0
+ 2030              		.section	.debug_aranges,"",%progbits
+ 2031 0000 1C000000 		.4byte	0x1c
+ 2032 0004 0200     		.2byte	0x2
+ 2033 0006 00000000 		.4byte	.Ldebug_info0
+ 2034 000a 04       		.byte	0x4
+ 2035 000b 00       		.byte	0x0
+ 2036 000c 0000     		.2byte	0x0
+ 2037 000e 0000     		.2byte	0x0
+ 2038 0010 00000000 		.4byte	.Ltext0
+ 2039 0014 A0030000 		.4byte	.Letext0-.Ltext0
+ 2040 0018 00000000 		.4byte	0x0
+ 2041 001c 00000000 		.4byte	0x0
+ 2042              		.section	.debug_str,"MS",%progbits,1
+ 2043              	.LASF25:
+ 2044 0000 70737472 		.ascii	"pstrHead\000"
+ 2044      48656164 
+ 2044      00
+ 2045              	.LASF44:
+ 2046 0009 75694465 		.ascii	"uiDelayTick\000"
+ 2046      6C617954 
+ 2046      69636B00 
+ 2047              	.LASF38:
+ 2048 0015 75635461 		.ascii	"ucTaskPrio\000"
+ 2048      736B5072 
+ 2048      696F00
+ 2049              	.LASF42:
+ 2050 0020 6D5F7461 		.ascii	"m_taskopt\000"
+ 2050      736B6F70 
+ 2050      7400
+ 2051              	.LASF28:
+ 2052 002a 6D5F7463 		.ascii	"m_tcbque\000"
+ 2052      62717565 
+ 2052      00
+ 2053              	.LASF27:
+ 2054 0033 4D5F4348 		.ascii	"M_CHAIN\000"
+ 2054      41494E00 
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 47
+
+
+ 2055              	.LASF55:
+ 2056 003b 7569436F 		.ascii	"uiCounter\000"
+ 2056      756E7465 
+ 2056      7200
+ 2057              	.LASF58:
+ 2058 0045 4D5F5443 		.ascii	"M_TCB\000"
+ 2058      4200
+ 2059              	.LASF4:
+ 2060 004b 73686F72 		.ascii	"short int\000"
+ 2060      7420696E 
+ 2060      7400
+ 2061              	.LASF23:
+ 2062 0055 73746163 		.ascii	"stackreg\000"
+ 2062      6B726567 
+ 2062      00
+ 2063              	.LASF37:
+ 2064 005e 75695461 		.ascii	"uiTaskFlag\000"
+ 2064      736B466C 
+ 2064      616700
+ 2065              	.LASF46:
+ 2066 0069 6D5F7072 		.ascii	"m_prioflag\000"
+ 2066      696F666C 
+ 2066      616700
+ 2067              	.LASF62:
+ 2068 0074 4D44535F 		.ascii	"MDS_SemTake\000"
+ 2068      53656D54 
+ 2068      616B6500 
+ 2069              	.LASF48:
+ 2070 0080 4D5F5052 		.ascii	"M_PRIOFLAG\000"
+ 2070      494F464C 
+ 2070      414700
+ 2071              	.LASF47:
+ 2072 008b 75635072 		.ascii	"ucPrioFlagGrp1\000"
+ 2072      696F466C 
+ 2072      61674772 
+ 2072      703100
+ 2073              	.LASF31:
+ 2074 009a 6D5F7463 		.ascii	"m_tcb\000"
+ 2074      6200
+ 2075              	.LASF69:
+ 2076 00a0 75695274 		.ascii	"uiRtnValue\000"
+ 2076      6E56616C 
+ 2076      756500
+ 2077              	.LASF70:
+ 2078 00ab 4D44535F 		.ascii	"MDS_SemFlush\000"
+ 2078      53656D46 
+ 2078      6C757368 
+ 2078      00
+ 2079              	.LASF30:
+ 2080 00b8 70737472 		.ascii	"pstrTcb\000"
+ 2080      54636200 
+ 2081              	.LASF61:
+ 2082 00c0 4D44535F 		.ascii	"MDS_SemCreate\000"
+ 2082      53656D43 
+ 2082      72656174 
+ 2082      6500
+ 2083              	.LASF68:
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 48
+
+
+ 2084 00ce 4D44535F 		.ascii	"MDS_SemFlushValue\000"
+ 2084      53656D46 
+ 2084      6C757368 
+ 2084      56616C75 
+ 2084      6500
+ 2085              	.LASF59:
+ 2086 00e0 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2086      20756E73 
+ 2086      69676E65 
+ 2086      6420696E 
+ 2086      7400
+ 2087              	.LASF5:
+ 2088 00f2 75694370 		.ascii	"uiCpsr\000"
+ 2088      737200
+ 2089              	.LASF24:
+ 2090 00f9 6D5F6368 		.ascii	"m_chain\000"
+ 2090      61696E00 
+ 2091              	.LASF6:
+ 2092 0101 75695230 		.ascii	"uiR0\000"
+ 2092      00
+ 2093              	.LASF7:
+ 2094 0106 75695231 		.ascii	"uiR1\000"
+ 2094      00
+ 2095              	.LASF8:
+ 2096 010b 75695232 		.ascii	"uiR2\000"
+ 2096      00
+ 2097              	.LASF9:
+ 2098 0110 75695233 		.ascii	"uiR3\000"
+ 2098      00
+ 2099              	.LASF10:
+ 2100 0115 75695234 		.ascii	"uiR4\000"
+ 2100      00
+ 2101              	.LASF11:
+ 2102 011a 75695235 		.ascii	"uiR5\000"
+ 2102      00
+ 2103              	.LASF12:
+ 2104 011f 75695236 		.ascii	"uiR6\000"
+ 2104      00
+ 2105              	.LASF13:
+ 2106 0124 75695237 		.ascii	"uiR7\000"
+ 2106      00
+ 2107              	.LASF14:
+ 2108 0129 75695238 		.ascii	"uiR8\000"
+ 2108      00
+ 2109              	.LASF15:
+ 2110 012e 75695239 		.ascii	"uiR9\000"
+ 2110      00
+ 2111              	.LASF50:
+ 2112 0133 61737472 		.ascii	"astrChain\000"
+ 2112      43686169 
+ 2112      6E00
+ 2113              	.LASF22:
+ 2114 013d 53544143 		.ascii	"STACKREG\000"
+ 2114      4B524547 
+ 2114      00
+ 2115              	.LASF0:
+ 2116 0146 756E7369 		.ascii	"unsigned char\000"
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 49
+
+
+ 2116      676E6564 
+ 2116      20636861 
+ 2116      7200
+ 2117              	.LASF60:
+ 2118 0154 7569496E 		.ascii	"uiInitVal\000"
+ 2118      69745661 
+ 2118      6C00
+ 2119              	.LASF71:
+ 2120 015e 4D44535F 		.ascii	"MDS_SemDelete\000"
+ 2120      53656D44 
+ 2120      656C6574 
+ 2120      6500
+ 2121              	.LASF51:
+ 2122 016c 73747246 		.ascii	"strFlag\000"
+ 2122      6C616700 
+ 2123              	.LASF2:
+ 2124 0174 756E7369 		.ascii	"unsigned int\000"
+ 2124      676E6564 
+ 2124      20696E74 
+ 2124      00
+ 2125              	.LASF43:
+ 2126 0181 75635461 		.ascii	"ucTaskSta\000"
+ 2126      736B5374 
+ 2126      6100
+ 2127              	.LASF16:
+ 2128 018b 75695231 		.ascii	"uiR10\000"
+ 2128      3000
+ 2129              	.LASF17:
+ 2130 0191 75695231 		.ascii	"uiR11\000"
+ 2130      3100
+ 2131              	.LASF18:
+ 2132 0197 75695231 		.ascii	"uiR12\000"
+ 2132      3200
+ 2133              	.LASF19:
+ 2134 019d 75695231 		.ascii	"uiR13\000"
+ 2134      3300
+ 2135              	.LASF20:
+ 2136 01a3 75695231 		.ascii	"uiR14\000"
+ 2136      3400
+ 2137              	.LASF21:
+ 2138 01a9 75695231 		.ascii	"uiR15\000"
+ 2138      3500
+ 2139              	.LASF36:
+ 2140 01af 70756354 		.ascii	"pucTaskName\000"
+ 2140      61736B4E 
+ 2140      616D6500 
+ 2141              	.LASF29:
+ 2142 01bb 73747251 		.ascii	"strQueHead\000"
+ 2142      75654865 
+ 2142      616400
+ 2143              	.LASF1:
+ 2144 01c6 73686F72 		.ascii	"short unsigned int\000"
+ 2144      7420756E 
+ 2144      7369676E 
+ 2144      65642069 
+ 2144      6E7400
+ 2145              	.LASF54:
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 50
+
+
+ 2146 01d9 73747253 		.ascii	"strSemTab\000"
+ 2146      656D5461 
+ 2146      6200
+ 2147              	.LASF3:
+ 2148 01e3 63686172 		.ascii	"char\000"
+ 2148      00
+ 2149              	.LASF65:
+ 2150 01e8 70737472 		.ascii	"pstrChain\000"
+ 2150      43686169 
+ 2150      6E00
+ 2151              	.LASF56:
+ 2152 01f2 75695365 		.ascii	"uiSemOpt\000"
+ 2152      6D4F7074 
+ 2152      00
+ 2153              	.LASF77:
+ 2154 01fb 463A5C77 		.ascii	"F:\\workdir\\RTOS_Mindows\\project\000"
+ 2154      6F726B64 
+ 2154      69725C52 
+ 2154      544F535F 
+ 2154      4D696E64 
+ 2155              	.LASF67:
+ 2156 021b 75695274 		.ascii	"uiRtn\000"
+ 2156      6E00
+ 2157              	.LASF40:
+ 2158 0221 75695374 		.ascii	"uiStillTick\000"
+ 2158      696C6C54 
+ 2158      69636B00 
+ 2159              	.LASF74:
+ 2160 022d 67707374 		.ascii	"gpstrCurTcb\000"
+ 2160      72437572 
+ 2160      54636200 
+ 2161              	.LASF73:
+ 2162 0239 67737472 		.ascii	"gstrDelayTab\000"
+ 2162      44656C61 
+ 2162      79546162 
+ 2162      00
+ 2163              	.LASF26:
+ 2164 0246 70737472 		.ascii	"pstrTail\000"
+ 2164      5461696C 
+ 2164      00
+ 2165              	.LASF45:
+ 2166 024f 4D5F5441 		.ascii	"M_TASKOPT\000"
+ 2166      534B4F50 
+ 2166      5400
+ 2167              	.LASF33:
+ 2168 0259 73747254 		.ascii	"strTcbQue\000"
+ 2168      63625175 
+ 2168      6500
+ 2169              	.LASF34:
+ 2170 0263 73747244 		.ascii	"strDelayQue\000"
+ 2170      656C6179 
+ 2170      51756500 
+ 2171              	.LASF57:
+ 2172 026f 4D5F5345 		.ascii	"M_SEM\000"
+ 2172      4D00
+ 2173              	.LASF75:
+ 2174 0275 474E5520 		.ascii	"GNU C 4.5.2\000"
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 51
+
+
+ 2174      4320342E 
+ 2174      352E3200 
+ 2175              	.LASF41:
+ 2176 0281 4D5F5443 		.ascii	"M_TCBQUE\000"
+ 2176      42515545 
+ 2176      00
+ 2177              	.LASF32:
+ 2178 028a 73747253 		.ascii	"strStackReg\000"
+ 2178      7461636B 
+ 2178      52656700 
+ 2179              	.LASF72:
+ 2180 0296 67737472 		.ascii	"gstrReadyTab\000"
+ 2180      52656164 
+ 2180      79546162 
+ 2180      00
+ 2181              	.LASF76:
+ 2182 02a3 2E2E2F6D 		.ascii	"../mindows/mds_sem.c\000"
+ 2182      696E646F 
+ 2182      77732F6D 
+ 2182      64735F73 
+ 2182      656D2E63 
+ 2183              	.LASF63:
+ 2184 02b8 4D44535F 		.ascii	"MDS_SemGive\000"
+ 2184      53656D47 
+ 2184      69766500 
+ 2185              	.LASF49:
+ 2186 02c4 6D5F7461 		.ascii	"m_taskschedtab\000"
+ 2186      736B7363 
+ 2186      68656474 
+ 2186      616200
+ 2187              	.LASF64:
+ 2188 02d3 70737472 		.ascii	"pstrNode\000"
+ 2188      4E6F6465 
+ 2188      00
+ 2189              	.LASF39:
+ 2190 02dc 73747254 		.ascii	"strTaskOpt\000"
+ 2190      61736B4F 
+ 2190      707400
+ 2191              	.LASF66:
+ 2192 02e7 70737472 		.ascii	"pstrPrioFlag\000"
+ 2192      5072696F 
+ 2192      466C6167 
+ 2192      00
+ 2193              	.LASF52:
+ 2194 02f4 4D5F5441 		.ascii	"M_TASKSCHEDTAB\000"
+ 2194      534B5343 
+ 2194      48454454 
+ 2194      414200
+ 2195              	.LASF53:
+ 2196 0303 6D5F7365 		.ascii	"m_sem\000"
+ 2196      6D00
+ 2197              	.LASF35:
+ 2198 0309 70737472 		.ascii	"pstrSem\000"
+ 2198      53656D00 
+ 2199              		.ident	"GCC: (Sourcery G++ Lite 2011.03-41) 4.5.2"
+ 2200              		.section	.note.GNU-stack,"",%progbits
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s 			page 52
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 mds_sem.c
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s:21     .text:00000000 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s:24     .text:00000000 MDS_SemCreate
+                       .ARM.extab:00000000 $d
+                       .ARM.exidx:00000000 $d
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s:114    .text:00000088 MDS_SemTake
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s:259    .text:00000190 $d
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s:264    .text:00000194 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s:267    .text:00000194 MDS_SemGive
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s:417    .text:000002a0 $d
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s:423    .text:000002a8 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s:426    .text:000002a8 MDS_SemFlushValue
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s:538    .text:00000358 $d
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s:545    .text:00000364 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s:548    .text:00000364 MDS_SemFlush
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1YUc9t.s:570    .text:0000036c MDS_SemDelete
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+MDS_TaskSchedTabInit
+__aeabi_unwind_cpp_pr1
+MDS_IntLock
+MDS_IntUnlock
+MDS_TaskPend
+MDS_TaskSwiSched
+gpstrCurTcb
+MDS_SemGetActiveTask
+MDS_TaskDelFromSemTab
+MDS_ChainCurNodeDelete
+MDS_TaskAddToSchedTab
+gstrDelayTab
+gstrReadyTab
+__aeabi_unwind_cpp_pr0

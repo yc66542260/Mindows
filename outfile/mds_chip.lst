@@ -1,0 +1,2037 @@
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 1
+
+
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 2
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 18, 4
+  11              		.file	"mds_chip.c"
+  12              		.section	.debug_abbrev,"",%progbits
+  13              	.Ldebug_abbrev0:
+  14              		.section	.debug_info,"",%progbits
+  15              	.Ldebug_info0:
+  16              		.section	.debug_line,"",%progbits
+  17              	.Ldebug_line0:
+  18 0000 C2000000 		.text
+  18      02005200 
+  18      00000201 
+  18      FB0E0D00 
+  18      01010101 
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.align	2
+  22              		.global	MDS_TaskStackInit
+  23              		.type	MDS_TaskStackInit, %function
+  24              	MDS_TaskStackInit:
+  25              		.fnstart
+  26              	.LFB0:
+  27              		.file 1 "../mindows/mds_chip.c"
+   1:../mindows/mds_chip.c **** 
+   2:../mindows/mds_chip.c **** #include "mindows_inner.h"
+   3:../mindows/mds_chip.c **** 
+   4:../mindows/mds_chip.c **** 
+   5:../mindows/mds_chip.c **** /***********************************************************************************
+   6:../mindows/mds_chip.c **** 函数功能: 初始化任务堆栈函数, 用来创建任务运行前的堆栈状态.
+   7:../mindows/mds_chip.c **** 入口参数: pstrTcb: 任务的TCB指针.
+   8:../mindows/mds_chip.c ****           vfFuncPointer: 任务运行的函数.
+   9:../mindows/mds_chip.c **** 返 回 值: none.
+  10:../mindows/mds_chip.c **** ***********************************************************************************/
+  11:../mindows/mds_chip.c **** void MDS_TaskStackInit(M_TCB* pstrTcb, VFUNC vfFuncPointer)
+  12:../mindows/mds_chip.c **** {
+  28              		.loc 1 12 0
+  29              		.cfi_startproc
+  30              		@ Function supports interworking.
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34              	.LVL0:
+  13:../mindows/mds_chip.c ****     STACKREG* pstrRegSp;
+  14:../mindows/mds_chip.c **** 
+  15:../mindows/mds_chip.c ****     pstrRegSp = &pstrTcb->strStackReg;          /* 寄存器组地址 */
+  16:../mindows/mds_chip.c **** 
+  17:../mindows/mds_chip.c ****     /* 对TCB中的寄存器组初始化 */
+  18:../mindows/mds_chip.c ****     pstrRegSp->uiCpsr = MODE_USR;               /* CPSR */
+  19:../mindows/mds_chip.c ****     pstrRegSp->uiR0 = 0;                        /* R0 */
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 2
+
+
+  20:../mindows/mds_chip.c ****     pstrRegSp->uiR1 = 0;                        /* R1 */
+  21:../mindows/mds_chip.c ****     pstrRegSp->uiR2 = 0;                        /* R2 */
+  22:../mindows/mds_chip.c ****     pstrRegSp->uiR3 = 0;                        /* R3 */
+  23:../mindows/mds_chip.c ****     pstrRegSp->uiR4 = 0;                        /* R4 */
+  24:../mindows/mds_chip.c ****     pstrRegSp->uiR5 = 0;                        /* R5 */
+  25:../mindows/mds_chip.c ****     pstrRegSp->uiR6 = 0;                        /* R6 */
+  26:../mindows/mds_chip.c ****     pstrRegSp->uiR7 = 0;                        /* R7 */
+  27:../mindows/mds_chip.c ****     pstrRegSp->uiR8 = 0;                        /* R8 */
+  28:../mindows/mds_chip.c ****     pstrRegSp->uiR9 = 0;                        /* R9 */
+  29:../mindows/mds_chip.c ****     pstrRegSp->uiR10 = 0;                       /* R10 */
+  30:../mindows/mds_chip.c ****     pstrRegSp->uiR11 = 0;                       /* R11 */
+  31:../mindows/mds_chip.c ****     pstrRegSp->uiR12 = 0;                       /* R12 */
+  32:../mindows/mds_chip.c ****     pstrRegSp->uiR13 = (U32)pstrTcb;            /* R13 */
+  33:../mindows/mds_chip.c ****     pstrRegSp->uiR14 = (U32)MDS_TaskSelfDelete; /* R14 */
+  34:../mindows/mds_chip.c **** 
+  35:../mindows/mds_chip.c ****     /* 非root任务首次运行可能会在IRQ中断里跳转执行, 函数入口地址需要多加4字节 */
+  36:../mindows/mds_chip.c ****     if(MDS_RootTask != vfFuncPointer)
+  35              		.loc 1 36 0
+  36 0000 54309FE5 		ldr	r3, .L4
+  37 0004 030051E1 		cmp	r1, r3
+  33:../mindows/mds_chip.c ****     pstrRegSp->uiR14 = (U32)MDS_TaskSelfDelete; /* R14 */
+  38              		.loc 1 33 0
+  39 0008 50309FE5 		ldr	r3, .L4+4
+  19:../mindows/mds_chip.c ****     pstrRegSp->uiR0 = 0;                        /* R0 */
+  40              		.loc 1 19 0
+  41 000c 00C0A0E3 		mov	ip, #0
+  18:../mindows/mds_chip.c ****     pstrRegSp->uiCpsr = MODE_USR;               /* CPSR */
+  42              		.loc 1 18 0
+  43 0010 1020A0E3 		mov	r2, #16
+  37:../mindows/mds_chip.c ****     {
+  38:../mindows/mds_chip.c ****         pstrRegSp->uiR15 = (U32)vfFuncPointer + 4;  /* R15 */
+  44              		.loc 1 38 0
+  45 0014 04108112 		addne	r1, r1, #4
+  46              	.LVL1:
+  18:../mindows/mds_chip.c ****     pstrRegSp->uiCpsr = MODE_USR;               /* CPSR */
+  47              		.loc 1 18 0
+  48 0018 041080E8 		stmia	r0, {r2, ip}	@ phole stm
+  20:../mindows/mds_chip.c ****     pstrRegSp->uiR1 = 0;                        /* R1 */
+  49              		.loc 1 20 0
+  50 001c 08C080E5 		str	ip, [r0, #8]
+  21:../mindows/mds_chip.c ****     pstrRegSp->uiR2 = 0;                        /* R2 */
+  51              		.loc 1 21 0
+  52 0020 0CC080E5 		str	ip, [r0, #12]
+  22:../mindows/mds_chip.c ****     pstrRegSp->uiR3 = 0;                        /* R3 */
+  53              		.loc 1 22 0
+  54 0024 10C080E5 		str	ip, [r0, #16]
+  23:../mindows/mds_chip.c ****     pstrRegSp->uiR4 = 0;                        /* R4 */
+  55              		.loc 1 23 0
+  56 0028 14C080E5 		str	ip, [r0, #20]
+  24:../mindows/mds_chip.c ****     pstrRegSp->uiR5 = 0;                        /* R5 */
+  57              		.loc 1 24 0
+  58 002c 18C080E5 		str	ip, [r0, #24]
+  25:../mindows/mds_chip.c ****     pstrRegSp->uiR6 = 0;                        /* R6 */
+  59              		.loc 1 25 0
+  60 0030 1CC080E5 		str	ip, [r0, #28]
+  26:../mindows/mds_chip.c ****     pstrRegSp->uiR7 = 0;                        /* R7 */
+  61              		.loc 1 26 0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 3
+
+
+  62 0034 20C080E5 		str	ip, [r0, #32]
+  27:../mindows/mds_chip.c ****     pstrRegSp->uiR8 = 0;                        /* R8 */
+  63              		.loc 1 27 0
+  64 0038 24C080E5 		str	ip, [r0, #36]
+  28:../mindows/mds_chip.c ****     pstrRegSp->uiR9 = 0;                        /* R9 */
+  65              		.loc 1 28 0
+  66 003c 28C080E5 		str	ip, [r0, #40]
+  29:../mindows/mds_chip.c ****     pstrRegSp->uiR10 = 0;                       /* R10 */
+  67              		.loc 1 29 0
+  68 0040 2CC080E5 		str	ip, [r0, #44]
+  30:../mindows/mds_chip.c ****     pstrRegSp->uiR11 = 0;                       /* R11 */
+  69              		.loc 1 30 0
+  70 0044 30C080E5 		str	ip, [r0, #48]
+  31:../mindows/mds_chip.c ****     pstrRegSp->uiR12 = 0;                       /* R12 */
+  71              		.loc 1 31 0
+  72 0048 34C080E5 		str	ip, [r0, #52]
+  32:../mindows/mds_chip.c ****     pstrRegSp->uiR13 = (U32)pstrTcb;            /* R13 */
+  73              		.loc 1 32 0
+  74 004c 380080E5 		str	r0, [r0, #56]
+  33:../mindows/mds_chip.c ****     pstrRegSp->uiR14 = (U32)MDS_TaskSelfDelete; /* R14 */
+  75              		.loc 1 33 0
+  76 0050 3C3080E5 		str	r3, [r0, #60]
+  39:../mindows/mds_chip.c ****     }
+  40:../mindows/mds_chip.c ****     else    /* root任务在USE模式下直接执行, 可以直接跳转到函数地址 */
+  41:../mindows/mds_chip.c ****     {
+  42:../mindows/mds_chip.c ****         pstrRegSp->uiR15 = (U32)vfFuncPointer;      /* R15 */
+  77              		.loc 1 42 0
+  78 0054 401080E5 		str	r1, [r0, #64]
+  79 0058 1EFF2FE1 		bx	lr
+  80              	.L5:
+  81              		.align	2
+  82              	.L4:
+  83 005c 00000000 		.word	MDS_RootTask
+  84 0060 00000000 		.word	MDS_TaskSelfDelete
+  85              		.cfi_endproc
+  86              	.LFE0:
+  87              		.fnend
+  88              		.size	MDS_TaskStackInit, .-MDS_TaskStackInit
+  89              		.align	2
+  90              		.global	MDS_TickIsr
+  91              		.type	MDS_TickIsr, %function
+  92              	MDS_TickIsr:
+  93              		.fnstart
+  94              	.LFB1:
+  43:../mindows/mds_chip.c ****     }
+  44:../mindows/mds_chip.c **** }
+  45:../mindows/mds_chip.c **** 
+  46:../mindows/mds_chip.c **** /***********************************************************************************
+  47:../mindows/mds_chip.c **** 函数功能: tick中断服务函数.
+  48:../mindows/mds_chip.c **** 入口参数: none.
+  49:../mindows/mds_chip.c **** 返 回 值: none.
+  50:../mindows/mds_chip.c **** ***********************************************************************************/
+  51:../mindows/mds_chip.c **** void MDS_TickIsr(void)
+  52:../mindows/mds_chip.c **** {
+  95              		.loc 1 52 0
+  96              		.cfi_startproc
+  97              		@ Function supports interworking.
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 4
+
+
+  98              		@ args = 0, pretend = 0, frame = 0
+  99              		@ frame_needed = 1, uses_anonymous_args = 0
+ 100              		.movsp ip
+ 101 0064 0DC0A0E1 		mov	ip, sp
+ 102              	.LCFI0:
+ 103              		.cfi_def_cfa_register 12
+ 104 0068 78D82DE9 		stmfd	sp!, {r3, r4, r5, r6, fp, ip, lr, pc}
+ 105              		.pad #4
+ 106              		.save {r3, r4, r5, r6, fp, ip, lr}
+  53:../mindows/mds_chip.c ****     U32 uiIrqStatus;
+  54:../mindows/mds_chip.c **** 
+  55:../mindows/mds_chip.c ****     /* 读取产生中断的IRQ中断源 */
+  56:../mindows/mds_chip.c ****     uiIrqStatus = IRQSTA;
+ 107              		.loc 1 56 0
+ 108 006c 0F5AE0E3 		mvn	r5, #61440
+ 109              		.cfi_offset 14, -8
+ 110              		.cfi_offset 13, -12
+ 111              		.cfi_offset 11, -16
+ 112              		.cfi_offset 6, -20
+ 113              		.cfi_offset 5, -24
+ 114              		.cfi_offset 4, -28
+ 115              		.cfi_offset 3, -32
+ 116 0070 FF4F15E5 		ldr	r4, [r5, #-4095]
+ 117              	.LVL2:
+  57:../mindows/mds_chip.c **** 
+  58:../mindows/mds_chip.c ****     /* tick产生中断 */
+  59:../mindows/mds_chip.c ****     if(TIME1INTMASK == (TIME1INTMASK & uiIrqStatus))
+ 118              		.loc 1 59 0
+ 119 0074 086014E2 		ands	r6, r4, #8
+  52:../mindows/mds_chip.c **** {
+ 120              		.loc 1 52 0
+ 121              		.setfp fp, ip, #-4
+ 122 0078 04B04CE2 		sub	fp, ip, #4
+ 123              	.LCFI1:
+ 124              		.cfi_def_cfa 11, 4
+ 125              		.loc 1 59 0
+ 126 007c 0A00001A 		bne	.L10
+ 127              	.L7:
+  60:../mindows/mds_chip.c ****     {
+  61:../mindows/mds_chip.c ****         /* 调度任务 */
+  62:../mindows/mds_chip.c ****         MDS_TaskTick();
+  63:../mindows/mds_chip.c **** 
+  64:../mindows/mds_chip.c ****         /******************* 用户可以在下面区域添加tick中断代码 *******************/
+  65:../mindows/mds_chip.c **** 
+  66:../mindows/mds_chip.c ****         /* 清除tick定时器中断标志 */
+  67:../mindows/mds_chip.c ****         T1CLRI = 0;
+  68:../mindows/mds_chip.c **** 
+  69:../mindows/mds_chip.c ****         /******************* 用户可以在上面区域添加tick中断代码 *******************/
+  70:../mindows/mds_chip.c ****     }
+  71:../mindows/mds_chip.c **** 
+  72:../mindows/mds_chip.c ****     /* 中断源有非tick中断 */
+  73:../mindows/mds_chip.c ****     if(TIME1INTMASK != uiIrqStatus)
+ 128              		.loc 1 73 0
+ 129 0080 080054E3 		cmp	r4, #8
+ 130 0084 0100000A 		beq	.L6
+  74:../mindows/mds_chip.c ****     {
+  75:../mindows/mds_chip.c ****         /* 中断源没有tick中断则需要更新一次任务调度变量 */
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 5
+
+
+  76:../mindows/mds_chip.c ****         if(TIME1INTMASK != (TIME1INTMASK & uiIrqStatus))
+ 131              		.loc 1 76 0
+ 132 0088 000056E3 		cmp	r6, #0
+ 133 008c 0200000A 		beq	.L11
+ 134              	.L6:
+  77:../mindows/mds_chip.c ****         {
+  78:../mindows/mds_chip.c ****             MDS_TaskSwitch(gpstrCurTcb);
+  79:../mindows/mds_chip.c ****         }
+  80:../mindows/mds_chip.c **** 
+  81:../mindows/mds_chip.c ****         /****************** 用户可以在下面区域添加自定义中断代码 ******************/
+  82:../mindows/mds_chip.c **** 
+  83:../mindows/mds_chip.c **** 
+  84:../mindows/mds_chip.c **** 
+  85:../mindows/mds_chip.c ****         /****************** 用户可以在上面区域添加自定义中断代码 ******************/
+  86:../mindows/mds_chip.c ****     }
+  87:../mindows/mds_chip.c **** }
+ 135              		.loc 1 87 0
+ 136 0090 1CD04BE2 		sub	sp, fp, #28
+ 137 0094 78689DE8 		ldmfd	sp, {r3, r4, r5, r6, fp, sp, lr}
+ 138 0098 1EFF2FE1 		bx	lr
+ 139              	.L11:
+  78:../mindows/mds_chip.c ****             MDS_TaskSwitch(gpstrCurTcb);
+ 140              		.loc 1 78 0
+ 141 009c 18009FE5 		ldr	r0, .L12
+ 142 00a0 000090E5 		ldr	r0, [r0, #0]
+ 143 00a4 FEFFFFEB 		bl	MDS_TaskSwitch
+ 144 00a8 F8FFFFEA 		b	.L6
+ 145              	.L10:
+  62:../mindows/mds_chip.c ****         MDS_TaskTick();
+ 146              		.loc 1 62 0
+ 147 00ac FEFFFFEB 		bl	MDS_TaskTick
+  67:../mindows/mds_chip.c ****         T1CLRI = 0;
+ 148              		.loc 1 67 0
+ 149 00b0 0030A0E3 		mov	r3, #0
+ 150 00b4 D33C05E5 		str	r3, [r5, #-3283]
+ 151 00b8 F0FFFFEA 		b	.L7
+ 152              	.L13:
+ 153              		.align	2
+ 154              	.L12:
+ 155 00bc 00000000 		.word	gpstrCurTcb
+ 156              		.cfi_endproc
+ 157              	.LFE1:
+ 158              		.fnend
+ 159              		.size	MDS_TickIsr, .-MDS_TickIsr
+ 160              		.align	2
+ 161              		.global	MDS_SwiIsr
+ 162              		.type	MDS_SwiIsr, %function
+ 163              	MDS_SwiIsr:
+ 164              		.fnstart
+ 165              	.LFB2:
+  88:../mindows/mds_chip.c **** 
+  89:../mindows/mds_chip.c **** /***********************************************************************************
+  90:../mindows/mds_chip.c **** 函数功能: 软中断服务函数.
+  91:../mindows/mds_chip.c **** 入口参数: uiSwiNo: 软中断号.
+  92:../mindows/mds_chip.c **** 返 回 值: none.
+  93:../mindows/mds_chip.c **** ***********************************************************************************/
+  94:../mindows/mds_chip.c **** void MDS_SwiIsr(U32 uiSwiNo)
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 6
+
+
+  95:../mindows/mds_chip.c **** {
+ 166              		.loc 1 95 0
+ 167              		.cfi_startproc
+ 168              		@ Function supports interworking.
+ 169              		@ args = 0, pretend = 0, frame = 0
+ 170              		@ frame_needed = 1, uses_anonymous_args = 0
+ 171              	.LVL3:
+  96:../mindows/mds_chip.c ****     /* 软中断产生的任务调度 */
+  97:../mindows/mds_chip.c ****     if(SWI_TASKSCHED == (SWI_TASKSCHED & uiSwiNo))
+ 172              		.loc 1 97 0
+ 173 00c0 64109FE5 		ldr	r1, .L21
+  95:../mindows/mds_chip.c **** {
+ 174              		.loc 1 95 0
+ 175              		.movsp ip
+ 176 00c4 0DC0A0E1 		mov	ip, sp
+ 177              	.LCFI2:
+ 178              		.cfi_def_cfa_register 12
+ 179              		.loc 1 97 0
+ 180 00c8 5C209FE5 		ldr	r2, .L21
+  95:../mindows/mds_chip.c **** {
+ 181              		.loc 1 95 0
+ 182 00cc 18D82DE9 		stmfd	sp!, {r3, r4, fp, ip, lr, pc}
+ 183              		.pad #4
+ 184              		.save {r3, r4, fp, ip, lr}
+ 185              		.loc 1 97 0
+ 186 00d0 013000E0 		and	r3, r0, r1
+ 187              		.cfi_offset 14, -8
+ 188              		.cfi_offset 13, -12
+ 189              		.cfi_offset 11, -16
+ 190              		.cfi_offset 4, -20
+ 191              		.cfi_offset 3, -24
+ 192 00d4 020053E1 		cmp	r3, r2
+  95:../mindows/mds_chip.c **** {
+ 193              		.loc 1 95 0
+ 194              		.setfp fp, ip, #-4
+ 195 00d8 04B04CE2 		sub	fp, ip, #4
+ 196              	.LCFI3:
+ 197              		.cfi_def_cfa 11, 4
+  95:../mindows/mds_chip.c **** {
+ 198              		.loc 1 95 0
+ 199 00dc 0040A0E1 		mov	r4, r0
+ 200              		.loc 1 97 0
+ 201 00e0 0F00000A 		beq	.L19
+  98:../mindows/mds_chip.c ****     {
+  99:../mindows/mds_chip.c ****         /* 调度任务 */
+ 100:../mindows/mds_chip.c ****         MDS_TaskReadySched();
+ 101:../mindows/mds_chip.c ****     }
+ 102:../mindows/mds_chip.c ****     else /* 中断源是非任务调度中断 */
+ 103:../mindows/mds_chip.c ****     {
+ 104:../mindows/mds_chip.c ****         /* 非任务调度中断引发的中断里需要更新一次任务调度变量 */
+ 105:../mindows/mds_chip.c ****         MDS_TaskSwitch(gpstrCurTcb);
+ 202              		.loc 1 105 0
+ 203 00e4 44009FE5 		ldr	r0, .L21+4
+ 204              	.LVL4:
+ 205 00e8 000090E5 		ldr	r0, [r0, #0]
+ 206 00ec FEFFFFEB 		bl	MDS_TaskSwitch
+ 106:../mindows/mds_chip.c **** 
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 7
+
+
+ 107:../mindows/mds_chip.c ****         switch(uiSwiNo)
+ 207              		.loc 1 107 0
+ 208 00f0 3C309FE5 		ldr	r3, .L21+8
+ 209 00f4 030054E1 		cmp	r4, r3
+ 210 00f8 0700000A 		beq	.L17
+ 211 00fc 01C083E2 		add	ip, r3, #1
+ 212 0100 0C0054E1 		cmp	r4, ip
+ 213 0104 0200000A 		beq	.L20
+ 214              	.L14:
+ 108:../mindows/mds_chip.c ****         {
+ 109:../mindows/mds_chip.c ****             case SWI_INTENABLE:     /* 中断使能 */
+ 110:../mindows/mds_chip.c **** 
+ 111:../mindows/mds_chip.c ****                 MDS_IntEnable();
+ 112:../mindows/mds_chip.c **** 
+ 113:../mindows/mds_chip.c ****                 break;
+ 114:../mindows/mds_chip.c **** 
+ 115:../mindows/mds_chip.c ****             case SWI_INTDISABLE:    /* 中断禁止 */
+ 116:../mindows/mds_chip.c **** 
+ 117:../mindows/mds_chip.c ****                 MDS_IntDisable();
+ 118:../mindows/mds_chip.c **** 
+ 119:../mindows/mds_chip.c ****                 break;
+ 120:../mindows/mds_chip.c **** 
+ 121:../mindows/mds_chip.c ****             /*************** 用户可以在下面区域添加自定义软中断代码 ***************/
+ 122:../mindows/mds_chip.c **** 
+ 123:../mindows/mds_chip.c ****             default:
+ 124:../mindows/mds_chip.c **** 
+ 125:../mindows/mds_chip.c ****                 break;
+ 126:../mindows/mds_chip.c **** 
+ 127:../mindows/mds_chip.c ****             /*************** 用户可以在上面区域添加自定义软中断代码 ***************/
+ 128:../mindows/mds_chip.c ****         }
+ 129:../mindows/mds_chip.c ****     }
+ 130:../mindows/mds_chip.c **** }
+ 215              		.loc 1 130 0
+ 216 0108 14D04BE2 		sub	sp, fp, #20
+ 217 010c 18689DE8 		ldmfd	sp, {r3, r4, fp, sp, lr}
+ 218 0110 1EFF2FE1 		bx	lr
+ 219              	.L20:
+ 117:../mindows/mds_chip.c ****                 MDS_IntDisable();
+ 220              		.loc 1 117 0
+ 221 0114 FEFFFFEB 		bl	MDS_IntDisable
+ 222 0118 FAFFFFEA 		b	.L14
+ 223              	.L17:
+ 111:../mindows/mds_chip.c ****                 MDS_IntEnable();
+ 224              		.loc 1 111 0
+ 225 011c FEFFFFEB 		bl	MDS_IntEnable
+ 113:../mindows/mds_chip.c ****                 break;
+ 226              		.loc 1 113 0
+ 227 0120 F8FFFFEA 		b	.L14
+ 228              	.L19:
+ 100:../mindows/mds_chip.c ****         MDS_TaskReadySched();
+ 229              		.loc 1 100 0
+ 230 0124 FEFFFFEB 		bl	MDS_TaskReadySched
+ 231 0128 F6FFFFEA 		b	.L14
+ 232              	.L22:
+ 233              		.align	2
+ 234              	.L21:
+ 235 012c 01100010 		.word	268439553
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 8
+
+
+ 236 0130 00000000 		.word	gpstrCurTcb
+ 237 0134 01200010 		.word	268443649
+ 238              		.cfi_endproc
+ 239              	.LFE2:
+ 240              		.fnend
+ 241              		.size	MDS_SwiIsr, .-MDS_SwiIsr
+ 242              		.align	2
+ 243              		.global	MDS_RunInInt
+ 244              		.type	MDS_RunInInt, %function
+ 245              	MDS_RunInInt:
+ 246              		.fnstart
+ 247              	.LFB4:
+ 131:../mindows/mds_chip.c **** 
+ 132:../mindows/mds_chip.c **** /***********************************************************************************
+ 133:../mindows/mds_chip.c **** 函数功能: 软中断任务调度函数, 非user模式下调用该函数不做任何操作.
+ 134:../mindows/mds_chip.c **** 入口参数: none.
+ 135:../mindows/mds_chip.c **** 返 回 值: none.
+ 136:../mindows/mds_chip.c **** ***********************************************************************************/
+ 137:../mindows/mds_chip.c **** void MDS_TaskSwiSched(void)
+ 138:../mindows/mds_chip.c **** {
+ 139:../mindows/mds_chip.c ****     /* 如果在中断中运行该函数则直接返回 */
+ 140:../mindows/mds_chip.c ****     if(RTN_SUCD == MDS_RunInInt())
+ 141:../mindows/mds_chip.c ****     {
+ 142:../mindows/mds_chip.c ****         return;
+ 143:../mindows/mds_chip.c ****     }
+ 144:../mindows/mds_chip.c **** 
+ 145:../mindows/mds_chip.c ****     /* 调用软中断, 在软中断服务程序中调度任务 */
+ 146:../mindows/mds_chip.c ****     MDS_TaskOccurSwi(SWI_TASKSCHED);
+ 147:../mindows/mds_chip.c **** }
+ 148:../mindows/mds_chip.c **** 
+ 149:../mindows/mds_chip.c **** /***********************************************************************************
+ 150:../mindows/mds_chip.c **** 函数功能: 判断当前程序是否是在中断中运行.
+ 151:../mindows/mds_chip.c **** 入口参数: none.
+ 152:../mindows/mds_chip.c **** 返 回 值: RTN_SUCD: 在中断中运行.
+ 153:../mindows/mds_chip.c ****           RTN_FAIL: 不在中断中运行.
+ 154:../mindows/mds_chip.c **** ***********************************************************************************/
+ 155:../mindows/mds_chip.c **** U32 MDS_RunInInt(void)
+ 156:../mindows/mds_chip.c **** {
+ 248              		.loc 1 156 0
+ 249              		.cfi_startproc
+ 250              		@ Function supports interworking.
+ 251              		@ args = 0, pretend = 0, frame = 0
+ 252              		@ frame_needed = 1, uses_anonymous_args = 0
+ 253              		.movsp ip
+ 254 0138 0DC0A0E1 		mov	ip, sp
+ 255              	.LCFI4:
+ 256              		.cfi_def_cfa_register 12
+ 257 013c 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 258              		.pad #4
+ 259              		.save {fp, ip, lr}
+ 260              		.setfp fp, ip, #-4
+ 261 0140 04B04CE2 		sub	fp, ip, #4
+ 262              		.cfi_offset 14, -8
+ 263              		.cfi_offset 13, -12
+ 264              		.cfi_offset 11, -16
+ 265              	.LCFI5:
+ 266              		.cfi_def_cfa 11, 4
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 9
+
+
+ 157:../mindows/mds_chip.c ****     /* 当前程序在中断中运行 */
+ 158:../mindows/mds_chip.c ****     if(MODE_USR != MDS_GetChipMode())
+ 267              		.loc 1 158 0
+ 268 0144 FEFFFFEB 		bl	MDS_GetChipMode
+ 159:../mindows/mds_chip.c ****     {
+ 160:../mindows/mds_chip.c ****         return RTN_SUCD;
+ 161:../mindows/mds_chip.c ****     }
+ 162:../mindows/mds_chip.c ****     else
+ 163:../mindows/mds_chip.c ****     {
+ 164:../mindows/mds_chip.c ****         return RTN_FAIL;
+ 165:../mindows/mds_chip.c ****     }
+ 166:../mindows/mds_chip.c **** }
+ 269              		.loc 1 166 0
+ 270 0148 103040E2 		sub	r3, r0, #16
+ 271 014c 000073E2 		rsbs	r0, r3, #0
+ 272 0150 0300A0E0 		adc	r0, r0, r3
+ 273 0154 0CD04BE2 		sub	sp, fp, #12
+ 274 0158 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 275 015c 1EFF2FE1 		bx	lr
+ 276              		.cfi_endproc
+ 277              	.LFE4:
+ 278              		.fnend
+ 279              		.size	MDS_RunInInt, .-MDS_RunInInt
+ 280              		.align	2
+ 281              		.global	MDS_TaskSwiSched
+ 282              		.type	MDS_TaskSwiSched, %function
+ 283              	MDS_TaskSwiSched:
+ 284              		.fnstart
+ 285              	.LFB3:
+ 138:../mindows/mds_chip.c **** {
+ 286              		.loc 1 138 0
+ 287              		.cfi_startproc
+ 288              		@ Function supports interworking.
+ 289              		@ args = 0, pretend = 0, frame = 0
+ 290              		@ frame_needed = 1, uses_anonymous_args = 0
+ 291              		.movsp ip
+ 292 0160 0DC0A0E1 		mov	ip, sp
+ 293              	.LCFI6:
+ 294              		.cfi_def_cfa_register 12
+ 295 0164 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 296              		.pad #4
+ 297              		.save {fp, ip, lr}
+ 298              		.setfp fp, ip, #-4
+ 299 0168 04B04CE2 		sub	fp, ip, #4
+ 300              		.cfi_offset 14, -8
+ 301              		.cfi_offset 13, -12
+ 302              		.cfi_offset 11, -16
+ 303              	.LCFI7:
+ 304              		.cfi_def_cfa 11, 4
+ 140:../mindows/mds_chip.c ****     if(RTN_SUCD == MDS_RunInInt())
+ 305              		.loc 1 140 0
+ 306 016c FEFFFFEB 		bl	MDS_RunInInt
+ 307 0170 000050E3 		cmp	r0, #0
+ 146:../mindows/mds_chip.c ****     MDS_TaskOccurSwi(SWI_TASKSCHED);
+ 308              		.loc 1 146 0
+ 309 0174 0C009F15 		ldrne	r0, .L26
+ 310 0178 FEFFFF1B 		blne	MDS_TaskOccurSwi
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 10
+
+
+ 311              	.L24:
+ 147:../mindows/mds_chip.c **** }
+ 312              		.loc 1 147 0
+ 313 017c 0CD04BE2 		sub	sp, fp, #12
+ 314 0180 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 315 0184 1EFF2FE1 		bx	lr
+ 316              	.L27:
+ 317              		.align	2
+ 318              	.L26:
+ 319 0188 01100010 		.word	268439553
+ 320              		.cfi_endproc
+ 321              	.LFE3:
+ 322              		.fnend
+ 323              		.size	MDS_TaskSwiSched, .-MDS_TaskSwiSched
+ 324              	.Letext0:
+ 325              		.section	.debug_loc,"",%progbits
+ 326              	.Ldebug_loc0:
+ 327              	.LLST0:
+ 328 0000 00000000 		.4byte	.LVL0-.Ltext0
+ 329 0004 18000000 		.4byte	.LVL1-.Ltext0
+ 330 0008 0100     		.2byte	0x1
+ 331 000a 51       		.byte	0x51
+ 332 000b 00000000 		.4byte	0x0
+ 333 000f 00000000 		.4byte	0x0
+ 334              	.LLST1:
+ 335 0013 64000000 		.4byte	.LFB1-.Ltext0
+ 336 0017 68000000 		.4byte	.LCFI0-.Ltext0
+ 337 001b 0200     		.2byte	0x2
+ 338 001d 7D       		.byte	0x7d
+ 339 001e 00       		.sleb128 0
+ 340 001f 68000000 		.4byte	.LCFI0-.Ltext0
+ 341 0023 7C000000 		.4byte	.LCFI1-.Ltext0
+ 342 0027 0200     		.2byte	0x2
+ 343 0029 7C       		.byte	0x7c
+ 344 002a 00       		.sleb128 0
+ 345 002b 7C000000 		.4byte	.LCFI1-.Ltext0
+ 346 002f C0000000 		.4byte	.LFE1-.Ltext0
+ 347 0033 0200     		.2byte	0x2
+ 348 0035 7B       		.byte	0x7b
+ 349 0036 04       		.sleb128 4
+ 350 0037 00000000 		.4byte	0x0
+ 351 003b 00000000 		.4byte	0x0
+ 352              	.LLST2:
+ 353 003f C0000000 		.4byte	.LFB2-.Ltext0
+ 354 0043 C8000000 		.4byte	.LCFI2-.Ltext0
+ 355 0047 0200     		.2byte	0x2
+ 356 0049 7D       		.byte	0x7d
+ 357 004a 00       		.sleb128 0
+ 358 004b C8000000 		.4byte	.LCFI2-.Ltext0
+ 359 004f DC000000 		.4byte	.LCFI3-.Ltext0
+ 360 0053 0200     		.2byte	0x2
+ 361 0055 7C       		.byte	0x7c
+ 362 0056 00       		.sleb128 0
+ 363 0057 DC000000 		.4byte	.LCFI3-.Ltext0
+ 364 005b 38010000 		.4byte	.LFE2-.Ltext0
+ 365 005f 0200     		.2byte	0x2
+ 366 0061 7B       		.byte	0x7b
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 11
+
+
+ 367 0062 04       		.sleb128 4
+ 368 0063 00000000 		.4byte	0x0
+ 369 0067 00000000 		.4byte	0x0
+ 370              	.LLST3:
+ 371 006b C0000000 		.4byte	.LVL3-.Ltext0
+ 372 006f E8000000 		.4byte	.LVL4-.Ltext0
+ 373 0073 0100     		.2byte	0x1
+ 374 0075 50       		.byte	0x50
+ 375 0076 E8000000 		.4byte	.LVL4-.Ltext0
+ 376 007a 38010000 		.4byte	.LFE2-.Ltext0
+ 377 007e 0100     		.2byte	0x1
+ 378 0080 54       		.byte	0x54
+ 379 0081 00000000 		.4byte	0x0
+ 380 0085 00000000 		.4byte	0x0
+ 381              	.LLST4:
+ 382 0089 38010000 		.4byte	.LFB4-.Ltext0
+ 383 008d 3C010000 		.4byte	.LCFI4-.Ltext0
+ 384 0091 0200     		.2byte	0x2
+ 385 0093 7D       		.byte	0x7d
+ 386 0094 00       		.sleb128 0
+ 387 0095 3C010000 		.4byte	.LCFI4-.Ltext0
+ 388 0099 44010000 		.4byte	.LCFI5-.Ltext0
+ 389 009d 0200     		.2byte	0x2
+ 390 009f 7C       		.byte	0x7c
+ 391 00a0 00       		.sleb128 0
+ 392 00a1 44010000 		.4byte	.LCFI5-.Ltext0
+ 393 00a5 60010000 		.4byte	.LFE4-.Ltext0
+ 394 00a9 0200     		.2byte	0x2
+ 395 00ab 7B       		.byte	0x7b
+ 396 00ac 04       		.sleb128 4
+ 397 00ad 00000000 		.4byte	0x0
+ 398 00b1 00000000 		.4byte	0x0
+ 399              	.LLST5:
+ 400 00b5 60010000 		.4byte	.LFB3-.Ltext0
+ 401 00b9 64010000 		.4byte	.LCFI6-.Ltext0
+ 402 00bd 0200     		.2byte	0x2
+ 403 00bf 7D       		.byte	0x7d
+ 404 00c0 00       		.sleb128 0
+ 405 00c1 64010000 		.4byte	.LCFI6-.Ltext0
+ 406 00c5 6C010000 		.4byte	.LCFI7-.Ltext0
+ 407 00c9 0200     		.2byte	0x2
+ 408 00cb 7C       		.byte	0x7c
+ 409 00cc 00       		.sleb128 0
+ 410 00cd 6C010000 		.4byte	.LCFI7-.Ltext0
+ 411 00d1 8C010000 		.4byte	.LFE3-.Ltext0
+ 412 00d5 0200     		.2byte	0x2
+ 413 00d7 7B       		.byte	0x7b
+ 414 00d8 04       		.sleb128 4
+ 415 00d9 00000000 		.4byte	0x0
+ 416 00dd 00000000 		.4byte	0x0
+ 417              		.file 2 "../mindows/mds_mdsdef.h"
+ 418              		.file 3 "../mindows/mds_core_c_inner.h"
+ 419              		.section	.debug_info
+ 420 0000 5D040000 		.4byte	0x45d
+ 421 0004 0200     		.2byte	0x2
+ 422 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 423 000a 04       		.byte	0x4
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 12
+
+
+ 424 000b 01       		.uleb128 0x1
+ 425 000c 74020000 		.4byte	.LASF69
+ 426 0010 01       		.byte	0x1
+ 427 0011 70000000 		.4byte	.LASF70
+ 428 0015 02020000 		.4byte	.LASF71
+ 429 0019 00000000 		.4byte	.Ltext0
+ 430 001d 8C010000 		.4byte	.Letext0
+ 431 0021 00000000 		.4byte	.Ldebug_line0
+ 432 0025 02       		.uleb128 0x2
+ 433 0026 553800   		.ascii	"U8\000"
+ 434 0029 02       		.byte	0x2
+ 435 002a 07       		.byte	0x7
+ 436 002b 2F000000 		.4byte	0x2f
+ 437 002f 03       		.uleb128 0x3
+ 438 0030 01       		.byte	0x1
+ 439 0031 08       		.byte	0x8
+ 440 0032 69010000 		.4byte	.LASF0
+ 441 0036 03       		.uleb128 0x3
+ 442 0037 02       		.byte	0x2
+ 443 0038 07       		.byte	0x7
+ 444 0039 CB010000 		.4byte	.LASF1
+ 445 003d 02       		.uleb128 0x2
+ 446 003e 55333200 		.ascii	"U32\000"
+ 447 0042 02       		.byte	0x2
+ 448 0043 09       		.byte	0x9
+ 449 0044 48000000 		.4byte	0x48
+ 450 0048 03       		.uleb128 0x3
+ 451 0049 04       		.byte	0x4
+ 452 004a 07       		.byte	0x7
+ 453 004b 7F010000 		.4byte	.LASF2
+ 454 004f 03       		.uleb128 0x3
+ 455 0050 01       		.byte	0x1
+ 456 0051 08       		.byte	0x8
+ 457 0052 E8010000 		.4byte	.LASF3
+ 458 0056 03       		.uleb128 0x3
+ 459 0057 02       		.byte	0x2
+ 460 0058 05       		.byte	0x5
+ 461 0059 5D000000 		.4byte	.LASF4
+ 462 005d 04       		.uleb128 0x4
+ 463 005e 04       		.byte	0x4
+ 464 005f 05       		.byte	0x5
+ 465 0060 696E7400 		.ascii	"int\000"
+ 466 0064 05       		.uleb128 0x5
+ 467 0065 BA010000 		.4byte	.LASF5
+ 468 0069 02       		.byte	0x2
+ 469 006a 0D       		.byte	0xd
+ 470 006b 6F000000 		.4byte	0x6f
+ 471 006f 06       		.uleb128 0x6
+ 472 0070 04       		.byte	0x4
+ 473 0071 75000000 		.4byte	0x75
+ 474 0075 07       		.uleb128 0x7
+ 475 0076 01       		.byte	0x1
+ 476 0077 08       		.uleb128 0x8
+ 477 0078 67000000 		.4byte	.LASF24
+ 478 007c 44       		.byte	0x44
+ 479 007d 02       		.byte	0x2
+ 480 007e 46       		.byte	0x46
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 13
+
+
+ 481 007f 72010000 		.4byte	0x172
+ 482 0083 09       		.uleb128 0x9
+ 483 0084 15010000 		.4byte	.LASF6
+ 484 0088 02       		.byte	0x2
+ 485 0089 48       		.byte	0x48
+ 486 008a 3D000000 		.4byte	0x3d
+ 487 008e 02       		.byte	0x2
+ 488 008f 23       		.byte	0x23
+ 489 0090 00       		.uleb128 0x0
+ 490 0091 09       		.uleb128 0x9
+ 491 0092 24010000 		.4byte	.LASF7
+ 492 0096 02       		.byte	0x2
+ 493 0097 49       		.byte	0x49
+ 494 0098 3D000000 		.4byte	0x3d
+ 495 009c 02       		.byte	0x2
+ 496 009d 23       		.byte	0x23
+ 497 009e 04       		.uleb128 0x4
+ 498 009f 09       		.uleb128 0x9
+ 499 00a0 29010000 		.4byte	.LASF8
+ 500 00a4 02       		.byte	0x2
+ 501 00a5 4A       		.byte	0x4a
+ 502 00a6 3D000000 		.4byte	0x3d
+ 503 00aa 02       		.byte	0x2
+ 504 00ab 23       		.byte	0x23
+ 505 00ac 08       		.uleb128 0x8
+ 506 00ad 09       		.uleb128 0x9
+ 507 00ae 2E010000 		.4byte	.LASF9
+ 508 00b2 02       		.byte	0x2
+ 509 00b3 4B       		.byte	0x4b
+ 510 00b4 3D000000 		.4byte	0x3d
+ 511 00b8 02       		.byte	0x2
+ 512 00b9 23       		.byte	0x23
+ 513 00ba 0C       		.uleb128 0xc
+ 514 00bb 09       		.uleb128 0x9
+ 515 00bc 33010000 		.4byte	.LASF10
+ 516 00c0 02       		.byte	0x2
+ 517 00c1 4C       		.byte	0x4c
+ 518 00c2 3D000000 		.4byte	0x3d
+ 519 00c6 02       		.byte	0x2
+ 520 00c7 23       		.byte	0x23
+ 521 00c8 10       		.uleb128 0x10
+ 522 00c9 09       		.uleb128 0x9
+ 523 00ca 38010000 		.4byte	.LASF11
+ 524 00ce 02       		.byte	0x2
+ 525 00cf 4D       		.byte	0x4d
+ 526 00d0 3D000000 		.4byte	0x3d
+ 527 00d4 02       		.byte	0x2
+ 528 00d5 23       		.byte	0x23
+ 529 00d6 14       		.uleb128 0x14
+ 530 00d7 09       		.uleb128 0x9
+ 531 00d8 3D010000 		.4byte	.LASF12
+ 532 00dc 02       		.byte	0x2
+ 533 00dd 4E       		.byte	0x4e
+ 534 00de 3D000000 		.4byte	0x3d
+ 535 00e2 02       		.byte	0x2
+ 536 00e3 23       		.byte	0x23
+ 537 00e4 18       		.uleb128 0x18
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 14
+
+
+ 538 00e5 09       		.uleb128 0x9
+ 539 00e6 42010000 		.4byte	.LASF13
+ 540 00ea 02       		.byte	0x2
+ 541 00eb 4F       		.byte	0x4f
+ 542 00ec 3D000000 		.4byte	0x3d
+ 543 00f0 02       		.byte	0x2
+ 544 00f1 23       		.byte	0x23
+ 545 00f2 1C       		.uleb128 0x1c
+ 546 00f3 09       		.uleb128 0x9
+ 547 00f4 47010000 		.4byte	.LASF14
+ 548 00f8 02       		.byte	0x2
+ 549 00f9 50       		.byte	0x50
+ 550 00fa 3D000000 		.4byte	0x3d
+ 551 00fe 02       		.byte	0x2
+ 552 00ff 23       		.byte	0x23
+ 553 0100 20       		.uleb128 0x20
+ 554 0101 09       		.uleb128 0x9
+ 555 0102 4C010000 		.4byte	.LASF15
+ 556 0106 02       		.byte	0x2
+ 557 0107 51       		.byte	0x51
+ 558 0108 3D000000 		.4byte	0x3d
+ 559 010c 02       		.byte	0x2
+ 560 010d 23       		.byte	0x23
+ 561 010e 24       		.uleb128 0x24
+ 562 010f 09       		.uleb128 0x9
+ 563 0110 51010000 		.4byte	.LASF16
+ 564 0114 02       		.byte	0x2
+ 565 0115 52       		.byte	0x52
+ 566 0116 3D000000 		.4byte	0x3d
+ 567 011a 02       		.byte	0x2
+ 568 011b 23       		.byte	0x23
+ 569 011c 28       		.uleb128 0x28
+ 570 011d 09       		.uleb128 0x9
+ 571 011e 96010000 		.4byte	.LASF17
+ 572 0122 02       		.byte	0x2
+ 573 0123 53       		.byte	0x53
+ 574 0124 3D000000 		.4byte	0x3d
+ 575 0128 02       		.byte	0x2
+ 576 0129 23       		.byte	0x23
+ 577 012a 2C       		.uleb128 0x2c
+ 578 012b 09       		.uleb128 0x9
+ 579 012c 9C010000 		.4byte	.LASF18
+ 580 0130 02       		.byte	0x2
+ 581 0131 54       		.byte	0x54
+ 582 0132 3D000000 		.4byte	0x3d
+ 583 0136 02       		.byte	0x2
+ 584 0137 23       		.byte	0x23
+ 585 0138 30       		.uleb128 0x30
+ 586 0139 09       		.uleb128 0x9
+ 587 013a A2010000 		.4byte	.LASF19
+ 588 013e 02       		.byte	0x2
+ 589 013f 55       		.byte	0x55
+ 590 0140 3D000000 		.4byte	0x3d
+ 591 0144 02       		.byte	0x2
+ 592 0145 23       		.byte	0x23
+ 593 0146 34       		.uleb128 0x34
+ 594 0147 09       		.uleb128 0x9
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 15
+
+
+ 595 0148 A8010000 		.4byte	.LASF20
+ 596 014c 02       		.byte	0x2
+ 597 014d 56       		.byte	0x56
+ 598 014e 3D000000 		.4byte	0x3d
+ 599 0152 02       		.byte	0x2
+ 600 0153 23       		.byte	0x23
+ 601 0154 38       		.uleb128 0x38
+ 602 0155 09       		.uleb128 0x9
+ 603 0156 AE010000 		.4byte	.LASF21
+ 604 015a 02       		.byte	0x2
+ 605 015b 57       		.byte	0x57
+ 606 015c 3D000000 		.4byte	0x3d
+ 607 0160 02       		.byte	0x2
+ 608 0161 23       		.byte	0x23
+ 609 0162 3C       		.uleb128 0x3c
+ 610 0163 09       		.uleb128 0x9
+ 611 0164 B4010000 		.4byte	.LASF22
+ 612 0168 02       		.byte	0x2
+ 613 0169 58       		.byte	0x58
+ 614 016a 3D000000 		.4byte	0x3d
+ 615 016e 02       		.byte	0x2
+ 616 016f 23       		.byte	0x23
+ 617 0170 40       		.uleb128 0x40
+ 618 0171 00       		.byte	0x0
+ 619 0172 05       		.uleb128 0x5
+ 620 0173 60010000 		.4byte	.LASF23
+ 621 0177 02       		.byte	0x2
+ 622 0178 59       		.byte	0x59
+ 623 0179 77000000 		.4byte	0x77
+ 624 017d 08       		.uleb128 0x8
+ 625 017e 1C010000 		.4byte	.LASF25
+ 626 0182 08       		.byte	0x8
+ 627 0183 02       		.byte	0x2
+ 628 0184 5B       		.byte	0x5b
+ 629 0185 A6010000 		.4byte	0x1a6
+ 630 0189 09       		.uleb128 0x9
+ 631 018a 00000000 		.4byte	.LASF26
+ 632 018e 02       		.byte	0x2
+ 633 018f 5D       		.byte	0x5d
+ 634 0190 A6010000 		.4byte	0x1a6
+ 635 0194 02       		.byte	0x2
+ 636 0195 23       		.byte	0x23
+ 637 0196 00       		.uleb128 0x0
+ 638 0197 09       		.uleb128 0x9
+ 639 0198 3A020000 		.4byte	.LASF27
+ 640 019c 02       		.byte	0x2
+ 641 019d 5E       		.byte	0x5e
+ 642 019e A6010000 		.4byte	0x1a6
+ 643 01a2 02       		.byte	0x2
+ 644 01a3 23       		.byte	0x23
+ 645 01a4 04       		.uleb128 0x4
+ 646 01a5 00       		.byte	0x0
+ 647 01a6 06       		.uleb128 0x6
+ 648 01a7 04       		.byte	0x4
+ 649 01a8 7D010000 		.4byte	0x17d
+ 650 01ac 05       		.uleb128 0x5
+ 651 01ad 45000000 		.4byte	.LASF28
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 16
+
+
+ 652 01b1 02       		.byte	0x2
+ 653 01b2 5F       		.byte	0x5f
+ 654 01b3 7D010000 		.4byte	0x17d
+ 655 01b7 08       		.uleb128 0x8
+ 656 01b8 3C000000 		.4byte	.LASF29
+ 657 01bc 0C       		.byte	0xc
+ 658 01bd 02       		.byte	0x2
+ 659 01be 61       		.byte	0x61
+ 660 01bf E0010000 		.4byte	0x1e0
+ 661 01c3 09       		.uleb128 0x9
+ 662 01c4 C0010000 		.4byte	.LASF30
+ 663 01c8 02       		.byte	0x2
+ 664 01c9 63       		.byte	0x63
+ 665 01ca AC010000 		.4byte	0x1ac
+ 666 01ce 02       		.byte	0x2
+ 667 01cf 23       		.byte	0x23
+ 668 01d0 00       		.uleb128 0x0
+ 669 01d1 09       		.uleb128 0x9
+ 670 01d2 F3000000 		.4byte	.LASF31
+ 671 01d6 02       		.byte	0x2
+ 672 01d7 64       		.byte	0x64
+ 673 01d8 6B020000 		.4byte	0x26b
+ 674 01dc 02       		.byte	0x2
+ 675 01dd 23       		.byte	0x23
+ 676 01de 08       		.uleb128 0x8
+ 677 01df 00       		.byte	0x0
+ 678 01e0 08       		.uleb128 0x8
+ 679 01e1 ED000000 		.4byte	.LASF32
+ 680 01e5 78       		.byte	0x78
+ 681 01e6 02       		.byte	0x2
+ 682 01e7 8A       		.byte	0x8a
+ 683 01e8 6B020000 		.4byte	0x26b
+ 684 01ec 09       		.uleb128 0x9
+ 685 01ed 89020000 		.4byte	.LASF33
+ 686 01f1 02       		.byte	0x2
+ 687 01f2 8C       		.byte	0x8c
+ 688 01f3 72010000 		.4byte	0x172
+ 689 01f7 02       		.byte	0x2
+ 690 01f8 23       		.byte	0x23
+ 691 01f9 00       		.uleb128 0x0
+ 692 01fa 09       		.uleb128 0x9
+ 693 01fb 58020000 		.4byte	.LASF34
+ 694 01ff 02       		.byte	0x2
+ 695 0200 8D       		.byte	0x8d
+ 696 0201 71020000 		.4byte	0x271
+ 697 0205 02       		.byte	0x2
+ 698 0206 23       		.byte	0x23
+ 699 0207 44       		.uleb128 0x44
+ 700 0208 09       		.uleb128 0x9
+ 701 0209 62020000 		.4byte	.LASF35
+ 702 020d 02       		.byte	0x2
+ 703 020e 8E       		.byte	0x8e
+ 704 020f 71020000 		.4byte	0x271
+ 705 0213 02       		.byte	0x2
+ 706 0214 23       		.byte	0x23
+ 707 0215 50       		.uleb128 0x50
+ 708 0216 09       		.uleb128 0x9
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 17
+
+
+ 709 0217 DB020000 		.4byte	.LASF36
+ 710 021b 02       		.byte	0x2
+ 711 021c 8F       		.byte	0x8f
+ 712 021d 5C030000 		.4byte	0x35c
+ 713 0221 02       		.byte	0x2
+ 714 0222 23       		.byte	0x23
+ 715 0223 5C       		.uleb128 0x5c
+ 716 0224 09       		.uleb128 0x9
+ 717 0225 F6010000 		.4byte	.LASF37
+ 718 0229 02       		.byte	0x2
+ 719 022a 90       		.byte	0x90
+ 720 022b 62030000 		.4byte	0x362
+ 721 022f 02       		.byte	0x2
+ 722 0230 23       		.byte	0x23
+ 723 0231 60       		.uleb128 0x60
+ 724 0232 09       		.uleb128 0x9
+ 725 0233 AF000000 		.4byte	.LASF38
+ 726 0237 02       		.byte	0x2
+ 727 0238 91       		.byte	0x91
+ 728 0239 3D000000 		.4byte	0x3d
+ 729 023d 02       		.byte	0x2
+ 730 023e 23       		.byte	0x23
+ 731 023f 64       		.uleb128 0x64
+ 732 0240 09       		.uleb128 0x9
+ 733 0241 15000000 		.4byte	.LASF39
+ 734 0245 02       		.byte	0x2
+ 735 0246 92       		.byte	0x92
+ 736 0247 25000000 		.4byte	0x25
+ 737 024b 02       		.byte	0x2
+ 738 024c 23       		.byte	0x23
+ 739 024d 68       		.uleb128 0x68
+ 740 024e 09       		.uleb128 0x9
+ 741 024f AE020000 		.4byte	.LASF40
+ 742 0253 02       		.byte	0x2
+ 743 0254 93       		.byte	0x93
+ 744 0255 A5020000 		.4byte	0x2a5
+ 745 0259 02       		.byte	0x2
+ 746 025a 23       		.byte	0x23
+ 747 025b 6C       		.uleb128 0x6c
+ 748 025c 09       		.uleb128 0x9
+ 749 025d 22020000 		.4byte	.LASF41
+ 750 0261 02       		.byte	0x2
+ 751 0262 94       		.byte	0x94
+ 752 0263 3D000000 		.4byte	0x3d
+ 753 0267 02       		.byte	0x2
+ 754 0268 23       		.byte	0x23
+ 755 0269 74       		.uleb128 0x74
+ 756 026a 00       		.byte	0x0
+ 757 026b 06       		.uleb128 0x6
+ 758 026c 04       		.byte	0x4
+ 759 026d E0010000 		.4byte	0x1e0
+ 760 0271 05       		.uleb128 0x5
+ 761 0272 80020000 		.4byte	.LASF42
+ 762 0276 02       		.byte	0x2
+ 763 0277 65       		.byte	0x65
+ 764 0278 B7010000 		.4byte	0x1b7
+ 765 027c 08       		.uleb128 0x8
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 18
+
+
+ 766 027d 20000000 		.4byte	.LASF43
+ 767 0281 08       		.byte	0x8
+ 768 0282 02       		.byte	0x2
+ 769 0283 67       		.byte	0x67
+ 770 0284 A5020000 		.4byte	0x2a5
+ 771 0288 09       		.uleb128 0x9
+ 772 0289 8C010000 		.4byte	.LASF44
+ 773 028d 02       		.byte	0x2
+ 774 028e 69       		.byte	0x69
+ 775 028f 25000000 		.4byte	0x25
+ 776 0293 02       		.byte	0x2
+ 777 0294 23       		.byte	0x23
+ 778 0295 00       		.uleb128 0x0
+ 779 0296 09       		.uleb128 0x9
+ 780 0297 09000000 		.4byte	.LASF45
+ 781 029b 02       		.byte	0x2
+ 782 029c 6A       		.byte	0x6a
+ 783 029d 3D000000 		.4byte	0x3d
+ 784 02a1 02       		.byte	0x2
+ 785 02a2 23       		.byte	0x23
+ 786 02a3 04       		.uleb128 0x4
+ 787 02a4 00       		.byte	0x0
+ 788 02a5 05       		.uleb128 0x5
+ 789 02a6 4E020000 		.4byte	.LASF46
+ 790 02aa 02       		.byte	0x2
+ 791 02ab 6B       		.byte	0x6b
+ 792 02ac 7C020000 		.4byte	0x27c
+ 793 02b0 08       		.uleb128 0x8
+ 794 02b1 BA000000 		.4byte	.LASF47
+ 795 02b5 01       		.byte	0x1
+ 796 02b6 02       		.byte	0x2
+ 797 02b7 6D       		.byte	0x6d
+ 798 02b8 CB020000 		.4byte	0x2cb
+ 799 02bc 09       		.uleb128 0x9
+ 800 02bd DE000000 		.4byte	.LASF48
+ 801 02c1 02       		.byte	0x2
+ 802 02c2 77       		.byte	0x77
+ 803 02c3 25000000 		.4byte	0x25
+ 804 02c7 02       		.byte	0x2
+ 805 02c8 23       		.byte	0x23
+ 806 02c9 00       		.uleb128 0x0
+ 807 02ca 00       		.byte	0x0
+ 808 02cb 05       		.uleb128 0x5
+ 809 02cc C5000000 		.4byte	.LASF49
+ 810 02d0 02       		.byte	0x2
+ 811 02d1 79       		.byte	0x79
+ 812 02d2 B0020000 		.4byte	0x2b0
+ 813 02d6 08       		.uleb128 0x8
+ 814 02d7 95020000 		.4byte	.LASF50
+ 815 02db 44       		.byte	0x44
+ 816 02dc 02       		.byte	0x2
+ 817 02dd 7B       		.byte	0x7b
+ 818 02de FF020000 		.4byte	0x2ff
+ 819 02e2 09       		.uleb128 0x9
+ 820 02e3 56010000 		.4byte	.LASF51
+ 821 02e7 02       		.byte	0x2
+ 822 02e8 7D       		.byte	0x7d
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 19
+
+
+ 823 02e9 FF020000 		.4byte	0x2ff
+ 824 02ed 02       		.byte	0x2
+ 825 02ee 23       		.byte	0x23
+ 826 02ef 00       		.uleb128 0x0
+ 827 02f0 09       		.uleb128 0x9
+ 828 02f1 77010000 		.4byte	.LASF52
+ 829 02f5 02       		.byte	0x2
+ 830 02f6 7E       		.byte	0x7e
+ 831 02f7 CB020000 		.4byte	0x2cb
+ 832 02fb 02       		.byte	0x2
+ 833 02fc 23       		.byte	0x23
+ 834 02fd 40       		.uleb128 0x40
+ 835 02fe 00       		.byte	0x0
+ 836 02ff 0A       		.uleb128 0xa
+ 837 0300 AC010000 		.4byte	0x1ac
+ 838 0304 0F030000 		.4byte	0x30f
+ 839 0308 0B       		.uleb128 0xb
+ 840 0309 48000000 		.4byte	0x48
+ 841 030d 07       		.byte	0x7
+ 842 030e 00       		.byte	0x0
+ 843 030f 05       		.uleb128 0x5
+ 844 0310 B9020000 		.4byte	.LASF53
+ 845 0314 02       		.byte	0x2
+ 846 0315 7F       		.byte	0x7f
+ 847 0316 D6020000 		.4byte	0x2d6
+ 848 031a 08       		.uleb128 0x8
+ 849 031b C8020000 		.4byte	.LASF54
+ 850 031f 4C       		.byte	0x4c
+ 851 0320 02       		.byte	0x2
+ 852 0321 82       		.byte	0x82
+ 853 0322 51030000 		.4byte	0x351
+ 854 0326 09       		.uleb128 0x9
+ 855 0327 DE010000 		.4byte	.LASF55
+ 856 032b 02       		.byte	0x2
+ 857 032c 84       		.byte	0x84
+ 858 032d 0F030000 		.4byte	0x30f
+ 859 0331 02       		.byte	0x2
+ 860 0332 23       		.byte	0x23
+ 861 0333 00       		.uleb128 0x0
+ 862 0334 09       		.uleb128 0x9
+ 863 0335 4D000000 		.4byte	.LASF56
+ 864 0339 02       		.byte	0x2
+ 865 033a 85       		.byte	0x85
+ 866 033b 3D000000 		.4byte	0x3d
+ 867 033f 02       		.byte	0x2
+ 868 0340 23       		.byte	0x23
+ 869 0341 44       		.uleb128 0x44
+ 870 0342 09       		.uleb128 0x9
+ 871 0343 ED010000 		.4byte	.LASF57
+ 872 0347 02       		.byte	0x2
+ 873 0348 86       		.byte	0x86
+ 874 0349 3D000000 		.4byte	0x3d
+ 875 034d 02       		.byte	0x2
+ 876 034e 23       		.byte	0x23
+ 877 034f 48       		.uleb128 0x48
+ 878 0350 00       		.byte	0x0
+ 879 0351 05       		.uleb128 0x5
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 20
+
+
+ 880 0352 6E020000 		.4byte	.LASF58
+ 881 0356 02       		.byte	0x2
+ 882 0357 87       		.byte	0x87
+ 883 0358 1A030000 		.4byte	0x31a
+ 884 035c 06       		.uleb128 0x6
+ 885 035d 04       		.byte	0x4
+ 886 035e 51030000 		.4byte	0x351
+ 887 0362 06       		.uleb128 0x6
+ 888 0363 04       		.byte	0x4
+ 889 0364 25000000 		.4byte	0x25
+ 890 0368 05       		.uleb128 0x5
+ 891 0369 57000000 		.4byte	.LASF59
+ 892 036d 02       		.byte	0x2
+ 893 036e 95       		.byte	0x95
+ 894 036f E0010000 		.4byte	0x1e0
+ 895 0373 06       		.uleb128 0x6
+ 896 0374 04       		.byte	0x4
+ 897 0375 68030000 		.4byte	0x368
+ 898 0379 03       		.uleb128 0x3
+ 899 037a 04       		.byte	0x4
+ 900 037b 07       		.byte	0x7
+ 901 037c 03010000 		.4byte	.LASF60
+ 902 0380 0C       		.uleb128 0xc
+ 903 0381 01       		.byte	0x1
+ 904 0382 2A000000 		.4byte	.LASF62
+ 905 0386 01       		.byte	0x1
+ 906 0387 0B       		.byte	0xb
+ 907 0388 01       		.byte	0x1
+ 908 0389 00000000 		.4byte	.LFB0
+ 909 038d 64000000 		.4byte	.LFE0
+ 910 0391 02       		.byte	0x2
+ 911 0392 7D       		.byte	0x7d
+ 912 0393 00       		.sleb128 0
+ 913 0394 C2030000 		.4byte	0x3c2
+ 914 0398 0D       		.uleb128 0xd
+ 915 0399 F3000000 		.4byte	.LASF31
+ 916 039d 01       		.byte	0x1
+ 917 039e 0B       		.byte	0xb
+ 918 039f 73030000 		.4byte	0x373
+ 919 03a3 01       		.byte	0x1
+ 920 03a4 50       		.byte	0x50
+ 921 03a5 0E       		.uleb128 0xe
+ 922 03a6 D0000000 		.4byte	.LASF61
+ 923 03aa 01       		.byte	0x1
+ 924 03ab 0B       		.byte	0xb
+ 925 03ac 64000000 		.4byte	0x64
+ 926 03b0 00000000 		.4byte	.LLST0
+ 927 03b4 0F       		.uleb128 0xf
+ 928 03b5 A4020000 		.4byte	.LASF64
+ 929 03b9 01       		.byte	0x1
+ 930 03ba 0D       		.byte	0xd
+ 931 03bb C2030000 		.4byte	0x3c2
+ 932 03bf 01       		.byte	0x1
+ 933 03c0 50       		.byte	0x50
+ 934 03c1 00       		.byte	0x0
+ 935 03c2 06       		.uleb128 0x6
+ 936 03c3 04       		.byte	0x4
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 21
+
+
+ 937 03c4 72010000 		.4byte	0x172
+ 938 03c8 10       		.uleb128 0x10
+ 939 03c9 01       		.byte	0x1
+ 940 03ca A3000000 		.4byte	.LASF63
+ 941 03ce 01       		.byte	0x1
+ 942 03cf 33       		.byte	0x33
+ 943 03d0 01       		.byte	0x1
+ 944 03d1 64000000 		.4byte	.LFB1
+ 945 03d5 C0000000 		.4byte	.LFE1
+ 946 03d9 13000000 		.4byte	.LLST1
+ 947 03dd EF030000 		.4byte	0x3ef
+ 948 03e1 0F       		.uleb128 0xf
+ 949 03e2 97000000 		.4byte	.LASF65
+ 950 03e6 01       		.byte	0x1
+ 951 03e7 35       		.byte	0x35
+ 952 03e8 3D000000 		.4byte	0x3d
+ 953 03ec 01       		.byte	0x1
+ 954 03ed 54       		.byte	0x54
+ 955 03ee 00       		.byte	0x0
+ 956 03ef 10       		.uleb128 0x10
+ 957 03f0 01       		.byte	0x1
+ 958 03f1 43020000 		.4byte	.LASF66
+ 959 03f5 01       		.byte	0x1
+ 960 03f6 5E       		.byte	0x5e
+ 961 03f7 01       		.byte	0x1
+ 962 03f8 C0000000 		.4byte	.LFB2
+ 963 03fc 38010000 		.4byte	.LFE2
+ 964 0400 3F000000 		.4byte	.LLST2
+ 965 0404 18040000 		.4byte	0x418
+ 966 0408 0E       		.uleb128 0xe
+ 967 0409 FB000000 		.4byte	.LASF67
+ 968 040d 01       		.byte	0x1
+ 969 040e 5E       		.byte	0x5e
+ 970 040f 3D000000 		.4byte	0x3d
+ 971 0413 6B000000 		.4byte	.LLST3
+ 972 0417 00       		.byte	0x0
+ 973 0418 11       		.uleb128 0x11
+ 974 0419 01       		.byte	0x1
+ 975 041a CE020000 		.4byte	.LASF72
+ 976 041e 01       		.byte	0x1
+ 977 041f 9B       		.byte	0x9b
+ 978 0420 01       		.byte	0x1
+ 979 0421 3D000000 		.4byte	0x3d
+ 980 0425 38010000 		.4byte	.LFB4
+ 981 0429 60010000 		.4byte	.LFE4
+ 982 042d 89000000 		.4byte	.LLST4
+ 983 0431 12       		.uleb128 0x12
+ 984 0432 01       		.byte	0x1
+ 985 0433 86000000 		.4byte	.LASF73
+ 986 0437 01       		.byte	0x1
+ 987 0438 89       		.byte	0x89
+ 988 0439 01       		.byte	0x1
+ 989 043a 60010000 		.4byte	.LFB3
+ 990 043e 8C010000 		.4byte	.LFE3
+ 991 0442 B5000000 		.4byte	.LLST5
+ 992 0446 13       		.uleb128 0x13
+ 993 0447 2E020000 		.4byte	.LASF68
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 22
+
+
+ 994 044b 03       		.byte	0x3
+ 995 044c 0E       		.byte	0xe
+ 996 044d 73030000 		.4byte	0x373
+ 997 0451 01       		.byte	0x1
+ 998 0452 01       		.byte	0x1
+ 999 0453 13       		.uleb128 0x13
+ 1000 0454 2E020000 		.4byte	.LASF68
+ 1001 0458 03       		.byte	0x3
+ 1002 0459 0E       		.byte	0xe
+ 1003 045a 73030000 		.4byte	0x373
+ 1004 045e 01       		.byte	0x1
+ 1005 045f 01       		.byte	0x1
+ 1006 0460 00       		.byte	0x0
+ 1007              		.section	.debug_abbrev
+ 1008 0000 01       		.uleb128 0x1
+ 1009 0001 11       		.uleb128 0x11
+ 1010 0002 01       		.byte	0x1
+ 1011 0003 25       		.uleb128 0x25
+ 1012 0004 0E       		.uleb128 0xe
+ 1013 0005 13       		.uleb128 0x13
+ 1014 0006 0B       		.uleb128 0xb
+ 1015 0007 03       		.uleb128 0x3
+ 1016 0008 0E       		.uleb128 0xe
+ 1017 0009 1B       		.uleb128 0x1b
+ 1018 000a 0E       		.uleb128 0xe
+ 1019 000b 11       		.uleb128 0x11
+ 1020 000c 01       		.uleb128 0x1
+ 1021 000d 12       		.uleb128 0x12
+ 1022 000e 01       		.uleb128 0x1
+ 1023 000f 10       		.uleb128 0x10
+ 1024 0010 06       		.uleb128 0x6
+ 1025 0011 00       		.byte	0x0
+ 1026 0012 00       		.byte	0x0
+ 1027 0013 02       		.uleb128 0x2
+ 1028 0014 16       		.uleb128 0x16
+ 1029 0015 00       		.byte	0x0
+ 1030 0016 03       		.uleb128 0x3
+ 1031 0017 08       		.uleb128 0x8
+ 1032 0018 3A       		.uleb128 0x3a
+ 1033 0019 0B       		.uleb128 0xb
+ 1034 001a 3B       		.uleb128 0x3b
+ 1035 001b 0B       		.uleb128 0xb
+ 1036 001c 49       		.uleb128 0x49
+ 1037 001d 13       		.uleb128 0x13
+ 1038 001e 00       		.byte	0x0
+ 1039 001f 00       		.byte	0x0
+ 1040 0020 03       		.uleb128 0x3
+ 1041 0021 24       		.uleb128 0x24
+ 1042 0022 00       		.byte	0x0
+ 1043 0023 0B       		.uleb128 0xb
+ 1044 0024 0B       		.uleb128 0xb
+ 1045 0025 3E       		.uleb128 0x3e
+ 1046 0026 0B       		.uleb128 0xb
+ 1047 0027 03       		.uleb128 0x3
+ 1048 0028 0E       		.uleb128 0xe
+ 1049 0029 00       		.byte	0x0
+ 1050 002a 00       		.byte	0x0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 23
+
+
+ 1051 002b 04       		.uleb128 0x4
+ 1052 002c 24       		.uleb128 0x24
+ 1053 002d 00       		.byte	0x0
+ 1054 002e 0B       		.uleb128 0xb
+ 1055 002f 0B       		.uleb128 0xb
+ 1056 0030 3E       		.uleb128 0x3e
+ 1057 0031 0B       		.uleb128 0xb
+ 1058 0032 03       		.uleb128 0x3
+ 1059 0033 08       		.uleb128 0x8
+ 1060 0034 00       		.byte	0x0
+ 1061 0035 00       		.byte	0x0
+ 1062 0036 05       		.uleb128 0x5
+ 1063 0037 16       		.uleb128 0x16
+ 1064 0038 00       		.byte	0x0
+ 1065 0039 03       		.uleb128 0x3
+ 1066 003a 0E       		.uleb128 0xe
+ 1067 003b 3A       		.uleb128 0x3a
+ 1068 003c 0B       		.uleb128 0xb
+ 1069 003d 3B       		.uleb128 0x3b
+ 1070 003e 0B       		.uleb128 0xb
+ 1071 003f 49       		.uleb128 0x49
+ 1072 0040 13       		.uleb128 0x13
+ 1073 0041 00       		.byte	0x0
+ 1074 0042 00       		.byte	0x0
+ 1075 0043 06       		.uleb128 0x6
+ 1076 0044 0F       		.uleb128 0xf
+ 1077 0045 00       		.byte	0x0
+ 1078 0046 0B       		.uleb128 0xb
+ 1079 0047 0B       		.uleb128 0xb
+ 1080 0048 49       		.uleb128 0x49
+ 1081 0049 13       		.uleb128 0x13
+ 1082 004a 00       		.byte	0x0
+ 1083 004b 00       		.byte	0x0
+ 1084 004c 07       		.uleb128 0x7
+ 1085 004d 15       		.uleb128 0x15
+ 1086 004e 00       		.byte	0x0
+ 1087 004f 27       		.uleb128 0x27
+ 1088 0050 0C       		.uleb128 0xc
+ 1089 0051 00       		.byte	0x0
+ 1090 0052 00       		.byte	0x0
+ 1091 0053 08       		.uleb128 0x8
+ 1092 0054 13       		.uleb128 0x13
+ 1093 0055 01       		.byte	0x1
+ 1094 0056 03       		.uleb128 0x3
+ 1095 0057 0E       		.uleb128 0xe
+ 1096 0058 0B       		.uleb128 0xb
+ 1097 0059 0B       		.uleb128 0xb
+ 1098 005a 3A       		.uleb128 0x3a
+ 1099 005b 0B       		.uleb128 0xb
+ 1100 005c 3B       		.uleb128 0x3b
+ 1101 005d 0B       		.uleb128 0xb
+ 1102 005e 01       		.uleb128 0x1
+ 1103 005f 13       		.uleb128 0x13
+ 1104 0060 00       		.byte	0x0
+ 1105 0061 00       		.byte	0x0
+ 1106 0062 09       		.uleb128 0x9
+ 1107 0063 0D       		.uleb128 0xd
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 24
+
+
+ 1108 0064 00       		.byte	0x0
+ 1109 0065 03       		.uleb128 0x3
+ 1110 0066 0E       		.uleb128 0xe
+ 1111 0067 3A       		.uleb128 0x3a
+ 1112 0068 0B       		.uleb128 0xb
+ 1113 0069 3B       		.uleb128 0x3b
+ 1114 006a 0B       		.uleb128 0xb
+ 1115 006b 49       		.uleb128 0x49
+ 1116 006c 13       		.uleb128 0x13
+ 1117 006d 38       		.uleb128 0x38
+ 1118 006e 0A       		.uleb128 0xa
+ 1119 006f 00       		.byte	0x0
+ 1120 0070 00       		.byte	0x0
+ 1121 0071 0A       		.uleb128 0xa
+ 1122 0072 01       		.uleb128 0x1
+ 1123 0073 01       		.byte	0x1
+ 1124 0074 49       		.uleb128 0x49
+ 1125 0075 13       		.uleb128 0x13
+ 1126 0076 01       		.uleb128 0x1
+ 1127 0077 13       		.uleb128 0x13
+ 1128 0078 00       		.byte	0x0
+ 1129 0079 00       		.byte	0x0
+ 1130 007a 0B       		.uleb128 0xb
+ 1131 007b 21       		.uleb128 0x21
+ 1132 007c 00       		.byte	0x0
+ 1133 007d 49       		.uleb128 0x49
+ 1134 007e 13       		.uleb128 0x13
+ 1135 007f 2F       		.uleb128 0x2f
+ 1136 0080 0B       		.uleb128 0xb
+ 1137 0081 00       		.byte	0x0
+ 1138 0082 00       		.byte	0x0
+ 1139 0083 0C       		.uleb128 0xc
+ 1140 0084 2E       		.uleb128 0x2e
+ 1141 0085 01       		.byte	0x1
+ 1142 0086 3F       		.uleb128 0x3f
+ 1143 0087 0C       		.uleb128 0xc
+ 1144 0088 03       		.uleb128 0x3
+ 1145 0089 0E       		.uleb128 0xe
+ 1146 008a 3A       		.uleb128 0x3a
+ 1147 008b 0B       		.uleb128 0xb
+ 1148 008c 3B       		.uleb128 0x3b
+ 1149 008d 0B       		.uleb128 0xb
+ 1150 008e 27       		.uleb128 0x27
+ 1151 008f 0C       		.uleb128 0xc
+ 1152 0090 11       		.uleb128 0x11
+ 1153 0091 01       		.uleb128 0x1
+ 1154 0092 12       		.uleb128 0x12
+ 1155 0093 01       		.uleb128 0x1
+ 1156 0094 40       		.uleb128 0x40
+ 1157 0095 0A       		.uleb128 0xa
+ 1158 0096 01       		.uleb128 0x1
+ 1159 0097 13       		.uleb128 0x13
+ 1160 0098 00       		.byte	0x0
+ 1161 0099 00       		.byte	0x0
+ 1162 009a 0D       		.uleb128 0xd
+ 1163 009b 05       		.uleb128 0x5
+ 1164 009c 00       		.byte	0x0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 25
+
+
+ 1165 009d 03       		.uleb128 0x3
+ 1166 009e 0E       		.uleb128 0xe
+ 1167 009f 3A       		.uleb128 0x3a
+ 1168 00a0 0B       		.uleb128 0xb
+ 1169 00a1 3B       		.uleb128 0x3b
+ 1170 00a2 0B       		.uleb128 0xb
+ 1171 00a3 49       		.uleb128 0x49
+ 1172 00a4 13       		.uleb128 0x13
+ 1173 00a5 02       		.uleb128 0x2
+ 1174 00a6 0A       		.uleb128 0xa
+ 1175 00a7 00       		.byte	0x0
+ 1176 00a8 00       		.byte	0x0
+ 1177 00a9 0E       		.uleb128 0xe
+ 1178 00aa 05       		.uleb128 0x5
+ 1179 00ab 00       		.byte	0x0
+ 1180 00ac 03       		.uleb128 0x3
+ 1181 00ad 0E       		.uleb128 0xe
+ 1182 00ae 3A       		.uleb128 0x3a
+ 1183 00af 0B       		.uleb128 0xb
+ 1184 00b0 3B       		.uleb128 0x3b
+ 1185 00b1 0B       		.uleb128 0xb
+ 1186 00b2 49       		.uleb128 0x49
+ 1187 00b3 13       		.uleb128 0x13
+ 1188 00b4 02       		.uleb128 0x2
+ 1189 00b5 06       		.uleb128 0x6
+ 1190 00b6 00       		.byte	0x0
+ 1191 00b7 00       		.byte	0x0
+ 1192 00b8 0F       		.uleb128 0xf
+ 1193 00b9 34       		.uleb128 0x34
+ 1194 00ba 00       		.byte	0x0
+ 1195 00bb 03       		.uleb128 0x3
+ 1196 00bc 0E       		.uleb128 0xe
+ 1197 00bd 3A       		.uleb128 0x3a
+ 1198 00be 0B       		.uleb128 0xb
+ 1199 00bf 3B       		.uleb128 0x3b
+ 1200 00c0 0B       		.uleb128 0xb
+ 1201 00c1 49       		.uleb128 0x49
+ 1202 00c2 13       		.uleb128 0x13
+ 1203 00c3 02       		.uleb128 0x2
+ 1204 00c4 0A       		.uleb128 0xa
+ 1205 00c5 00       		.byte	0x0
+ 1206 00c6 00       		.byte	0x0
+ 1207 00c7 10       		.uleb128 0x10
+ 1208 00c8 2E       		.uleb128 0x2e
+ 1209 00c9 01       		.byte	0x1
+ 1210 00ca 3F       		.uleb128 0x3f
+ 1211 00cb 0C       		.uleb128 0xc
+ 1212 00cc 03       		.uleb128 0x3
+ 1213 00cd 0E       		.uleb128 0xe
+ 1214 00ce 3A       		.uleb128 0x3a
+ 1215 00cf 0B       		.uleb128 0xb
+ 1216 00d0 3B       		.uleb128 0x3b
+ 1217 00d1 0B       		.uleb128 0xb
+ 1218 00d2 27       		.uleb128 0x27
+ 1219 00d3 0C       		.uleb128 0xc
+ 1220 00d4 11       		.uleb128 0x11
+ 1221 00d5 01       		.uleb128 0x1
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 26
+
+
+ 1222 00d6 12       		.uleb128 0x12
+ 1223 00d7 01       		.uleb128 0x1
+ 1224 00d8 40       		.uleb128 0x40
+ 1225 00d9 06       		.uleb128 0x6
+ 1226 00da 01       		.uleb128 0x1
+ 1227 00db 13       		.uleb128 0x13
+ 1228 00dc 00       		.byte	0x0
+ 1229 00dd 00       		.byte	0x0
+ 1230 00de 11       		.uleb128 0x11
+ 1231 00df 2E       		.uleb128 0x2e
+ 1232 00e0 00       		.byte	0x0
+ 1233 00e1 3F       		.uleb128 0x3f
+ 1234 00e2 0C       		.uleb128 0xc
+ 1235 00e3 03       		.uleb128 0x3
+ 1236 00e4 0E       		.uleb128 0xe
+ 1237 00e5 3A       		.uleb128 0x3a
+ 1238 00e6 0B       		.uleb128 0xb
+ 1239 00e7 3B       		.uleb128 0x3b
+ 1240 00e8 0B       		.uleb128 0xb
+ 1241 00e9 27       		.uleb128 0x27
+ 1242 00ea 0C       		.uleb128 0xc
+ 1243 00eb 49       		.uleb128 0x49
+ 1244 00ec 13       		.uleb128 0x13
+ 1245 00ed 11       		.uleb128 0x11
+ 1246 00ee 01       		.uleb128 0x1
+ 1247 00ef 12       		.uleb128 0x12
+ 1248 00f0 01       		.uleb128 0x1
+ 1249 00f1 40       		.uleb128 0x40
+ 1250 00f2 06       		.uleb128 0x6
+ 1251 00f3 00       		.byte	0x0
+ 1252 00f4 00       		.byte	0x0
+ 1253 00f5 12       		.uleb128 0x12
+ 1254 00f6 2E       		.uleb128 0x2e
+ 1255 00f7 00       		.byte	0x0
+ 1256 00f8 3F       		.uleb128 0x3f
+ 1257 00f9 0C       		.uleb128 0xc
+ 1258 00fa 03       		.uleb128 0x3
+ 1259 00fb 0E       		.uleb128 0xe
+ 1260 00fc 3A       		.uleb128 0x3a
+ 1261 00fd 0B       		.uleb128 0xb
+ 1262 00fe 3B       		.uleb128 0x3b
+ 1263 00ff 0B       		.uleb128 0xb
+ 1264 0100 27       		.uleb128 0x27
+ 1265 0101 0C       		.uleb128 0xc
+ 1266 0102 11       		.uleb128 0x11
+ 1267 0103 01       		.uleb128 0x1
+ 1268 0104 12       		.uleb128 0x12
+ 1269 0105 01       		.uleb128 0x1
+ 1270 0106 40       		.uleb128 0x40
+ 1271 0107 06       		.uleb128 0x6
+ 1272 0108 00       		.byte	0x0
+ 1273 0109 00       		.byte	0x0
+ 1274 010a 13       		.uleb128 0x13
+ 1275 010b 34       		.uleb128 0x34
+ 1276 010c 00       		.byte	0x0
+ 1277 010d 03       		.uleb128 0x3
+ 1278 010e 0E       		.uleb128 0xe
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 27
+
+
+ 1279 010f 3A       		.uleb128 0x3a
+ 1280 0110 0B       		.uleb128 0xb
+ 1281 0111 3B       		.uleb128 0x3b
+ 1282 0112 0B       		.uleb128 0xb
+ 1283 0113 49       		.uleb128 0x49
+ 1284 0114 13       		.uleb128 0x13
+ 1285 0115 3F       		.uleb128 0x3f
+ 1286 0116 0C       		.uleb128 0xc
+ 1287 0117 3C       		.uleb128 0x3c
+ 1288 0118 0C       		.uleb128 0xc
+ 1289 0119 00       		.byte	0x0
+ 1290 011a 00       		.byte	0x0
+ 1291 011b 00       		.byte	0x0
+ 1292              		.section	.debug_pubnames,"",%progbits
+ 1293 0000 69000000 		.4byte	0x69
+ 1294 0004 0200     		.2byte	0x2
+ 1295 0006 00000000 		.4byte	.Ldebug_info0
+ 1296 000a 61040000 		.4byte	0x461
+ 1297 000e 80030000 		.4byte	0x380
+ 1298 0012 4D44535F 		.ascii	"MDS_TaskStackInit\000"
+ 1298      5461736B 
+ 1298      53746163 
+ 1298      6B496E69 
+ 1298      7400
+ 1299 0024 C8030000 		.4byte	0x3c8
+ 1300 0028 4D44535F 		.ascii	"MDS_TickIsr\000"
+ 1300      5469636B 
+ 1300      49737200 
+ 1301 0034 EF030000 		.4byte	0x3ef
+ 1302 0038 4D44535F 		.ascii	"MDS_SwiIsr\000"
+ 1302      53776949 
+ 1302      737200
+ 1303 0043 18040000 		.4byte	0x418
+ 1304 0047 4D44535F 		.ascii	"MDS_RunInInt\000"
+ 1304      52756E49 
+ 1304      6E496E74 
+ 1304      00
+ 1305 0054 31040000 		.4byte	0x431
+ 1306 0058 4D44535F 		.ascii	"MDS_TaskSwiSched\000"
+ 1306      5461736B 
+ 1306      53776953 
+ 1306      63686564 
+ 1306      00
+ 1307 0069 00000000 		.4byte	0x0
+ 1308              		.section	.debug_pubtypes,"",%progbits
+ 1309 0000 FB000000 		.4byte	0xfb
+ 1310 0004 0200     		.2byte	0x2
+ 1311 0006 00000000 		.4byte	.Ldebug_info0
+ 1312 000a 61040000 		.4byte	0x461
+ 1313 000e 25000000 		.4byte	0x25
+ 1314 0012 553800   		.ascii	"U8\000"
+ 1315 0015 3D000000 		.4byte	0x3d
+ 1316 0019 55333200 		.ascii	"U32\000"
+ 1317 001d 64000000 		.4byte	0x64
+ 1318 0021 5646554E 		.ascii	"VFUNC\000"
+ 1318      4300
+ 1319 0027 77000000 		.4byte	0x77
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 28
+
+
+ 1320 002b 73746163 		.ascii	"stackreg\000"
+ 1320      6B726567 
+ 1320      00
+ 1321 0034 72010000 		.4byte	0x172
+ 1322 0038 53544143 		.ascii	"STACKREG\000"
+ 1322      4B524547 
+ 1322      00
+ 1323 0041 7D010000 		.4byte	0x17d
+ 1324 0045 6D5F6368 		.ascii	"m_chain\000"
+ 1324      61696E00 
+ 1325 004d AC010000 		.4byte	0x1ac
+ 1326 0051 4D5F4348 		.ascii	"M_CHAIN\000"
+ 1326      41494E00 
+ 1327 0059 B7010000 		.4byte	0x1b7
+ 1328 005d 6D5F7463 		.ascii	"m_tcbque\000"
+ 1328      62717565 
+ 1328      00
+ 1329 0066 71020000 		.4byte	0x271
+ 1330 006a 4D5F5443 		.ascii	"M_TCBQUE\000"
+ 1330      42515545 
+ 1330      00
+ 1331 0073 7C020000 		.4byte	0x27c
+ 1332 0077 6D5F7461 		.ascii	"m_taskopt\000"
+ 1332      736B6F70 
+ 1332      7400
+ 1333 0081 A5020000 		.4byte	0x2a5
+ 1334 0085 4D5F5441 		.ascii	"M_TASKOPT\000"
+ 1334      534B4F50 
+ 1334      5400
+ 1335 008f B0020000 		.4byte	0x2b0
+ 1336 0093 6D5F7072 		.ascii	"m_prioflag\000"
+ 1336      696F666C 
+ 1336      616700
+ 1337 009e CB020000 		.4byte	0x2cb
+ 1338 00a2 4D5F5052 		.ascii	"M_PRIOFLAG\000"
+ 1338      494F464C 
+ 1338      414700
+ 1339 00ad D6020000 		.4byte	0x2d6
+ 1340 00b1 6D5F7461 		.ascii	"m_taskschedtab\000"
+ 1340      736B7363 
+ 1340      68656474 
+ 1340      616200
+ 1341 00c0 0F030000 		.4byte	0x30f
+ 1342 00c4 4D5F5441 		.ascii	"M_TASKSCHEDTAB\000"
+ 1342      534B5343 
+ 1342      48454454 
+ 1342      414200
+ 1343 00d3 1A030000 		.4byte	0x31a
+ 1344 00d7 6D5F7365 		.ascii	"m_sem\000"
+ 1344      6D00
+ 1345 00dd 51030000 		.4byte	0x351
+ 1346 00e1 4D5F5345 		.ascii	"M_SEM\000"
+ 1346      4D00
+ 1347 00e7 E0010000 		.4byte	0x1e0
+ 1348 00eb 6D5F7463 		.ascii	"m_tcb\000"
+ 1348      6200
+ 1349 00f1 68030000 		.4byte	0x368
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 29
+
+
+ 1350 00f5 4D5F5443 		.ascii	"M_TCB\000"
+ 1350      4200
+ 1351 00fb 00000000 		.4byte	0x0
+ 1352              		.section	.debug_aranges,"",%progbits
+ 1353 0000 1C000000 		.4byte	0x1c
+ 1354 0004 0200     		.2byte	0x2
+ 1355 0006 00000000 		.4byte	.Ldebug_info0
+ 1356 000a 04       		.byte	0x4
+ 1357 000b 00       		.byte	0x0
+ 1358 000c 0000     		.2byte	0x0
+ 1359 000e 0000     		.2byte	0x0
+ 1360 0010 00000000 		.4byte	.Ltext0
+ 1361 0014 8C010000 		.4byte	.Letext0-.Ltext0
+ 1362 0018 00000000 		.4byte	0x0
+ 1363 001c 00000000 		.4byte	0x0
+ 1364              		.section	.debug_str,"MS",%progbits,1
+ 1365              	.LASF26:
+ 1366 0000 70737472 		.ascii	"pstrHead\000"
+ 1366      48656164 
+ 1366      00
+ 1367              	.LASF45:
+ 1368 0009 75694465 		.ascii	"uiDelayTick\000"
+ 1368      6C617954 
+ 1368      69636B00 
+ 1369              	.LASF39:
+ 1370 0015 75635461 		.ascii	"ucTaskPrio\000"
+ 1370      736B5072 
+ 1370      696F00
+ 1371              	.LASF43:
+ 1372 0020 6D5F7461 		.ascii	"m_taskopt\000"
+ 1372      736B6F70 
+ 1372      7400
+ 1373              	.LASF62:
+ 1374 002a 4D44535F 		.ascii	"MDS_TaskStackInit\000"
+ 1374      5461736B 
+ 1374      53746163 
+ 1374      6B496E69 
+ 1374      7400
+ 1375              	.LASF29:
+ 1376 003c 6D5F7463 		.ascii	"m_tcbque\000"
+ 1376      62717565 
+ 1376      00
+ 1377              	.LASF28:
+ 1378 0045 4D5F4348 		.ascii	"M_CHAIN\000"
+ 1378      41494E00 
+ 1379              	.LASF56:
+ 1380 004d 7569436F 		.ascii	"uiCounter\000"
+ 1380      756E7465 
+ 1380      7200
+ 1381              	.LASF59:
+ 1382 0057 4D5F5443 		.ascii	"M_TCB\000"
+ 1382      4200
+ 1383              	.LASF4:
+ 1384 005d 73686F72 		.ascii	"short int\000"
+ 1384      7420696E 
+ 1384      7400
+ 1385              	.LASF24:
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 30
+
+
+ 1386 0067 73746163 		.ascii	"stackreg\000"
+ 1386      6B726567 
+ 1386      00
+ 1387              	.LASF70:
+ 1388 0070 2E2E2F6D 		.ascii	"../mindows/mds_chip.c\000"
+ 1388      696E646F 
+ 1388      77732F6D 
+ 1388      64735F63 
+ 1388      6869702E 
+ 1389              	.LASF73:
+ 1390 0086 4D44535F 		.ascii	"MDS_TaskSwiSched\000"
+ 1390      5461736B 
+ 1390      53776953 
+ 1390      63686564 
+ 1390      00
+ 1391              	.LASF65:
+ 1392 0097 75694972 		.ascii	"uiIrqStatus\000"
+ 1392      71537461 
+ 1392      74757300 
+ 1393              	.LASF63:
+ 1394 00a3 4D44535F 		.ascii	"MDS_TickIsr\000"
+ 1394      5469636B 
+ 1394      49737200 
+ 1395              	.LASF38:
+ 1396 00af 75695461 		.ascii	"uiTaskFlag\000"
+ 1396      736B466C 
+ 1396      616700
+ 1397              	.LASF47:
+ 1398 00ba 6D5F7072 		.ascii	"m_prioflag\000"
+ 1398      696F666C 
+ 1398      616700
+ 1399              	.LASF49:
+ 1400 00c5 4D5F5052 		.ascii	"M_PRIOFLAG\000"
+ 1400      494F464C 
+ 1400      414700
+ 1401              	.LASF61:
+ 1402 00d0 76664675 		.ascii	"vfFuncPointer\000"
+ 1402      6E63506F 
+ 1402      696E7465 
+ 1402      7200
+ 1403              	.LASF48:
+ 1404 00de 75635072 		.ascii	"ucPrioFlagGrp1\000"
+ 1404      696F466C 
+ 1404      61674772 
+ 1404      703100
+ 1405              	.LASF32:
+ 1406 00ed 6D5F7463 		.ascii	"m_tcb\000"
+ 1406      6200
+ 1407              	.LASF31:
+ 1408 00f3 70737472 		.ascii	"pstrTcb\000"
+ 1408      54636200 
+ 1409              	.LASF67:
+ 1410 00fb 75695377 		.ascii	"uiSwiNo\000"
+ 1410      694E6F00 
+ 1411              	.LASF60:
+ 1412 0103 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1412      20756E73 
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 31
+
+
+ 1412      69676E65 
+ 1412      6420696E 
+ 1412      7400
+ 1413              	.LASF6:
+ 1414 0115 75694370 		.ascii	"uiCpsr\000"
+ 1414      737200
+ 1415              	.LASF25:
+ 1416 011c 6D5F6368 		.ascii	"m_chain\000"
+ 1416      61696E00 
+ 1417              	.LASF7:
+ 1418 0124 75695230 		.ascii	"uiR0\000"
+ 1418      00
+ 1419              	.LASF8:
+ 1420 0129 75695231 		.ascii	"uiR1\000"
+ 1420      00
+ 1421              	.LASF9:
+ 1422 012e 75695232 		.ascii	"uiR2\000"
+ 1422      00
+ 1423              	.LASF10:
+ 1424 0133 75695233 		.ascii	"uiR3\000"
+ 1424      00
+ 1425              	.LASF11:
+ 1426 0138 75695234 		.ascii	"uiR4\000"
+ 1426      00
+ 1427              	.LASF12:
+ 1428 013d 75695235 		.ascii	"uiR5\000"
+ 1428      00
+ 1429              	.LASF13:
+ 1430 0142 75695236 		.ascii	"uiR6\000"
+ 1430      00
+ 1431              	.LASF14:
+ 1432 0147 75695237 		.ascii	"uiR7\000"
+ 1432      00
+ 1433              	.LASF15:
+ 1434 014c 75695238 		.ascii	"uiR8\000"
+ 1434      00
+ 1435              	.LASF16:
+ 1436 0151 75695239 		.ascii	"uiR9\000"
+ 1436      00
+ 1437              	.LASF51:
+ 1438 0156 61737472 		.ascii	"astrChain\000"
+ 1438      43686169 
+ 1438      6E00
+ 1439              	.LASF23:
+ 1440 0160 53544143 		.ascii	"STACKREG\000"
+ 1440      4B524547 
+ 1440      00
+ 1441              	.LASF0:
+ 1442 0169 756E7369 		.ascii	"unsigned char\000"
+ 1442      676E6564 
+ 1442      20636861 
+ 1442      7200
+ 1443              	.LASF52:
+ 1444 0177 73747246 		.ascii	"strFlag\000"
+ 1444      6C616700 
+ 1445              	.LASF2:
+ 1446 017f 756E7369 		.ascii	"unsigned int\000"
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 32
+
+
+ 1446      676E6564 
+ 1446      20696E74 
+ 1446      00
+ 1447              	.LASF44:
+ 1448 018c 75635461 		.ascii	"ucTaskSta\000"
+ 1448      736B5374 
+ 1448      6100
+ 1449              	.LASF17:
+ 1450 0196 75695231 		.ascii	"uiR10\000"
+ 1450      3000
+ 1451              	.LASF18:
+ 1452 019c 75695231 		.ascii	"uiR11\000"
+ 1452      3100
+ 1453              	.LASF19:
+ 1454 01a2 75695231 		.ascii	"uiR12\000"
+ 1454      3200
+ 1455              	.LASF20:
+ 1456 01a8 75695231 		.ascii	"uiR13\000"
+ 1456      3300
+ 1457              	.LASF21:
+ 1458 01ae 75695231 		.ascii	"uiR14\000"
+ 1458      3400
+ 1459              	.LASF22:
+ 1460 01b4 75695231 		.ascii	"uiR15\000"
+ 1460      3500
+ 1461              	.LASF5:
+ 1462 01ba 5646554E 		.ascii	"VFUNC\000"
+ 1462      4300
+ 1463              	.LASF30:
+ 1464 01c0 73747251 		.ascii	"strQueHead\000"
+ 1464      75654865 
+ 1464      616400
+ 1465              	.LASF1:
+ 1466 01cb 73686F72 		.ascii	"short unsigned int\000"
+ 1466      7420756E 
+ 1466      7369676E 
+ 1466      65642069 
+ 1466      6E7400
+ 1467              	.LASF55:
+ 1468 01de 73747253 		.ascii	"strSemTab\000"
+ 1468      656D5461 
+ 1468      6200
+ 1469              	.LASF3:
+ 1470 01e8 63686172 		.ascii	"char\000"
+ 1470      00
+ 1471              	.LASF57:
+ 1472 01ed 75695365 		.ascii	"uiSemOpt\000"
+ 1472      6D4F7074 
+ 1472      00
+ 1473              	.LASF37:
+ 1474 01f6 70756354 		.ascii	"pucTaskName\000"
+ 1474      61736B4E 
+ 1474      616D6500 
+ 1475              	.LASF71:
+ 1476 0202 463A5C77 		.ascii	"F:\\workdir\\RTOS_Mindows\\project\000"
+ 1476      6F726B64 
+ 1476      69725C52 
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 33
+
+
+ 1476      544F535F 
+ 1476      4D696E64 
+ 1477              	.LASF41:
+ 1478 0222 75695374 		.ascii	"uiStillTick\000"
+ 1478      696C6C54 
+ 1478      69636B00 
+ 1479              	.LASF68:
+ 1480 022e 67707374 		.ascii	"gpstrCurTcb\000"
+ 1480      72437572 
+ 1480      54636200 
+ 1481              	.LASF27:
+ 1482 023a 70737472 		.ascii	"pstrTail\000"
+ 1482      5461696C 
+ 1482      00
+ 1483              	.LASF66:
+ 1484 0243 4D44535F 		.ascii	"MDS_SwiIsr\000"
+ 1484      53776949 
+ 1484      737200
+ 1485              	.LASF46:
+ 1486 024e 4D5F5441 		.ascii	"M_TASKOPT\000"
+ 1486      534B4F50 
+ 1486      5400
+ 1487              	.LASF34:
+ 1488 0258 73747254 		.ascii	"strTcbQue\000"
+ 1488      63625175 
+ 1488      6500
+ 1489              	.LASF35:
+ 1490 0262 73747244 		.ascii	"strDelayQue\000"
+ 1490      656C6179 
+ 1490      51756500 
+ 1491              	.LASF58:
+ 1492 026e 4D5F5345 		.ascii	"M_SEM\000"
+ 1492      4D00
+ 1493              	.LASF69:
+ 1494 0274 474E5520 		.ascii	"GNU C 4.5.2\000"
+ 1494      4320342E 
+ 1494      352E3200 
+ 1495              	.LASF42:
+ 1496 0280 4D5F5443 		.ascii	"M_TCBQUE\000"
+ 1496      42515545 
+ 1496      00
+ 1497              	.LASF33:
+ 1498 0289 73747253 		.ascii	"strStackReg\000"
+ 1498      7461636B 
+ 1498      52656700 
+ 1499              	.LASF50:
+ 1500 0295 6D5F7461 		.ascii	"m_taskschedtab\000"
+ 1500      736B7363 
+ 1500      68656474 
+ 1500      616200
+ 1501              	.LASF64:
+ 1502 02a4 70737472 		.ascii	"pstrRegSp\000"
+ 1502      52656753 
+ 1502      7000
+ 1503              	.LASF40:
+ 1504 02ae 73747254 		.ascii	"strTaskOpt\000"
+ 1504      61736B4F 
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 34
+
+
+ 1504      707400
+ 1505              	.LASF53:
+ 1506 02b9 4D5F5441 		.ascii	"M_TASKSCHEDTAB\000"
+ 1506      534B5343 
+ 1506      48454454 
+ 1506      414200
+ 1507              	.LASF54:
+ 1508 02c8 6D5F7365 		.ascii	"m_sem\000"
+ 1508      6D00
+ 1509              	.LASF72:
+ 1510 02ce 4D44535F 		.ascii	"MDS_RunInInt\000"
+ 1510      52756E49 
+ 1510      6E496E74 
+ 1510      00
+ 1511              	.LASF36:
+ 1512 02db 70737472 		.ascii	"pstrSem\000"
+ 1512      53656D00 
+ 1513              		.ident	"GCC: (Sourcery G++ Lite 2011.03-41) 4.5.2"
+ 1514              		.section	.note.GNU-stack,"",%progbits
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s 			page 35
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 mds_chip.c
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s:21     .text:00000000 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s:24     .text:00000000 MDS_TaskStackInit
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s:83     .text:0000005c $d
+                       .ARM.exidx:00000000 $d
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s:89     .text:00000064 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s:92     .text:00000064 MDS_TickIsr
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s:155    .text:000000bc $d
+                       .ARM.extab:00000000 $d
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s:160    .text:000000c0 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s:163    .text:000000c0 MDS_SwiIsr
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s:235    .text:0000012c $d
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s:242    .text:00000138 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s:245    .text:00000138 MDS_RunInInt
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s:283    .text:00000160 MDS_TaskSwiSched
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\ccgPTXUI.s:319    .text:00000188 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+MDS_RootTask
+MDS_TaskSelfDelete
+__aeabi_unwind_cpp_pr0
+MDS_TaskSwitch
+MDS_TaskTick
+gpstrCurTcb
+__aeabi_unwind_cpp_pr1
+MDS_IntDisable
+MDS_IntEnable
+MDS_TaskReadySched
+MDS_GetChipMode
+MDS_TaskOccurSwi

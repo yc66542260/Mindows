@@ -1,0 +1,999 @@
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 1
+
+
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 2
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 18, 4
+  11              		.file	"mds_queue.c"
+  12              		.section	.debug_abbrev,"",%progbits
+  13              	.Ldebug_abbrev0:
+  14              		.section	.debug_info,"",%progbits
+  15              	.Ldebug_info0:
+  16              		.section	.debug_line,"",%progbits
+  17              	.Ldebug_line0:
+  18 0000 8B000000 		.text
+  18      02004C00 
+  18      00000201 
+  18      FB0E0D00 
+  18      01010101 
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.align	2
+  22              		.global	MDS_QueCreate
+  23              		.type	MDS_QueCreate, %function
+  24              	MDS_QueCreate:
+  25              		.fnstart
+  26              	.LFB0:
+  27              		.file 1 "../mindows/mds_queue.c"
+   1:../mindows/mds_queue.c **** 
+   2:../mindows/mds_queue.c **** #include "mindows_inner.h"
+   3:../mindows/mds_queue.c **** #include "mds_queue_inner.h"
+   4:../mindows/mds_queue.c **** 
+   5:../mindows/mds_queue.c **** 
+   6:../mindows/mds_queue.c **** /***********************************************************************************
+   7:../mindows/mds_queue.c **** 函数功能: 创建队列.
+   8:../mindows/mds_queue.c **** 入口参数: pstrQue: 队列指针.
+   9:../mindows/mds_queue.c **** 返 回 值: RTN_SUCD: 创建队列成功.
+  10:../mindows/mds_queue.c ****           RTN_FAIL: 创建队列失败.
+  11:../mindows/mds_queue.c **** ***********************************************************************************/
+  12:../mindows/mds_queue.c **** U32 MDS_QueCreate(M_QUE* pstrQue)
+  13:../mindows/mds_queue.c **** {
+  28              		.loc 1 13 0
+  29              		.cfi_startproc
+  30              		@ Function supports interworking.
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33              	.LVL0:
+  34              		.movsp ip
+  35 0000 0DC0A0E1 		mov	ip, sp
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_register 12
+  14:../mindows/mds_queue.c ****     /* 入口参数检查 */
+  15:../mindows/mds_queue.c ****     if(NULL == pstrQue)
+  38              		.loc 1 15 0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 2
+
+
+  39 0004 000050E3 		cmp	r0, #0
+  13:../mindows/mds_queue.c **** {
+  40              		.loc 1 13 0
+  41 0008 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+  42              		.pad #4
+  43              		.save {fp, ip, lr}
+  16:../mindows/mds_queue.c ****     {
+  17:../mindows/mds_queue.c ****         return RTN_FAIL;
+  44              		.loc 1 17 0
+  45 000c 0100A003 		moveq	r0, #1
+  46              	.LVL1:
+  13:../mindows/mds_queue.c **** {
+  47              		.loc 1 13 0
+  48              		.setfp fp, ip, #-4
+  49 0010 04B04CE2 		sub	fp, ip, #4
+  50              		.cfi_offset 14, -8
+  51              		.cfi_offset 13, -12
+  52              		.cfi_offset 11, -16
+  53              	.LCFI1:
+  54              		.cfi_def_cfa 11, 4
+  15:../mindows/mds_queue.c ****     if(NULL == pstrQue)
+  55              		.loc 1 15 0
+  56 0014 0100000A 		beq	.L2
+  18:../mindows/mds_queue.c ****     }
+  19:../mindows/mds_queue.c **** 
+  20:../mindows/mds_queue.c ****     MDS_ChainInit(&pstrQue->strChain);
+  57              		.loc 1 20 0
+  58 0018 FEFFFFEB 		bl	MDS_ChainInit
+  21:../mindows/mds_queue.c **** 
+  22:../mindows/mds_queue.c ****     return RTN_SUCD;
+  59              		.loc 1 22 0
+  60 001c 0000A0E3 		mov	r0, #0
+  61              	.L2:
+  23:../mindows/mds_queue.c **** }
+  62              		.loc 1 23 0
+  63 0020 0CD04BE2 		sub	sp, fp, #12
+  64 0024 00689DE8 		ldmfd	sp, {fp, sp, lr}
+  65 0028 1EFF2FE1 		bx	lr
+  66              		.cfi_endproc
+  67              	.LFE0:
+  68              		.fnend
+  69              		.size	MDS_QueCreate, .-MDS_QueCreate
+  70              		.align	2
+  71              		.global	MDS_QuePut
+  72              		.type	MDS_QuePut, %function
+  73              	MDS_QuePut:
+  74              		.fnstart
+  75              	.LFB1:
+  24:../mindows/mds_queue.c **** 
+  25:../mindows/mds_queue.c **** /***********************************************************************************
+  26:../mindows/mds_queue.c **** 函数功能: 将一个节点加入队列.
+  27:../mindows/mds_queue.c **** 入口参数: pstrQue: 队列指针.
+  28:../mindows/mds_queue.c ****           pstrQueNode: 要加入的队列节点指针.
+  29:../mindows/mds_queue.c **** 返 回 值: RTN_SUCD: 将节点加入队列成功.
+  30:../mindows/mds_queue.c ****           RTN_FAIL: 将节点加入队列失败.
+  31:../mindows/mds_queue.c **** ***********************************************************************************/
+  32:../mindows/mds_queue.c **** U32 MDS_QuePut(M_QUE* pstrQue, M_CHAIN* pstrQueNode)
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 3
+
+
+  33:../mindows/mds_queue.c **** {
+  76              		.loc 1 33 0
+  77              		.cfi_startproc
+  78              		@ Function supports interworking.
+  79              		@ args = 0, pretend = 0, frame = 0
+  80              		@ frame_needed = 1, uses_anonymous_args = 0
+  81              	.LVL2:
+  82              		.movsp ip
+  83 002c 0DC0A0E1 		mov	ip, sp
+  84              	.LCFI2:
+  85              		.cfi_def_cfa_register 12
+  34:../mindows/mds_queue.c ****     /* 入口参数检查 */
+  35:../mindows/mds_queue.c ****     if((NULL == pstrQue) || (NULL == pstrQueNode))
+  86              		.loc 1 35 0
+  87 0030 000050E3 		cmp	r0, #0
+  88 0034 00005113 		cmpne	r1, #0
+  33:../mindows/mds_queue.c **** {
+  89              		.loc 1 33 0
+  90 0038 78D82DE9 		stmfd	sp!, {r3, r4, r5, r6, fp, ip, lr, pc}
+  91              		.pad #4
+  92              		.save {r3, r4, r5, r6, fp, ip, lr}
+  93              		.loc 1 35 0
+  94 003c 0060A0E1 		mov	r6, r0
+  95              		.cfi_offset 14, -8
+  96              		.cfi_offset 13, -12
+  97              		.cfi_offset 11, -16
+  98              		.cfi_offset 6, -20
+  99              		.cfi_offset 5, -24
+ 100              		.cfi_offset 4, -28
+ 101              		.cfi_offset 3, -32
+  33:../mindows/mds_queue.c **** {
+ 102              		.loc 1 33 0
+ 103              		.setfp fp, ip, #-4
+ 104 0040 04B04CE2 		sub	fp, ip, #4
+ 105              	.LCFI3:
+ 106              		.cfi_def_cfa 11, 4
+ 107              		.loc 1 35 0
+ 108 0044 0150A0E1 		mov	r5, r1
+ 109 0048 0040A013 		movne	r4, #0
+ 110 004c 0140A003 		moveq	r4, #1
+  36:../mindows/mds_queue.c ****     {
+  37:../mindows/mds_queue.c ****         return RTN_FAIL;
+ 111              		.loc 1 37 0
+ 112 0050 0100A003 		moveq	r0, #1
+ 113              	.LVL3:
+  35:../mindows/mds_queue.c ****     if((NULL == pstrQue) || (NULL == pstrQueNode))
+ 114              		.loc 1 35 0
+ 115 0054 0500000A 		beq	.L6
+  38:../mindows/mds_queue.c ****     }
+  39:../mindows/mds_queue.c **** 
+  40:../mindows/mds_queue.c ****     (void)MDS_IntLock();
+ 116              		.loc 1 40 0
+ 117 0058 FEFFFFEB 		bl	MDS_IntLock
+ 118              	.LVL4:
+  41:../mindows/mds_queue.c **** 
+  42:../mindows/mds_queue.c ****     /* 将节点加入队列 */
+  43:../mindows/mds_queue.c ****     MDS_ChainNodeAdd(&pstrQue->strChain, pstrQueNode);
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 4
+
+
+ 119              		.loc 1 43 0
+ 120 005c 0600A0E1 		mov	r0, r6
+ 121 0060 0510A0E1 		mov	r1, r5
+ 122 0064 FEFFFFEB 		bl	MDS_ChainNodeAdd
+  44:../mindows/mds_queue.c **** 
+  45:../mindows/mds_queue.c ****     (void)MDS_IntUnlock();
+ 123              		.loc 1 45 0
+ 124 0068 FEFFFFEB 		bl	MDS_IntUnlock
+  46:../mindows/mds_queue.c **** 
+  47:../mindows/mds_queue.c ****     return RTN_SUCD;
+ 125              		.loc 1 47 0
+ 126 006c 0400A0E1 		mov	r0, r4
+ 127              	.L6:
+  48:../mindows/mds_queue.c **** }
+ 128              		.loc 1 48 0
+ 129 0070 1CD04BE2 		sub	sp, fp, #28
+ 130 0074 78689DE8 		ldmfd	sp, {r3, r4, r5, r6, fp, sp, lr}
+ 131 0078 1EFF2FE1 		bx	lr
+ 132              		.cfi_endproc
+ 133              	.LFE1:
+ 134              		.fnend
+ 135              		.size	MDS_QuePut, .-MDS_QuePut
+ 136              		.align	2
+ 137              		.global	MDS_QueGet
+ 138              		.type	MDS_QueGet, %function
+ 139              	MDS_QueGet:
+ 140              		.fnstart
+ 141              	.LFB2:
+  49:../mindows/mds_queue.c **** 
+  50:../mindows/mds_queue.c **** /***********************************************************************************
+  51:../mindows/mds_queue.c **** 函数功能: 从队列中取出一个队列节点.
+  52:../mindows/mds_queue.c **** 入口参数: pstrQue: 队列根节点指针.
+  53:../mindows/mds_queue.c ****           ppstrQueNode: 存放队列节点指针的指针.
+  54:../mindows/mds_queue.c **** 返 回 值: RTN_SUCD: 从队列取出节点成功.
+  55:../mindows/mds_queue.c ****           RTN_FAIL: 从队列取出节点失败.
+  56:../mindows/mds_queue.c **** ***********************************************************************************/
+  57:../mindows/mds_queue.c **** U32 MDS_QueGet(M_QUE* pstrQue, M_CHAIN** ppstrQueNode)
+  58:../mindows/mds_queue.c **** {
+ 142              		.loc 1 58 0
+ 143              		.cfi_startproc
+ 144              		@ Function supports interworking.
+ 145              		@ args = 0, pretend = 0, frame = 0
+ 146              		@ frame_needed = 1, uses_anonymous_args = 0
+ 147              	.LVL5:
+ 148              		.movsp ip
+ 149 007c 0DC0A0E1 		mov	ip, sp
+ 150              	.LCFI4:
+ 151              		.cfi_def_cfa_register 12
+  59:../mindows/mds_queue.c ****     M_CHAIN* pstrQueNode;
+  60:../mindows/mds_queue.c **** 
+  61:../mindows/mds_queue.c ****     /* 入口参数检查 */
+  62:../mindows/mds_queue.c ****     if((NULL == pstrQue) || (NULL == ppstrQueNode))
+ 152              		.loc 1 62 0
+ 153 0080 000050E3 		cmp	r0, #0
+ 154 0084 00005113 		cmpne	r1, #0
+  58:../mindows/mds_queue.c **** {
+ 155              		.loc 1 58 0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 5
+
+
+ 156 0088 78D82DE9 		stmfd	sp!, {r3, r4, r5, r6, fp, ip, lr, pc}
+ 157              		.pad #4
+ 158              		.save {r3, r4, r5, r6, fp, ip, lr}
+ 159              		.setfp fp, ip, #-4
+ 160 008c 04B04CE2 		sub	fp, ip, #4
+ 161              		.cfi_offset 14, -8
+ 162              		.cfi_offset 13, -12
+ 163              		.cfi_offset 11, -16
+ 164              		.cfi_offset 6, -20
+ 165              		.cfi_offset 5, -24
+ 166              		.cfi_offset 4, -28
+ 167              		.cfi_offset 3, -32
+ 168              	.LCFI5:
+ 169              		.cfi_def_cfa 11, 4
+ 170              		.loc 1 62 0
+ 171 0090 0150A0E1 		mov	r5, r1
+ 172 0094 0040A0E1 		mov	r4, r0
+ 173 0098 0060A013 		movne	r6, #0
+ 174 009c 0160A003 		moveq	r6, #1
+ 175 00a0 0300001A 		bne	.L12
+ 176              	.LVL6:
+ 177              	.L11:
+  63:../mindows/mds_queue.c ****     {
+  64:../mindows/mds_queue.c ****         return RTN_FAIL;
+  65:../mindows/mds_queue.c ****     }
+  66:../mindows/mds_queue.c **** 
+  67:../mindows/mds_queue.c ****     (void)MDS_IntLock();
+  68:../mindows/mds_queue.c **** 
+  69:../mindows/mds_queue.c ****     /* 从队列取出节点 */
+  70:../mindows/mds_queue.c ****     pstrQueNode = MDS_ChainNodeDelete(&pstrQue->strChain);
+  71:../mindows/mds_queue.c **** 
+  72:../mindows/mds_queue.c ****     (void)MDS_IntUnlock();
+  73:../mindows/mds_queue.c **** 
+  74:../mindows/mds_queue.c ****     /* 队列不为空, 可以取出节点 */
+  75:../mindows/mds_queue.c ****     if(NULL != pstrQueNode)
+  76:../mindows/mds_queue.c ****     {
+  77:../mindows/mds_queue.c ****         *ppstrQueNode = pstrQueNode;
+  78:../mindows/mds_queue.c **** 
+  79:../mindows/mds_queue.c ****         return RTN_SUCD;
+  80:../mindows/mds_queue.c ****     }
+  81:../mindows/mds_queue.c ****     else /* 队列为空, 无法取出节点 */
+  82:../mindows/mds_queue.c ****     {
+  83:../mindows/mds_queue.c ****         return RTN_FAIL;
+ 178              		.loc 1 83 0
+ 179 00a4 0100A0E3 		mov	r0, #1
+ 180              	.L9:
+  84:../mindows/mds_queue.c ****     }
+  85:../mindows/mds_queue.c **** }
+ 181              		.loc 1 85 0
+ 182 00a8 1CD04BE2 		sub	sp, fp, #28
+ 183 00ac 78689DE8 		ldmfd	sp, {r3, r4, r5, r6, fp, sp, lr}
+ 184 00b0 1EFF2FE1 		bx	lr
+ 185              	.LVL7:
+ 186              	.L12:
+  67:../mindows/mds_queue.c ****     (void)MDS_IntLock();
+ 187              		.loc 1 67 0
+ 188 00b4 FEFFFFEB 		bl	MDS_IntLock
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 6
+
+
+ 189              	.LVL8:
+  70:../mindows/mds_queue.c ****     pstrQueNode = MDS_ChainNodeDelete(&pstrQue->strChain);
+ 190              		.loc 1 70 0
+ 191 00b8 0400A0E1 		mov	r0, r4
+ 192 00bc FEFFFFEB 		bl	MDS_ChainNodeDelete
+ 193 00c0 0040A0E1 		mov	r4, r0
+ 194              	.LVL9:
+  72:../mindows/mds_queue.c ****     (void)MDS_IntUnlock();
+ 195              		.loc 1 72 0
+ 196 00c4 FEFFFFEB 		bl	MDS_IntUnlock
+ 197              	.LVL10:
+  75:../mindows/mds_queue.c ****     if(NULL != pstrQueNode)
+ 198              		.loc 1 75 0
+ 199 00c8 000054E3 		cmp	r4, #0
+  77:../mindows/mds_queue.c ****         *ppstrQueNode = pstrQueNode;
+ 200              		.loc 1 77 0
+ 201 00cc 00408515 		strne	r4, [r5, #0]
+  79:../mindows/mds_queue.c ****         return RTN_SUCD;
+ 202              		.loc 1 79 0
+ 203 00d0 0600A011 		movne	r0, r6
+  75:../mindows/mds_queue.c ****     if(NULL != pstrQueNode)
+ 204              		.loc 1 75 0
+ 205 00d4 F3FFFF1A 		bne	.L9
+ 206 00d8 F1FFFFEA 		b	.L11
+ 207              		.cfi_endproc
+ 208              	.LFE2:
+ 209              		.fnend
+ 210              		.size	MDS_QueGet, .-MDS_QueGet
+ 211              	.Letext0:
+ 212              		.section	.debug_loc,"",%progbits
+ 213              	.Ldebug_loc0:
+ 214              	.LLST0:
+ 215 0000 00000000 		.4byte	.LFB0-.Ltext0
+ 216 0004 04000000 		.4byte	.LCFI0-.Ltext0
+ 217 0008 0200     		.2byte	0x2
+ 218 000a 7D       		.byte	0x7d
+ 219 000b 00       		.sleb128 0
+ 220 000c 04000000 		.4byte	.LCFI0-.Ltext0
+ 221 0010 14000000 		.4byte	.LCFI1-.Ltext0
+ 222 0014 0200     		.2byte	0x2
+ 223 0016 7C       		.byte	0x7c
+ 224 0017 00       		.sleb128 0
+ 225 0018 14000000 		.4byte	.LCFI1-.Ltext0
+ 226 001c 2C000000 		.4byte	.LFE0-.Ltext0
+ 227 0020 0200     		.2byte	0x2
+ 228 0022 7B       		.byte	0x7b
+ 229 0023 04       		.sleb128 4
+ 230 0024 00000000 		.4byte	0x0
+ 231 0028 00000000 		.4byte	0x0
+ 232              	.LLST1:
+ 233 002c 00000000 		.4byte	.LVL0-.Ltext0
+ 234 0030 10000000 		.4byte	.LVL1-.Ltext0
+ 235 0034 0100     		.2byte	0x1
+ 236 0036 50       		.byte	0x50
+ 237 0037 00000000 		.4byte	0x0
+ 238 003b 00000000 		.4byte	0x0
+ 239              	.LLST2:
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 7
+
+
+ 240 003f 2C000000 		.4byte	.LFB1-.Ltext0
+ 241 0043 30000000 		.4byte	.LCFI2-.Ltext0
+ 242 0047 0200     		.2byte	0x2
+ 243 0049 7D       		.byte	0x7d
+ 244 004a 00       		.sleb128 0
+ 245 004b 30000000 		.4byte	.LCFI2-.Ltext0
+ 246 004f 44000000 		.4byte	.LCFI3-.Ltext0
+ 247 0053 0200     		.2byte	0x2
+ 248 0055 7C       		.byte	0x7c
+ 249 0056 00       		.sleb128 0
+ 250 0057 44000000 		.4byte	.LCFI3-.Ltext0
+ 251 005b 7C000000 		.4byte	.LFE1-.Ltext0
+ 252 005f 0200     		.2byte	0x2
+ 253 0061 7B       		.byte	0x7b
+ 254 0062 04       		.sleb128 4
+ 255 0063 00000000 		.4byte	0x0
+ 256 0067 00000000 		.4byte	0x0
+ 257              	.LLST3:
+ 258 006b 2C000000 		.4byte	.LVL2-.Ltext0
+ 259 006f 54000000 		.4byte	.LVL3-.Ltext0
+ 260 0073 0100     		.2byte	0x1
+ 261 0075 50       		.byte	0x50
+ 262 0076 54000000 		.4byte	.LVL3-.Ltext0
+ 263 007a 7C000000 		.4byte	.LFE1-.Ltext0
+ 264 007e 0100     		.2byte	0x1
+ 265 0080 56       		.byte	0x56
+ 266 0081 00000000 		.4byte	0x0
+ 267 0085 00000000 		.4byte	0x0
+ 268              	.LLST4:
+ 269 0089 2C000000 		.4byte	.LVL2-.Ltext0
+ 270 008d 5B000000 		.4byte	.LVL4-1-.Ltext0
+ 271 0091 0100     		.2byte	0x1
+ 272 0093 51       		.byte	0x51
+ 273 0094 5B000000 		.4byte	.LVL4-1-.Ltext0
+ 274 0098 7C000000 		.4byte	.LFE1-.Ltext0
+ 275 009c 0100     		.2byte	0x1
+ 276 009e 55       		.byte	0x55
+ 277 009f 00000000 		.4byte	0x0
+ 278 00a3 00000000 		.4byte	0x0
+ 279              	.LLST5:
+ 280 00a7 7C000000 		.4byte	.LFB2-.Ltext0
+ 281 00ab 80000000 		.4byte	.LCFI4-.Ltext0
+ 282 00af 0200     		.2byte	0x2
+ 283 00b1 7D       		.byte	0x7d
+ 284 00b2 00       		.sleb128 0
+ 285 00b3 80000000 		.4byte	.LCFI4-.Ltext0
+ 286 00b7 90000000 		.4byte	.LCFI5-.Ltext0
+ 287 00bb 0200     		.2byte	0x2
+ 288 00bd 7C       		.byte	0x7c
+ 289 00be 00       		.sleb128 0
+ 290 00bf 90000000 		.4byte	.LCFI5-.Ltext0
+ 291 00c3 DC000000 		.4byte	.LFE2-.Ltext0
+ 292 00c7 0200     		.2byte	0x2
+ 293 00c9 7B       		.byte	0x7b
+ 294 00ca 04       		.sleb128 4
+ 295 00cb 00000000 		.4byte	0x0
+ 296 00cf 00000000 		.4byte	0x0
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 8
+
+
+ 297              	.LLST6:
+ 298 00d3 7C000000 		.4byte	.LVL5-.Ltext0
+ 299 00d7 A4000000 		.4byte	.LVL6-.Ltext0
+ 300 00db 0100     		.2byte	0x1
+ 301 00dd 50       		.byte	0x50
+ 302 00de B4000000 		.4byte	.LVL7-.Ltext0
+ 303 00e2 B7000000 		.4byte	.LVL8-1-.Ltext0
+ 304 00e6 0100     		.2byte	0x1
+ 305 00e8 50       		.byte	0x50
+ 306 00e9 B7000000 		.4byte	.LVL8-1-.Ltext0
+ 307 00ed C4000000 		.4byte	.LVL9-.Ltext0
+ 308 00f1 0100     		.2byte	0x1
+ 309 00f3 54       		.byte	0x54
+ 310 00f4 00000000 		.4byte	0x0
+ 311 00f8 00000000 		.4byte	0x0
+ 312              	.LLST7:
+ 313 00fc 7C000000 		.4byte	.LVL5-.Ltext0
+ 314 0100 A4000000 		.4byte	.LVL6-.Ltext0
+ 315 0104 0100     		.2byte	0x1
+ 316 0106 51       		.byte	0x51
+ 317 0107 A4000000 		.4byte	.LVL6-.Ltext0
+ 318 010b DC000000 		.4byte	.LFE2-.Ltext0
+ 319 010f 0100     		.2byte	0x1
+ 320 0111 55       		.byte	0x55
+ 321 0112 00000000 		.4byte	0x0
+ 322 0116 00000000 		.4byte	0x0
+ 323              	.LLST8:
+ 324 011a C4000000 		.4byte	.LVL9-.Ltext0
+ 325 011e C7000000 		.4byte	.LVL10-1-.Ltext0
+ 326 0122 0100     		.2byte	0x1
+ 327 0124 50       		.byte	0x50
+ 328 0125 C7000000 		.4byte	.LVL10-1-.Ltext0
+ 329 0129 DC000000 		.4byte	.LFE2-.Ltext0
+ 330 012d 0100     		.2byte	0x1
+ 331 012f 54       		.byte	0x54
+ 332 0130 00000000 		.4byte	0x0
+ 333 0134 00000000 		.4byte	0x0
+ 334              		.file 2 "../mindows/mds_mdsdef.h"
+ 335              		.file 3 "../mindows/mds_queue.h"
+ 336              		.section	.debug_info
+ 337 0000 84010000 		.4byte	0x184
+ 338 0004 0200     		.2byte	0x2
+ 339 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 340 000a 04       		.byte	0x4
+ 341 000b 01       		.uleb128 0x1
+ 342 000c 7C000000 		.4byte	.LASF19
+ 343 0010 01       		.byte	0x1
+ 344 0011 0B000000 		.4byte	.LASF20
+ 345 0015 40000000 		.4byte	.LASF21
+ 346 0019 00000000 		.4byte	.Ltext0
+ 347 001d DC000000 		.4byte	.Letext0
+ 348 0021 00000000 		.4byte	.Ldebug_line0
+ 349 0025 02       		.uleb128 0x2
+ 350 0026 01       		.byte	0x1
+ 351 0027 08       		.byte	0x8
+ 352 0028 97000000 		.4byte	.LASF0
+ 353 002c 02       		.uleb128 0x2
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 9
+
+
+ 354 002d 02       		.byte	0x2
+ 355 002e 07       		.byte	0x7
+ 356 002f DA000000 		.4byte	.LASF1
+ 357 0033 03       		.uleb128 0x3
+ 358 0034 55333200 		.ascii	"U32\000"
+ 359 0038 02       		.byte	0x2
+ 360 0039 09       		.byte	0x9
+ 361 003a 3E000000 		.4byte	0x3e
+ 362 003e 02       		.uleb128 0x2
+ 363 003f 04       		.byte	0x4
+ 364 0040 07       		.byte	0x7
+ 365 0041 22000000 		.4byte	.LASF2
+ 366 0045 02       		.uleb128 0x2
+ 367 0046 01       		.byte	0x1
+ 368 0047 08       		.byte	0x8
+ 369 0048 A5000000 		.4byte	.LASF3
+ 370 004c 02       		.uleb128 0x2
+ 371 004d 02       		.byte	0x2
+ 372 004e 05       		.byte	0x5
+ 373 004f FB000000 		.4byte	.LASF4
+ 374 0053 04       		.uleb128 0x4
+ 375 0054 04       		.byte	0x4
+ 376 0055 05       		.byte	0x5
+ 377 0056 696E7400 		.ascii	"int\000"
+ 378 005a 05       		.uleb128 0x5
+ 379 005b AA000000 		.4byte	.LASF9
+ 380 005f 08       		.byte	0x8
+ 381 0060 02       		.byte	0x2
+ 382 0061 5B       		.byte	0x5b
+ 383 0062 83000000 		.4byte	0x83
+ 384 0066 06       		.uleb128 0x6
+ 385 0067 8E000000 		.4byte	.LASF5
+ 386 006b 02       		.byte	0x2
+ 387 006c 5D       		.byte	0x5d
+ 388 006d 83000000 		.4byte	0x83
+ 389 0071 02       		.byte	0x2
+ 390 0072 23       		.byte	0x23
+ 391 0073 00       		.uleb128 0x0
+ 392 0074 06       		.uleb128 0x6
+ 393 0075 BF000000 		.4byte	.LASF6
+ 394 0079 02       		.byte	0x2
+ 395 007a 5E       		.byte	0x5e
+ 396 007b 83000000 		.4byte	0x83
+ 397 007f 02       		.byte	0x2
+ 398 0080 23       		.byte	0x23
+ 399 0081 04       		.uleb128 0x4
+ 400 0082 00       		.byte	0x0
+ 401 0083 07       		.uleb128 0x7
+ 402 0084 04       		.byte	0x4
+ 403 0085 5A000000 		.4byte	0x5a
+ 404 0089 08       		.uleb128 0x8
+ 405 008a 60000000 		.4byte	.LASF7
+ 406 008e 02       		.byte	0x2
+ 407 008f 5F       		.byte	0x5f
+ 408 0090 5A000000 		.4byte	0x5a
+ 409 0094 02       		.uleb128 0x2
+ 410 0095 04       		.byte	0x4
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 10
+
+
+ 411 0096 07       		.byte	0x7
+ 412 0097 C8000000 		.4byte	.LASF8
+ 413 009b 05       		.uleb128 0x5
+ 414 009c 88000000 		.4byte	.LASF10
+ 415 00a0 08       		.byte	0x8
+ 416 00a1 03       		.byte	0x3
+ 417 00a2 06       		.byte	0x6
+ 418 00a3 B6000000 		.4byte	0xb6
+ 419 00a7 06       		.uleb128 0x6
+ 420 00a8 05010000 		.4byte	.LASF11
+ 421 00ac 03       		.byte	0x3
+ 422 00ad 08       		.byte	0x8
+ 423 00ae 89000000 		.4byte	0x89
+ 424 00b2 02       		.byte	0x2
+ 425 00b3 23       		.byte	0x23
+ 426 00b4 00       		.uleb128 0x0
+ 427 00b5 00       		.byte	0x0
+ 428 00b6 08       		.uleb128 0x8
+ 429 00b7 3A000000 		.4byte	.LASF12
+ 430 00bb 03       		.byte	0x3
+ 431 00bc 09       		.byte	0x9
+ 432 00bd 9B000000 		.4byte	0x9b
+ 433 00c1 09       		.uleb128 0x9
+ 434 00c2 01       		.byte	0x1
+ 435 00c3 ED000000 		.4byte	.LASF13
+ 436 00c7 01       		.byte	0x1
+ 437 00c8 0C       		.byte	0xc
+ 438 00c9 01       		.byte	0x1
+ 439 00ca 33000000 		.4byte	0x33
+ 440 00ce 00000000 		.4byte	.LFB0
+ 441 00d2 2C000000 		.4byte	.LFE0
+ 442 00d6 00000000 		.4byte	.LLST0
+ 443 00da EE000000 		.4byte	0xee
+ 444 00de 0A       		.uleb128 0xa
+ 445 00df 68000000 		.4byte	.LASF15
+ 446 00e3 01       		.byte	0x1
+ 447 00e4 0C       		.byte	0xc
+ 448 00e5 EE000000 		.4byte	0xee
+ 449 00e9 2C000000 		.4byte	.LLST1
+ 450 00ed 00       		.byte	0x0
+ 451 00ee 07       		.uleb128 0x7
+ 452 00ef 04       		.byte	0x4
+ 453 00f0 B6000000 		.4byte	0xb6
+ 454 00f4 09       		.uleb128 0x9
+ 455 00f5 01       		.byte	0x1
+ 456 00f6 00000000 		.4byte	.LASF14
+ 457 00fa 01       		.byte	0x1
+ 458 00fb 20       		.byte	0x20
+ 459 00fc 01       		.byte	0x1
+ 460 00fd 33000000 		.4byte	0x33
+ 461 0101 2C000000 		.4byte	.LFB1
+ 462 0105 7C000000 		.4byte	.LFE1
+ 463 0109 3F000000 		.4byte	.LLST2
+ 464 010d 30010000 		.4byte	0x130
+ 465 0111 0A       		.uleb128 0xa
+ 466 0112 68000000 		.4byte	.LASF15
+ 467 0116 01       		.byte	0x1
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 11
+
+
+ 468 0117 20       		.byte	0x20
+ 469 0118 EE000000 		.4byte	0xee
+ 470 011c 6B000000 		.4byte	.LLST3
+ 471 0120 0A       		.uleb128 0xa
+ 472 0121 70000000 		.4byte	.LASF16
+ 473 0125 01       		.byte	0x1
+ 474 0126 20       		.byte	0x20
+ 475 0127 30010000 		.4byte	0x130
+ 476 012b 89000000 		.4byte	.LLST4
+ 477 012f 00       		.byte	0x0
+ 478 0130 07       		.uleb128 0x7
+ 479 0131 04       		.byte	0x4
+ 480 0132 89000000 		.4byte	0x89
+ 481 0136 09       		.uleb128 0x9
+ 482 0137 01       		.byte	0x1
+ 483 0138 2F000000 		.4byte	.LASF17
+ 484 013c 01       		.byte	0x1
+ 485 013d 39       		.byte	0x39
+ 486 013e 01       		.byte	0x1
+ 487 013f 33000000 		.4byte	0x33
+ 488 0143 7C000000 		.4byte	.LFB2
+ 489 0147 DC000000 		.4byte	.LFE2
+ 490 014b A7000000 		.4byte	.LLST5
+ 491 014f 81010000 		.4byte	0x181
+ 492 0153 0A       		.uleb128 0xa
+ 493 0154 68000000 		.4byte	.LASF15
+ 494 0158 01       		.byte	0x1
+ 495 0159 39       		.byte	0x39
+ 496 015a EE000000 		.4byte	0xee
+ 497 015e D3000000 		.4byte	.LLST6
+ 498 0162 0A       		.uleb128 0xa
+ 499 0163 B2000000 		.4byte	.LASF18
+ 500 0167 01       		.byte	0x1
+ 501 0168 39       		.byte	0x39
+ 502 0169 81010000 		.4byte	0x181
+ 503 016d FC000000 		.4byte	.LLST7
+ 504 0171 0B       		.uleb128 0xb
+ 505 0172 70000000 		.4byte	.LASF16
+ 506 0176 01       		.byte	0x1
+ 507 0177 3B       		.byte	0x3b
+ 508 0178 30010000 		.4byte	0x130
+ 509 017c 1A010000 		.4byte	.LLST8
+ 510 0180 00       		.byte	0x0
+ 511 0181 07       		.uleb128 0x7
+ 512 0182 04       		.byte	0x4
+ 513 0183 30010000 		.4byte	0x130
+ 514 0187 00       		.byte	0x0
+ 515              		.section	.debug_abbrev
+ 516 0000 01       		.uleb128 0x1
+ 517 0001 11       		.uleb128 0x11
+ 518 0002 01       		.byte	0x1
+ 519 0003 25       		.uleb128 0x25
+ 520 0004 0E       		.uleb128 0xe
+ 521 0005 13       		.uleb128 0x13
+ 522 0006 0B       		.uleb128 0xb
+ 523 0007 03       		.uleb128 0x3
+ 524 0008 0E       		.uleb128 0xe
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 12
+
+
+ 525 0009 1B       		.uleb128 0x1b
+ 526 000a 0E       		.uleb128 0xe
+ 527 000b 11       		.uleb128 0x11
+ 528 000c 01       		.uleb128 0x1
+ 529 000d 12       		.uleb128 0x12
+ 530 000e 01       		.uleb128 0x1
+ 531 000f 10       		.uleb128 0x10
+ 532 0010 06       		.uleb128 0x6
+ 533 0011 00       		.byte	0x0
+ 534 0012 00       		.byte	0x0
+ 535 0013 02       		.uleb128 0x2
+ 536 0014 24       		.uleb128 0x24
+ 537 0015 00       		.byte	0x0
+ 538 0016 0B       		.uleb128 0xb
+ 539 0017 0B       		.uleb128 0xb
+ 540 0018 3E       		.uleb128 0x3e
+ 541 0019 0B       		.uleb128 0xb
+ 542 001a 03       		.uleb128 0x3
+ 543 001b 0E       		.uleb128 0xe
+ 544 001c 00       		.byte	0x0
+ 545 001d 00       		.byte	0x0
+ 546 001e 03       		.uleb128 0x3
+ 547 001f 16       		.uleb128 0x16
+ 548 0020 00       		.byte	0x0
+ 549 0021 03       		.uleb128 0x3
+ 550 0022 08       		.uleb128 0x8
+ 551 0023 3A       		.uleb128 0x3a
+ 552 0024 0B       		.uleb128 0xb
+ 553 0025 3B       		.uleb128 0x3b
+ 554 0026 0B       		.uleb128 0xb
+ 555 0027 49       		.uleb128 0x49
+ 556 0028 13       		.uleb128 0x13
+ 557 0029 00       		.byte	0x0
+ 558 002a 00       		.byte	0x0
+ 559 002b 04       		.uleb128 0x4
+ 560 002c 24       		.uleb128 0x24
+ 561 002d 00       		.byte	0x0
+ 562 002e 0B       		.uleb128 0xb
+ 563 002f 0B       		.uleb128 0xb
+ 564 0030 3E       		.uleb128 0x3e
+ 565 0031 0B       		.uleb128 0xb
+ 566 0032 03       		.uleb128 0x3
+ 567 0033 08       		.uleb128 0x8
+ 568 0034 00       		.byte	0x0
+ 569 0035 00       		.byte	0x0
+ 570 0036 05       		.uleb128 0x5
+ 571 0037 13       		.uleb128 0x13
+ 572 0038 01       		.byte	0x1
+ 573 0039 03       		.uleb128 0x3
+ 574 003a 0E       		.uleb128 0xe
+ 575 003b 0B       		.uleb128 0xb
+ 576 003c 0B       		.uleb128 0xb
+ 577 003d 3A       		.uleb128 0x3a
+ 578 003e 0B       		.uleb128 0xb
+ 579 003f 3B       		.uleb128 0x3b
+ 580 0040 0B       		.uleb128 0xb
+ 581 0041 01       		.uleb128 0x1
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 13
+
+
+ 582 0042 13       		.uleb128 0x13
+ 583 0043 00       		.byte	0x0
+ 584 0044 00       		.byte	0x0
+ 585 0045 06       		.uleb128 0x6
+ 586 0046 0D       		.uleb128 0xd
+ 587 0047 00       		.byte	0x0
+ 588 0048 03       		.uleb128 0x3
+ 589 0049 0E       		.uleb128 0xe
+ 590 004a 3A       		.uleb128 0x3a
+ 591 004b 0B       		.uleb128 0xb
+ 592 004c 3B       		.uleb128 0x3b
+ 593 004d 0B       		.uleb128 0xb
+ 594 004e 49       		.uleb128 0x49
+ 595 004f 13       		.uleb128 0x13
+ 596 0050 38       		.uleb128 0x38
+ 597 0051 0A       		.uleb128 0xa
+ 598 0052 00       		.byte	0x0
+ 599 0053 00       		.byte	0x0
+ 600 0054 07       		.uleb128 0x7
+ 601 0055 0F       		.uleb128 0xf
+ 602 0056 00       		.byte	0x0
+ 603 0057 0B       		.uleb128 0xb
+ 604 0058 0B       		.uleb128 0xb
+ 605 0059 49       		.uleb128 0x49
+ 606 005a 13       		.uleb128 0x13
+ 607 005b 00       		.byte	0x0
+ 608 005c 00       		.byte	0x0
+ 609 005d 08       		.uleb128 0x8
+ 610 005e 16       		.uleb128 0x16
+ 611 005f 00       		.byte	0x0
+ 612 0060 03       		.uleb128 0x3
+ 613 0061 0E       		.uleb128 0xe
+ 614 0062 3A       		.uleb128 0x3a
+ 615 0063 0B       		.uleb128 0xb
+ 616 0064 3B       		.uleb128 0x3b
+ 617 0065 0B       		.uleb128 0xb
+ 618 0066 49       		.uleb128 0x49
+ 619 0067 13       		.uleb128 0x13
+ 620 0068 00       		.byte	0x0
+ 621 0069 00       		.byte	0x0
+ 622 006a 09       		.uleb128 0x9
+ 623 006b 2E       		.uleb128 0x2e
+ 624 006c 01       		.byte	0x1
+ 625 006d 3F       		.uleb128 0x3f
+ 626 006e 0C       		.uleb128 0xc
+ 627 006f 03       		.uleb128 0x3
+ 628 0070 0E       		.uleb128 0xe
+ 629 0071 3A       		.uleb128 0x3a
+ 630 0072 0B       		.uleb128 0xb
+ 631 0073 3B       		.uleb128 0x3b
+ 632 0074 0B       		.uleb128 0xb
+ 633 0075 27       		.uleb128 0x27
+ 634 0076 0C       		.uleb128 0xc
+ 635 0077 49       		.uleb128 0x49
+ 636 0078 13       		.uleb128 0x13
+ 637 0079 11       		.uleb128 0x11
+ 638 007a 01       		.uleb128 0x1
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 14
+
+
+ 639 007b 12       		.uleb128 0x12
+ 640 007c 01       		.uleb128 0x1
+ 641 007d 40       		.uleb128 0x40
+ 642 007e 06       		.uleb128 0x6
+ 643 007f 01       		.uleb128 0x1
+ 644 0080 13       		.uleb128 0x13
+ 645 0081 00       		.byte	0x0
+ 646 0082 00       		.byte	0x0
+ 647 0083 0A       		.uleb128 0xa
+ 648 0084 05       		.uleb128 0x5
+ 649 0085 00       		.byte	0x0
+ 650 0086 03       		.uleb128 0x3
+ 651 0087 0E       		.uleb128 0xe
+ 652 0088 3A       		.uleb128 0x3a
+ 653 0089 0B       		.uleb128 0xb
+ 654 008a 3B       		.uleb128 0x3b
+ 655 008b 0B       		.uleb128 0xb
+ 656 008c 49       		.uleb128 0x49
+ 657 008d 13       		.uleb128 0x13
+ 658 008e 02       		.uleb128 0x2
+ 659 008f 06       		.uleb128 0x6
+ 660 0090 00       		.byte	0x0
+ 661 0091 00       		.byte	0x0
+ 662 0092 0B       		.uleb128 0xb
+ 663 0093 34       		.uleb128 0x34
+ 664 0094 00       		.byte	0x0
+ 665 0095 03       		.uleb128 0x3
+ 666 0096 0E       		.uleb128 0xe
+ 667 0097 3A       		.uleb128 0x3a
+ 668 0098 0B       		.uleb128 0xb
+ 669 0099 3B       		.uleb128 0x3b
+ 670 009a 0B       		.uleb128 0xb
+ 671 009b 49       		.uleb128 0x49
+ 672 009c 13       		.uleb128 0x13
+ 673 009d 02       		.uleb128 0x2
+ 674 009e 06       		.uleb128 0x6
+ 675 009f 00       		.byte	0x0
+ 676 00a0 00       		.byte	0x0
+ 677 00a1 00       		.byte	0x0
+ 678              		.section	.debug_pubnames,"",%progbits
+ 679 0000 3E000000 		.4byte	0x3e
+ 680 0004 0200     		.2byte	0x2
+ 681 0006 00000000 		.4byte	.Ldebug_info0
+ 682 000a 88010000 		.4byte	0x188
+ 683 000e C1000000 		.4byte	0xc1
+ 684 0012 4D44535F 		.ascii	"MDS_QueCreate\000"
+ 684      51756543 
+ 684      72656174 
+ 684      6500
+ 685 0020 F4000000 		.4byte	0xf4
+ 686 0024 4D44535F 		.ascii	"MDS_QuePut\000"
+ 686      51756550 
+ 686      757400
+ 687 002f 36010000 		.4byte	0x136
+ 688 0033 4D44535F 		.ascii	"MDS_QueGet\000"
+ 688      51756547 
+ 688      657400
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 15
+
+
+ 689 003e 00000000 		.4byte	0x0
+ 690              		.section	.debug_pubtypes,"",%progbits
+ 691 0000 42000000 		.4byte	0x42
+ 692 0004 0200     		.2byte	0x2
+ 693 0006 00000000 		.4byte	.Ldebug_info0
+ 694 000a 88010000 		.4byte	0x188
+ 695 000e 33000000 		.4byte	0x33
+ 696 0012 55333200 		.ascii	"U32\000"
+ 697 0016 5A000000 		.4byte	0x5a
+ 698 001a 6D5F6368 		.ascii	"m_chain\000"
+ 698      61696E00 
+ 699 0022 89000000 		.4byte	0x89
+ 700 0026 4D5F4348 		.ascii	"M_CHAIN\000"
+ 700      41494E00 
+ 701 002e 9B000000 		.4byte	0x9b
+ 702 0032 6D5F7175 		.ascii	"m_que\000"
+ 702      6500
+ 703 0038 B6000000 		.4byte	0xb6
+ 704 003c 4D5F5155 		.ascii	"M_QUE\000"
+ 704      4500
+ 705 0042 00000000 		.4byte	0x0
+ 706              		.section	.debug_aranges,"",%progbits
+ 707 0000 1C000000 		.4byte	0x1c
+ 708 0004 0200     		.2byte	0x2
+ 709 0006 00000000 		.4byte	.Ldebug_info0
+ 710 000a 04       		.byte	0x4
+ 711 000b 00       		.byte	0x0
+ 712 000c 0000     		.2byte	0x0
+ 713 000e 0000     		.2byte	0x0
+ 714 0010 00000000 		.4byte	.Ltext0
+ 715 0014 DC000000 		.4byte	.Letext0-.Ltext0
+ 716 0018 00000000 		.4byte	0x0
+ 717 001c 00000000 		.4byte	0x0
+ 718              		.section	.debug_str,"MS",%progbits,1
+ 719              	.LASF14:
+ 720 0000 4D44535F 		.ascii	"MDS_QuePut\000"
+ 720      51756550 
+ 720      757400
+ 721              	.LASF20:
+ 722 000b 2E2E2F6D 		.ascii	"../mindows/mds_queue.c\000"
+ 722      696E646F 
+ 722      77732F6D 
+ 722      64735F71 
+ 722      75657565 
+ 723              	.LASF2:
+ 724 0022 756E7369 		.ascii	"unsigned int\000"
+ 724      676E6564 
+ 724      20696E74 
+ 724      00
+ 725              	.LASF17:
+ 726 002f 4D44535F 		.ascii	"MDS_QueGet\000"
+ 726      51756547 
+ 726      657400
+ 727              	.LASF12:
+ 728 003a 4D5F5155 		.ascii	"M_QUE\000"
+ 728      4500
+ 729              	.LASF21:
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 16
+
+
+ 730 0040 463A5C77 		.ascii	"F:\\workdir\\RTOS_Mindows\\project\000"
+ 730      6F726B64 
+ 730      69725C52 
+ 730      544F535F 
+ 730      4D696E64 
+ 731              	.LASF7:
+ 732 0060 4D5F4348 		.ascii	"M_CHAIN\000"
+ 732      41494E00 
+ 733              	.LASF15:
+ 734 0068 70737472 		.ascii	"pstrQue\000"
+ 734      51756500 
+ 735              	.LASF16:
+ 736 0070 70737472 		.ascii	"pstrQueNode\000"
+ 736      5175654E 
+ 736      6F646500 
+ 737              	.LASF19:
+ 738 007c 474E5520 		.ascii	"GNU C 4.5.2\000"
+ 738      4320342E 
+ 738      352E3200 
+ 739              	.LASF10:
+ 740 0088 6D5F7175 		.ascii	"m_que\000"
+ 740      6500
+ 741              	.LASF5:
+ 742 008e 70737472 		.ascii	"pstrHead\000"
+ 742      48656164 
+ 742      00
+ 743              	.LASF0:
+ 744 0097 756E7369 		.ascii	"unsigned char\000"
+ 744      676E6564 
+ 744      20636861 
+ 744      7200
+ 745              	.LASF3:
+ 746 00a5 63686172 		.ascii	"char\000"
+ 746      00
+ 747              	.LASF9:
+ 748 00aa 6D5F6368 		.ascii	"m_chain\000"
+ 748      61696E00 
+ 749              	.LASF18:
+ 750 00b2 70707374 		.ascii	"ppstrQueNode\000"
+ 750      72517565 
+ 750      4E6F6465 
+ 750      00
+ 751              	.LASF6:
+ 752 00bf 70737472 		.ascii	"pstrTail\000"
+ 752      5461696C 
+ 752      00
+ 753              	.LASF8:
+ 754 00c8 6C6F6E67 		.ascii	"long unsigned int\000"
+ 754      20756E73 
+ 754      69676E65 
+ 754      6420696E 
+ 754      7400
+ 755              	.LASF1:
+ 756 00da 73686F72 		.ascii	"short unsigned int\000"
+ 756      7420756E 
+ 756      7369676E 
+ 756      65642069 
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 17
+
+
+ 756      6E7400
+ 757              	.LASF13:
+ 758 00ed 4D44535F 		.ascii	"MDS_QueCreate\000"
+ 758      51756543 
+ 758      72656174 
+ 758      6500
+ 759              	.LASF4:
+ 760 00fb 73686F72 		.ascii	"short int\000"
+ 760      7420696E 
+ 760      7400
+ 761              	.LASF11:
+ 762 0105 73747243 		.ascii	"strChain\000"
+ 762      6861696E 
+ 762      00
+ 763              		.ident	"GCC: (Sourcery G++ Lite 2011.03-41) 4.5.2"
+ 764              		.section	.note.GNU-stack,"",%progbits
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s 			page 18
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 mds_queue.c
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s:21     .text:00000000 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s:24     .text:00000000 MDS_QueCreate
+                       .ARM.extab:00000000 $d
+                       .ARM.exidx:00000000 $d
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s:73     .text:0000002c MDS_QuePut
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc1iD5YV.s:139    .text:0000007c MDS_QueGet
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+MDS_ChainInit
+__aeabi_unwind_cpp_pr1
+MDS_IntLock
+MDS_ChainNodeAdd
+MDS_IntUnlock
+MDS_ChainNodeDelete

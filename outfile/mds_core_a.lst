@@ -1,0 +1,235 @@
+ARM GAS  ../mindows/mds_core_a.asm 			page 1
+
+
+   1              	
+   2              	    .include "mds_core_a_inner.h"
+   1              	
+   2              	#ifndef  MDS_CORE_A_INNER_H
+   3              	#define  MDS_CORE_A_INNER_H
+   4              	
+   5              	
+   6              	.equ CPSR_IRQENABLE,        (~0x80)     /* CPSR寄存器中IRQ使能掩码 */
+   7              	.equ CPSR_IRQDISABLE,       0x80        /* CPSR寄存器中IRQ禁止掩码 */
+   8              	.equ CPSR_FIQENABLE,        (~0x40)     /* CPSR寄存器中FIQ使能掩码 */
+   9              	.equ CPSR_FIQDISABLE,       0x40        /* CPSR寄存器中FIQ禁止掩码 */
+  10              	
+  11              	
+  12              	/*********************************** 变量声明 *************************************/
+  13              	.extern gpstrCurTaskSpAddr
+  14              	.extern gpstrNextTaskSpAddr
+  15              	
+  16              	
+  17              	/*********************************** 函数声明 *************************************/
+  18              	.global MDS_TickIsr
+  19              	.global MDS_SwiIsr
+  20              	.global MDS_TickContextSwitch
+  21              	.global MDS_SwiContextSwitch
+  22              	.global MDS_SwitchToTask
+  23              	.global MDS_TaskOccurSwi
+  24              	.global MDS_GetChipMode
+  25              	.global MDS_IntEnable
+  26              	.global MDS_IntDisable
+  27              	
+  28              	
+  29              	#endif
+  30              	
+   3              	
+   4              	
+   5              	    .text
+   6              	    .arm
+   7              	
+   8              	
+   9              	    @函数功能: 实现任务切换功能, 将寄存器备份到当前任务堆栈中, 从将要运行任务堆栈中
+  10              	    @          取出寄存器保存值并跳转到将要运行任务执行. 该函数由Tick中断触发.
+  11              	    @入口参数: none.
+  12              	    @返 回 值: none.
+  13              	    .func MDS_TickContextSwitch
+  14              	MDS_TickContextSwitch:
+  15              	
+  16              	    @保存接口寄存器
+  17 0000 0F502DE9 	    STMDB  R13!, {R0 - R3, R12, R14}
+  18              	
+  19              	    @调用C语言TICK中断处理函数
+  20 0004 FC009FE5 	    LDR    R0, =MDS_TickIsr
+  21 0008 0FE0A0E1 	    MOV    R14, PC
+  22 000c 10FF2FE1 	    BX     R0
+  23              	
+  24              	    @保存当前任务的堆栈信息
+  25 0010 F4009FE5 	    LDR    R0, =gpstrCurTaskSpAddr
+  26 0014 00E090E5 	    LDR    R14, [R0]
+  27 0018 00004FE1 	    MRS    R0, SPSR
+ARM GAS  ../mindows/mds_core_a.asm 			page 2
+
+
+  28 001c 0100AEE8 	    STMIA  R14!, {R0}
+  29 0020 0F10BDE8 	    LDMIA  R13!, {R0 - R3, R12}
+  30 0024 FF7FCEE8 	    STMIA  R14, {R0 - R14}^
+  31 0028 3CE08EE2 	    ADD    R14, R14, #0x3C
+  32 002c 04009DE4 	    LDMIA  R13!, {R0}
+  33 0030 01008EE8 	    STMIA  R14, {R0}
+  34              	
+  35              	    @任务调度完毕, 恢复将要运行任务现场
+  36 0034 D4009FE5 	    LDR    R0, =gpstrNextTaskSpAddr
+  37 0038 00E090E5 	    LDR    R14, [R0]
+  38 003c 01009EE8 	    LDMIA  R14, {R0}
+  39 0040 00F069E1 	    MSR    SPSR, R0
+  40 0044 FF7FDEE9 	    LDMIB  R14, {R0 - R14}^
+  41 0048 0000A0E1 	    NOP
+  42 004c 40E08EE2 	    ADD    R14, R14, #0x40
+  43 0050 00409EE8 	    LDMIA  R14, {R14}
+  44 0054 04F05EE2 	    SUBS   PC, R14, #4
+  45              	
+  46              	    .endfunc
+  47              	
+  48              	
+  49              	    @函数功能: 实现任务切换功能, 将寄存器备份到当前任务堆栈中, 从将要运行任务堆栈中
+  50              	    @          取出寄存器保存值并跳转到将要运行任务执行. 该函数由程序调用软中断函数
+  51              	    @          触发.
+  52              	    @入口参数: none.
+  53              	    @返 回 值: none.
+  54              	    .func MDS_SwiContextSwitch
+  55              	MDS_SwiContextSwitch:
+  56              	
+  57              	    @保存接口寄存器
+  58 0058 04E08EE2 	    ADD    R14, R14, #4
+  59 005c 0F502DE9 	    STMDB  R13!, {R0 - R3, R12, R14}
+  60              	
+  61              	    @调用C语言SWI中断处理函数
+  62 0060 AC309FE5 	    LDR    R3, =MDS_SwiIsr
+  63 0064 0FE0A0E1 	    MOV    R14, PC
+  64 0068 13FF2FE1 	    BX     R3
+  65              	
+  66              	    @保存当前任务的堆栈信息
+  67 006c 98009FE5 	    LDR    R0, =gpstrCurTaskSpAddr
+  68 0070 00E090E5 	    LDR    R14, [R0]
+  69 0074 00004FE1 	    MRS    R0, SPSR
+  70 0078 0100AEE8 	    STMIA  R14!, {R0}
+  71 007c 0F10BDE8 	    LDMIA  R13!, {R0 - R3, R12}
+  72 0080 FF7FCEE8 	    STMIA  R14, {R0 - R14}^
+  73 0084 3CE08EE2 	    ADD    R14, R14, #0x3C
+  74 0088 04009DE4 	    LDMIA  R13!, {R0}
+  75 008c 01008EE8 	    STMIA  R14, {R0}
+  76              	
+  77              	    @任务调度完毕, 恢复将要运行任务现场
+  78 0090 78009FE5 	    LDR    R0, =gpstrNextTaskSpAddr
+  79 0094 00E090E5 	    LDR    R14, [R0]
+  80 0098 01009EE8 	    LDMIA  R14, {R0}
+  81 009c 00F069E1 	    MSR    SPSR, R0
+  82 00a0 FF7FDEE9 	    LDMIB  R14, {R0 - R14}^
+  83 00a4 0000A0E1 	    NOP
+  84 00a8 40E08EE2 	    ADD    R14, R14, #0x40
+ARM GAS  ../mindows/mds_core_a.asm 			page 3
+
+
+  85 00ac 00409EE8 	    LDMIA  R14, {R14}
+  86 00b0 04E04EE2 	    SUB    R14, R14, #4
+  87 00b4 0EF0B0E1 	    MOVS   PC, R14
+  88              	
+  89              	    .endfunc
+  90              	
+  91              	
+  92              	    @函数功能: 实现从无操作系统状态切换到操作系统状态, 从Root任务堆栈中取出寄存器保
+  93              	    @          存值并跳转到Root任务执行. 该函数由程序直接调用.
+  94              	    @入口参数: none.
+  95              	    @返 回 值: none.
+  96              	    .func MDS_SwitchToTask
+  97              	MDS_SwitchToTask:
+  98              	
+  99              	    @获取将要运行任务的指针
+ 100 00b8 50009FE5 	    LDR    R0, =gpstrNextTaskSpAddr
+ 101 00bc 00D090E5 	    LDR    R13, [R0]
+ 102              	
+ 103              	    @获取将要运行任务的堆栈信息并运行新任务
+ 104 00c0 04009DE4 	    LDMIA  R13!, {R0}
+ 105 00c4 00F029E1 	    MSR    CPSR, R0
+ 106 00c8 FFFF9DE8 	    LDMIA  R13, {R0 - R15}
+ 107              	
+ 108              	    .endfunc
+ 109              	
+ 110              	
+ 111              	    @函数功能: 获取ARM芯片的工作模式.
+ 112              	    @入口参数: none.
+ 113              	    @返 回 值: MODE_USR/MODE_FIQ/MODE_IRQ/MODE_SVC/MODE_ABT/MODE_UND/MODE_SYS.
+ 114              	    .func MDS_GetChipMode
+ 115              	MDS_GetChipMode:
+ 116              	
+ 117 00cc 00000FE1 	    MRS    R0, CPSR
+ 118 00d0 1F0000E2 	    AND    R0, R0, #0x1F
+ 119 00d4 1EFF2FE1 	    BX     R14
+ 120              	
+ 121              	    .endfunc
+ 122              	
+ 123              	
+ 124              	    @函数功能: 由程序直接调用, 触发SWI软中断.
+ 125              	    @入口参数: none.
+ 126              	    @返 回 值: R0: 软中断服务号.
+ 127              	    .func MDS_TaskOccurSwi
+ 128              	MDS_TaskOccurSwi:
+ 129              	
+ 130 00d8 000000EF 	    SWI    0
+ 131 00dc 1EFF2FE1 	    BX     R14
+ 132              	
+ 133              	    .endfunc
+ 134              	
+ 135              	
+ 136              	    @函数功能: 将CPSR寄存器中的I和F标志位清零, 使能IRQ和FIQ中断.
+ 137              	    @入口参数: none.
+ 138              	    @返 回 值: none.
+ 139              	    .func MDS_IntEnable
+ 140              	MDS_IntEnable:
+ 141              	
+ARM GAS  ../mindows/mds_core_a.asm 			page 4
+
+
+ 142 00e0 00004FE1 	    MRS    R0, SPSR
+ 143 00e4 C010E0E3 	    LDR    R1, =(CPSR_IRQENABLE & CPSR_FIQENABLE)
+ 144 00e8 010000E0 	    AND    R0, R0, R1
+ 145 00ec 00F069E1 	    MSR    SPSR, R0
+ 146 00f0 1EFF2FE1 	    BX     R14
+ 147              	
+ 148              	    .endfunc
+ 149              	
+ 150              	
+ 151              	    @函数功能: 将CPSR寄存器中的I和F标志位置位, 禁止IRQ和FIQ中断.
+ 152              	    @入口参数: none.
+ 153              	    @返 回 值: none.
+ 154              	    .func MDS_IntDisable
+ 155              	MDS_IntDisable:
+ 156              	
+ 157 00f4 00004FE1 	    MRS    R0, SPSR
+ 158 00f8 C010A0E3 	    LDR    R1, =(CPSR_IRQDISABLE | CPSR_FIQDISABLE)
+ 159 00fc 010080E1 	    ORR    R0, R0, R1
+ 160 0100 00F069E1 	    MSR    SPSR, R0
+ 161 0104 1EFF2FE1 	    BX     R14
+ 162              	
+ 163              	    .endfunc
+ 164              	
+ 165              	
+ 166 0108 00000000 	    .end
+ 166      00000000 
+ 166      00000000 
+ 166      00000000 
+ARM GAS  ../mindows/mds_core_a.asm 			page 5
+
+
+DEFINED SYMBOLS
+../mindows/mds_core_a_inner.h:6      *ABS*:ffffff7f CPSR_IRQENABLE
+../mindows/mds_core_a_inner.h:7      *ABS*:00000080 CPSR_IRQDISABLE
+../mindows/mds_core_a_inner.h:8      *ABS*:ffffffbf CPSR_FIQENABLE
+../mindows/mds_core_a_inner.h:9      *ABS*:00000040 CPSR_FIQDISABLE
+../mindows/mds_core_a.asm:14     .text:00000000 MDS_TickContextSwitch
+../mindows/mds_core_a.asm:55     .text:00000058 MDS_SwiContextSwitch
+../mindows/mds_core_a.asm:97     .text:000000b8 MDS_SwitchToTask
+../mindows/mds_core_a.asm:128    .text:000000d8 MDS_TaskOccurSwi
+../mindows/mds_core_a.asm:115    .text:000000cc MDS_GetChipMode
+../mindows/mds_core_a.asm:140    .text:000000e0 MDS_IntEnable
+../mindows/mds_core_a.asm:155    .text:000000f4 MDS_IntDisable
+../mindows/mds_core_a.asm:17     .text:00000000 $a
+../mindows/mds_core_a.asm:166    .text:00000108 $d
+                   .debug_aranges:0000000c $d
+
+UNDEFINED SYMBOLS
+MDS_TickIsr
+MDS_SwiIsr
+gpstrCurTaskSpAddr
+gpstrNextTaskSpAddr

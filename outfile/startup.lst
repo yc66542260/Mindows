@@ -1,0 +1,370 @@
+ARM GAS  ../others/startup.s 			page 1
+
+
+   1              	#/***********************************************************************/
+   2              	#/*  This file is part of the uVision/ARM development tools             */
+   3              	#/*  Copyright KEIL ELEKTRONIK GmbH 2002-2004                           */
+   4              	#/***********************************************************************/
+   5              	#/*                                                                     */
+   6              	#/*  STARTUP.S:  Startup file ADI ADuC702x device series                */
+   7              	#/*                                                                     */
+   8              	#/***********************************************************************/
+   9              	
+  10              	
+  11              	/*
+  12              	//*** <<< Use Configuration Wizard in Context Menu >>> ***
+  13              	*/
+  14              	
+  15              	
+  16              	# *** Startup Code (executed after Reset) ***
+  17              	
+  18              	
+  19              	# Standard definitions of Mode bits and Interrupt (I & F) flags in PSRs
+  20              	
+  21              	        .equ    Mode_USR,       0x10
+  22              	        .equ    Mode_FIQ,       0x11
+  23              	        .equ    Mode_IRQ,       0x12
+  24              	        .equ    Mode_SVC,       0x13
+  25              	        .equ    Mode_ABT,       0x17
+  26              	        .equ    Mode_UND,       0x1B
+  27              	        .equ    Mode_SYS,       0x1F
+  28              	
+  29              	        .equ    I_Bit,          0x80    /* when I bit is set, IRQ is disabled */
+  30              	        .equ    F_Bit,          0x40    /* when F bit is set, FIQ is disabled */
+  31              	
+  32              	
+  33              	
+  34              	        .equ    Top_Stack,      0x00012000
+  35              	        .equ    UND_Stack_Size, 0x00000004
+  36              	        .equ    SVC_Stack_Size, 0x00000200
+  37              	        .equ    ABT_Stack_Size, 0x00000004
+  38              	        .equ    FIQ_Stack_Size, 0x00000200
+  39              	        .equ    IRQ_Stack_Size, 0x00000200
+  40              	        .equ    USR_Stack_Size, 0x00000200
+  41              	
+  42              	
+  43              	# MMR definitions
+  44              	        .equ    MMR_BASE,       0xFFFF0000     /* MMR Base Address */
+  45              	        .equ    POWKEY1_OFFSET,     0x0404
+  46              	        .equ    POWCON_OFFSET,      0x0408
+  47              	        .equ    POWKEY2_OFFSET,     0x040C
+  48              	
+  49              	
+  50              	
+  51              	        .equ    PLL_SETUP,      1
+  52              	        .equ    PLLCFG_Val,     0x00000000
+  53              	
+  54              	
+  55              	
+  56              	        .equ    GPIO_SETUP,     0
+  57              	        .equ    GPIOBASE,       0xFFFFF400
+ARM GAS  ../others/startup.s 			page 2
+
+
+  58              	
+  59              	
+  60              	        .equ    GP0CON_Val,     0x00000000
+  61              	
+  62              	
+  63              	        .equ    GP1CON_Val,     0x00000000
+  64              	
+  65              	
+  66              	        .equ    GP2CON_Val,     0x00000000
+  67              	
+  68              	
+  69              	        .equ    GP3CON_Val,     0x00000000
+  70              	
+  71              	
+  72              	        .equ    GP4CON_Val,     0x00000000
+  73              	
+  74              	
+  75              	        .equ    XM_SETUP,       0
+  76              	        .equ    XMBASE,         0xFFFFF000
+  77              	
+  78              	
+  79              	        .equ    XM0CON_Val,     0x00000000
+  80              	        .equ    XM0PAR_Val,     0x000070FF
+  81              	
+  82              	
+  83              	        .equ    XM1CON_Val,     0x00000000
+  84              	        .equ    XM1PAR_Val,     0x000070FF
+  85              	
+  86              	
+  87              	        .equ    XM2CON_Val,     0x00000000
+  88              	        .equ    XM2PAR_Val,     0x000070FF
+  89              	
+  90              	
+  91              	        .equ    XM3CON_Val,     0x00000000
+  92              	        .equ    XM3PAR_Val,     0x000070FF
+  93              	
+  94              	
+  95              	        .equ    XMCFG_Val,      0x00000001
+  96              	
+  97              	
+  98              	        .equ    En_StdIO,       0
+  99              	
+ 100              	
+ 101              	# Starupt Code must be linked first at Address at which it expects to run.
+ 102              	
+ 103              	        .text
+ 104              	        .arm
+ 105              	
+ 106              	        .global _startup
+ 107              	        .func   _startup
+ 108              	_startup:
+ 109              	
+ 110              	
+ 111              	# Exception Vectors
+ 112              	#  Mapped to Address 0.
+ 113              	#  Absolute addressing mode must be used.
+ 114              	#  Dummy Handlers are implemented as infinite loops which can be modified.
+ARM GAS  ../others/startup.s 			page 3
+
+
+ 115              	
+ 116 0000 18F09FE5 	Vectors:        LDR     PC, Reset_Addr
+ 117 0004 18F09FE5 	                LDR     PC, Undef_Addr
+ 118 0008 18F09FE5 	                LDR     PC, SWI_Addr
+ 119 000c 18F09FE5 	                LDR     PC, PAbt_Addr
+ 120 0010 18F09FE5 	                LDR     PC, DAbt_Addr
+ 121 0014 0000A0E1 	                NOP                            /* Reserved Vector */
+ 122 0018 14F09FE5 	                LDR     PC, IRQ_Addr
+ 123 001c 14F09FE5 	                LDR     PC, FIQ_Addr
+ 124              	
+ 125 0020 3C000000 	Reset_Addr:     .word   Reset_Handler
+ 126 0024 00000000 	Undef_Addr:     .word   ADI_UNDEF_Interrupt_Setup
+ 127 0028 00000000 	SWI_Addr:       .word   MDS_SwiContextSwitch
+ 128 002c 00000000 	PAbt_Addr:      .word   ADI_PABORT_Interrupt_Setup
+ 129 0030 00000000 	DAbt_Addr:      .word   ADI_DABORT_Interrupt_Setup
+ 130 0034 00000000 	IRQ_Addr:       .word   MDS_TickContextSwitch
+ 131 0038 00000000 	FIQ_Addr:       .word   ADI_FIQ_Interrupt_Setup
+ 132              	
+ 133              	# Reset Handler
+ 134              	
+ 135              	Reset_Handler:
+ 136              	
+ 137              	
+ 138              	.if PLL_SETUP
+ 139 003c A4009FE5 	                LDR     R0, =MMR_BASE
+ 140 0040 0110A0E3 	                MOV     R1, #0x01
+ 141 0044 041480E5 	                STR     R1, [R0,#POWKEY1_OFFSET]
+ 142 0048 0010A0E3 	                MOV     R1, #PLLCFG_Val
+ 143 004c 081480E5 	                STR     R1, [R0,#POWCON_OFFSET]
+ 144 0050 F410A0E3 	                MOV     R1, #0xF4
+ 145 0054 0C1480E5 	                STR     R1, [R0,#POWKEY2_OFFSET]
+ 146              	.endif
+ 147              	
+ 148              	
+ 149              	# Setup Pins
+ 150              	.if GPIO_SETUP
+ 151              	
+ 152              	                ADR     R10, GPIO_CFG          /* Pointer to GPIO CFG */
+ 153              	                LDMIA   R10, {R0-R5}           /* Load GPIO Configuration */
+ 154              	                STMIA   R0, {R1-R5}            /* Store GPxCON */
+ 155              	                B       GPIO_END
+ 156              	
+ 157              	GPIO_CFG:       .word   GPIOBASE
+ 158              	                .word   GP0CON_Val
+ 159              	                .word   GP1CON_Val
+ 160              	                .word   GP2CON_Val
+ 161              	                .word   GP3CON_Val
+ 162              	                .word   GP4CON_Val
+ 163              	GPIO_END:
+ 164              	
+ 165              	.endif  /* GPIO_SETUP */
+ 166              	
+ 167              	
+ 168              	# Setup External Memory Interface
+ 169              	.if XM_SETUP
+ 170              	
+ 171              	                ADR     R10, XM_CFG            /* Pointer to XM CFG */
+ARM GAS  ../others/startup.s 			page 4
+
+
+ 172              	                LDMIA   R10, {R0-R9}           /* Load XM Configuration */
+ 173              	                STR     R1, [R0],#0x10         /* Store XMCFG */
+ 174              	                STMIA   R0, {R2-R9}            /* Store XMxCON & XMxPAR */
+ 175              	                B       XM_END
+ 176              	
+ 177              	XM_CFG:         .word   XMBASE
+ 178              	                .word   XMCFG_Val
+ 179              	                .word   XM0CON_Val
+ 180              	                .word   XM1CON_Val
+ 181              	                .word   XM2CON_Val
+ 182              	                .word   XM3CON_Val
+ 183              	                .word   XM0PAR_Val
+ 184              	                .word   XM1PAR_Val
+ 185              	                .word   XM2PAR_Val
+ 186              	                .word   XM3PAR_Val
+ 187              	XM_END:
+ 188              	
+ 189              	.endif  /* XM_SETUP */
+ 190              	
+ 191              	
+ 192              	# Setup Stack for each mode
+ 193              	
+ 194 0058 120AA0E3 	                LDR     R0, =Top_Stack
+ 195              	
+ 196              	#  Enter Undefined Instruction Mode and set its Stack Pointer
+ 197 005c DBF021E3 	                MSR     CPSR_c, #Mode_UND|I_Bit|F_Bit
+ 198 0060 00D0A0E1 	                MOV     SP, R0
+ 199 0064 040040E2 	                SUB     R0, R0, #UND_Stack_Size
+ 200              	
+ 201              	#  Enter Abort Mode and set its Stack Pointer
+ 202 0068 D7F021E3 	                MSR     CPSR_c, #Mode_ABT|I_Bit|F_Bit
+ 203 006c 00D0A0E1 	                MOV     SP, R0
+ 204 0070 040040E2 	                SUB     R0, R0, #ABT_Stack_Size
+ 205              	
+ 206              	#  Enter FIQ Mode and set its Stack Pointer
+ 207 0074 D1F021E3 	                MSR     CPSR_c, #Mode_FIQ|I_Bit|F_Bit
+ 208 0078 00D0A0E1 	                MOV     SP, R0
+ 209 007c 020C40E2 	                SUB     R0, R0, #FIQ_Stack_Size
+ 210              	
+ 211              	#  Enter IRQ Mode and set its Stack Pointer
+ 212 0080 D2F021E3 	                MSR     CPSR_c, #Mode_IRQ|I_Bit|F_Bit
+ 213 0084 00D0A0E1 	                MOV     SP, R0
+ 214 0088 020C40E2 	                SUB     R0, R0, #IRQ_Stack_Size
+ 215              	
+ 216              	#  Enter Supervisor Mode and set its Stack Pointer
+ 217 008c D3F021E3 	                MSR     CPSR_c, #Mode_SVC|I_Bit|F_Bit
+ 218 0090 00D0A0E1 	                MOV     SP, R0
+ 219 0094 020C40E2 	                SUB     R0, R0, #SVC_Stack_Size
+ 220              	
+ 221              	#  Enter User Mode and set its Stack Pointer
+ 222 0098 10F021E3 	                MSR     CPSR_c, #Mode_USR
+ 223 009c 00D0A0E1 	                MOV     SP, R0
+ 224              	
+ 225              	#  Setup a default Stack Limit (when compiled with "-mapcs-stack-check")
+ 226 00a0 02AC4DE2 	                SUB     SL, SP, #USR_Stack_Size
+ 227              	
+ 228              	
+ARM GAS  ../others/startup.s 			page 5
+
+
+ 229              	# Relocate .data section (Copy from ROM to RAM)
+ 230 00a4 40109FE5 	                LDR     R1, =_etext
+ 231 00a8 40209FE5 	                LDR     R2, =_data
+ 232 00ac 40309FE5 	                LDR     R3, =_edata
+ 233 00b0 030052E1 	LoopRel:        CMP     R2, R3
+ 234 00b4 04009134 	                LDRLO   R0, [R1], #4
+ 235 00b8 04008234 	                STRLO   R0, [R2], #4
+ 236 00bc FBFFFF3A 	                BLO     LoopRel
+ 237              	
+ 238              	
+ 239              	# Clear .bss section (Zero init)
+ 240 00c0 0000A0E3 	                MOV     R0, #0
+ 241 00c4 2C109FE5 	                LDR     R1, =__bss_start__
+ 242 00c8 2C209FE5 	                LDR     R2, =__bss_end__
+ 243 00cc 020051E1 	LoopZI:         CMP     R1, R2
+ 244 00d0 04008134 	                STRLO   R0, [R1], #4
+ 245 00d4 FCFFFF3A 	                BLO     LoopZI
+ 246              	
+ 247              	
+ 248              	# Enter the C code
+ 249              	
+ 250              	.if En_StdIO
+ 251              	
+ 252              	# Enter the standard system startup code required for stdlib I/O
+ 253              	                B       _start
+ 254              	
+ 255              	.else
+ 256              	
+ 257 00d8 20E09FE5 	                LDR     LR, =__Return_from_main
+ 258 00dc 20009FE5 	                LDR     R0, =main
+ 259 00e0 10FF2FE1 	                BX      R0
+ 260              	
+ 261              	__Return_from_main:
+ 262 00e4 FEFFFFEA 	                B       __Return_from_main
+ 263              	
+ 264              	.endif
+ 265              	
+ 266              	
+ 267              	        .size   _startup, . - _startup
+ 268              	        .endfunc
+ 269              	
+ 270              	
+ 271 00e8 0000FFFF 	        .end
+ 271      00000000 
+ 271      00000000 
+ 271      00000000 
+ 271      00000000 
+ARM GAS  ../others/startup.s 			page 6
+
+
+DEFINED SYMBOLS
+ ../others/startup.s:21     *ABS*:00000010 Mode_USR
+ ../others/startup.s:22     *ABS*:00000011 Mode_FIQ
+ ../others/startup.s:23     *ABS*:00000012 Mode_IRQ
+ ../others/startup.s:24     *ABS*:00000013 Mode_SVC
+ ../others/startup.s:25     *ABS*:00000017 Mode_ABT
+ ../others/startup.s:26     *ABS*:0000001b Mode_UND
+ ../others/startup.s:27     *ABS*:0000001f Mode_SYS
+ ../others/startup.s:29     *ABS*:00000080 I_Bit
+ ../others/startup.s:30     *ABS*:00000040 F_Bit
+ ../others/startup.s:34     *ABS*:00012000 Top_Stack
+ ../others/startup.s:35     *ABS*:00000004 UND_Stack_Size
+ ../others/startup.s:36     *ABS*:00000200 SVC_Stack_Size
+ ../others/startup.s:37     *ABS*:00000004 ABT_Stack_Size
+ ../others/startup.s:38     *ABS*:00000200 FIQ_Stack_Size
+ ../others/startup.s:39     *ABS*:00000200 IRQ_Stack_Size
+ ../others/startup.s:40     *ABS*:00000200 USR_Stack_Size
+ ../others/startup.s:44     *ABS*:ffff0000 MMR_BASE
+ ../others/startup.s:45     *ABS*:00000404 POWKEY1_OFFSET
+ ../others/startup.s:46     *ABS*:00000408 POWCON_OFFSET
+ ../others/startup.s:47     *ABS*:0000040c POWKEY2_OFFSET
+ ../others/startup.s:51     *ABS*:00000001 PLL_SETUP
+ ../others/startup.s:52     *ABS*:00000000 PLLCFG_Val
+ ../others/startup.s:56     *ABS*:00000000 GPIO_SETUP
+ ../others/startup.s:57     *ABS*:fffff400 GPIOBASE
+ ../others/startup.s:60     *ABS*:00000000 GP0CON_Val
+ ../others/startup.s:63     *ABS*:00000000 GP1CON_Val
+ ../others/startup.s:66     *ABS*:00000000 GP2CON_Val
+ ../others/startup.s:69     *ABS*:00000000 GP3CON_Val
+ ../others/startup.s:72     *ABS*:00000000 GP4CON_Val
+ ../others/startup.s:75     *ABS*:00000000 XM_SETUP
+ ../others/startup.s:76     *ABS*:fffff000 XMBASE
+ ../others/startup.s:79     *ABS*:00000000 XM0CON_Val
+ ../others/startup.s:80     *ABS*:000070ff XM0PAR_Val
+ ../others/startup.s:83     *ABS*:00000000 XM1CON_Val
+ ../others/startup.s:84     *ABS*:000070ff XM1PAR_Val
+ ../others/startup.s:87     *ABS*:00000000 XM2CON_Val
+ ../others/startup.s:88     *ABS*:000070ff XM2PAR_Val
+ ../others/startup.s:91     *ABS*:00000000 XM3CON_Val
+ ../others/startup.s:92     *ABS*:000070ff XM3PAR_Val
+ ../others/startup.s:95     *ABS*:00000001 XMCFG_Val
+ ../others/startup.s:98     *ABS*:00000000 En_StdIO
+ ../others/startup.s:108    .text:00000000 _startup
+ ../others/startup.s:116    .text:00000000 Vectors
+ ../others/startup.s:125    .text:00000020 Reset_Addr
+ ../others/startup.s:116    .text:00000000 $a
+ ../others/startup.s:126    .text:00000024 Undef_Addr
+ ../others/startup.s:127    .text:00000028 SWI_Addr
+ ../others/startup.s:128    .text:0000002c PAbt_Addr
+ ../others/startup.s:129    .text:00000030 DAbt_Addr
+ ../others/startup.s:130    .text:00000034 IRQ_Addr
+ ../others/startup.s:131    .text:00000038 FIQ_Addr
+ ../others/startup.s:125    .text:00000020 $d
+ ../others/startup.s:135    .text:0000003c Reset_Handler
+ ../others/startup.s:139    .text:0000003c $a
+ ../others/startup.s:233    .text:000000b0 LoopRel
+ ../others/startup.s:243    .text:000000cc LoopZI
+ARM GAS  ../others/startup.s 			page 7
+
+
+ ../others/startup.s:261    .text:000000e4 __Return_from_main
+ ../others/startup.s:271    .text:000000e8 $d
+                   .debug_aranges:0000000c $d
+
+UNDEFINED SYMBOLS
+ADI_UNDEF_Interrupt_Setup
+MDS_SwiContextSwitch
+ADI_PABORT_Interrupt_Setup
+ADI_DABORT_Interrupt_Setup
+MDS_TickContextSwitch
+ADI_FIQ_Interrupt_Setup
+_etext
+_data
+_edata
+__bss_start__
+__bss_end__
+main

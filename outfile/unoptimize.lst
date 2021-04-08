@@ -1,0 +1,447 @@
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc7IBC3y.s 			page 1
+
+
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 2
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"unoptimize.c"
+  12              		.section	.debug_abbrev,"",%progbits
+  13              	.Ldebug_abbrev0:
+  14              		.section	.debug_info,"",%progbits
+  15              	.Ldebug_info0:
+  16              		.section	.debug_line,"",%progbits
+  17              	.Ldebug_line0:
+  18 0000 65000000 		.text
+  18      02004900 
+  18      00000201 
+  18      FB0E0D00 
+  18      01010101 
+  19              	.Ltext0:
+  20              		.cfi_sections	.debug_frame
+  21              		.align	2
+  22              		.global	DEV_DelayMs
+  23              		.type	DEV_DelayMs, %function
+  24              	DEV_DelayMs:
+  25              		.fnstart
+  26              	.LFB0:
+  27              		.file 1 "../srccode/unoptimize.c"
+   1:../srccode/unoptimize.c **** 
+   2:../srccode/unoptimize.c **** #include "global.h"
+   3:../srccode/unoptimize.c **** 
+   4:../srccode/unoptimize.c **** 
+   5:../srccode/unoptimize.c **** /***********************************************************************************
+   6:../srccode/unoptimize.c **** 函数功能: 延迟ms函数, 采用死循环延迟时间, 该函数的延迟时间与编译选项及芯片时钟相关.
+   7:../srccode/unoptimize.c **** 入口参数: uiMs: 要延迟的时间, 单位ms.
+   8:../srccode/unoptimize.c **** 返 回 值: none.
+   9:../srccode/unoptimize.c **** ***********************************************************************************/
+  10:../srccode/unoptimize.c **** void DEV_DelayMs(U32 uiMs)
+  11:../srccode/unoptimize.c **** {
+  28              		.loc 1 11 0
+  29              		.cfi_startproc
+  30              		@ Function supports interworking.
+  31              		@ args = 0, pretend = 0, frame = 16
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33              		.movsp ip
+  34 0000 0DC0A0E1 		mov	ip, sp
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_register 12
+  37 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+  38              		.pad #4
+  39              		.save {fp, ip, lr}
+  40              		.setfp fp, ip, #-4
+  41 0008 04B04CE2 		sub	fp, ip, #4
+  42              		.cfi_offset 14, -8
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc7IBC3y.s 			page 2
+
+
+  43              		.cfi_offset 13, -12
+  44              		.cfi_offset 11, -16
+  45              	.LCFI1:
+  46              		.cfi_def_cfa 11, 4
+  47              		.pad #16
+  48 000c 10D04DE2 		sub	sp, sp, #16
+  49 0010 18000BE5 		str	r0, [fp, #-24]
+  12:../srccode/unoptimize.c ****     U32 i;
+  13:../srccode/unoptimize.c ****     U32 j;
+  14:../srccode/unoptimize.c **** 
+  15:../srccode/unoptimize.c ****     j = 1265 * uiMs;
+  50              		.loc 1 15 0
+  51 0014 18201BE5 		ldr	r2, [fp, #-24]
+  52 0018 0230A0E1 		mov	r3, r2
+  53 001c 0333A0E1 		mov	r3, r3, asl #6
+  54 0020 033062E0 		rsb	r3, r2, r3
+  55 0024 0331A0E1 		mov	r3, r3, asl #2
+  56 0028 023083E0 		add	r3, r3, r2
+  57 002c 0321A0E1 		mov	r2, r3, asl #2
+  58 0030 023083E0 		add	r3, r3, r2
+  59 0034 14300BE5 		str	r3, [fp, #-20]
+  16:../srccode/unoptimize.c **** 
+  17:../srccode/unoptimize.c ****     for(i = 0; ; i++)
+  60              		.loc 1 17 0
+  61 0038 0030A0E3 		mov	r3, #0
+  62 003c 10300BE5 		str	r3, [fp, #-16]
+  63              	.L3:
+  18:../srccode/unoptimize.c ****     {
+  19:../srccode/unoptimize.c ****         if(i == j)
+  64              		.loc 1 19 0
+  65 0040 10201BE5 		ldr	r2, [fp, #-16]
+  66 0044 14301BE5 		ldr	r3, [fp, #-20]
+  67 0048 030052E1 		cmp	r2, r3
+  68 004c 0300000A 		beq	.L5
+  69              	.L2:
+  17:../srccode/unoptimize.c ****     for(i = 0; ; i++)
+  70              		.loc 1 17 0
+  71 0050 10301BE5 		ldr	r3, [fp, #-16]
+  72 0054 013083E2 		add	r3, r3, #1
+  73 0058 10300BE5 		str	r3, [fp, #-16]
+  20:../srccode/unoptimize.c ****         {
+  21:../srccode/unoptimize.c ****             break;
+  22:../srccode/unoptimize.c ****         }
+  23:../srccode/unoptimize.c ****     }
+  74              		.loc 1 23 0
+  75 005c F7FFFFEA 		b	.L3
+  76              	.L5:
+  24:../srccode/unoptimize.c **** }
+  77              		.loc 1 24 0
+  78 0060 0000A0E1 		mov	r0, r0	@ nop
+  79              	.L4:
+  80 0064 0CD04BE2 		sub	sp, fp, #12
+  81 0068 00689DE8 		ldmfd	sp, {fp, sp, lr}
+  82 006c 1EFF2FE1 		bx	lr
+  83              		.cfi_endproc
+  84              	.LFE0:
+  85              		.fnend
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc7IBC3y.s 			page 3
+
+
+  86              		.size	DEV_DelayMs, .-DEV_DelayMs
+  87              	.Letext0:
+  88              		.section	.debug_loc,"",%progbits
+  89              	.Ldebug_loc0:
+  90              	.LLST0:
+  91 0000 00000000 		.4byte	.LFB0-.Ltext0
+  92 0004 04000000 		.4byte	.LCFI0-.Ltext0
+  93 0008 0200     		.2byte	0x2
+  94 000a 7D       		.byte	0x7d
+  95 000b 00       		.sleb128 0
+  96 000c 04000000 		.4byte	.LCFI0-.Ltext0
+  97 0010 0C000000 		.4byte	.LCFI1-.Ltext0
+  98 0014 0200     		.2byte	0x2
+  99 0016 7C       		.byte	0x7c
+ 100 0017 00       		.sleb128 0
+ 101 0018 0C000000 		.4byte	.LCFI1-.Ltext0
+ 102 001c 70000000 		.4byte	.LFE0-.Ltext0
+ 103 0020 0200     		.2byte	0x2
+ 104 0022 7B       		.byte	0x7b
+ 105 0023 04       		.sleb128 4
+ 106 0024 00000000 		.4byte	0x0
+ 107 0028 00000000 		.4byte	0x0
+ 108              		.file 2 "../mindows/mds_mdsdef.h"
+ 109              		.section	.debug_info
+ 110 0000 9A000000 		.4byte	0x9a
+ 111 0004 0200     		.2byte	0x2
+ 112 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 113 000a 04       		.byte	0x4
+ 114 000b 01       		.uleb128 0x1
+ 115 000c 00000000 		.4byte	.LASF6
+ 116 0010 01       		.byte	0x1
+ 117 0011 75000000 		.4byte	.LASF7
+ 118 0015 19000000 		.4byte	.LASF8
+ 119 0019 00000000 		.4byte	.Ltext0
+ 120 001d 70000000 		.4byte	.Letext0
+ 121 0021 00000000 		.4byte	.Ldebug_line0
+ 122 0025 02       		.uleb128 0x2
+ 123 0026 04       		.byte	0x4
+ 124 0027 07       		.byte	0x7
+ 125 0028 8D000000 		.4byte	.LASF0
+ 126 002c 02       		.uleb128 0x2
+ 127 002d 04       		.byte	0x4
+ 128 002e 07       		.byte	0x7
+ 129 002f 0C000000 		.4byte	.LASF1
+ 130 0033 02       		.uleb128 0x2
+ 131 0034 01       		.byte	0x1
+ 132 0035 08       		.byte	0x8
+ 133 0036 67000000 		.4byte	.LASF2
+ 134 003a 02       		.uleb128 0x2
+ 135 003b 02       		.byte	0x2
+ 136 003c 07       		.byte	0x7
+ 137 003d 39000000 		.4byte	.LASF3
+ 138 0041 03       		.uleb128 0x3
+ 139 0042 55333200 		.ascii	"U32\000"
+ 140 0046 02       		.byte	0x2
+ 141 0047 09       		.byte	0x9
+ 142 0048 2C000000 		.4byte	0x2c
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc7IBC3y.s 			page 4
+
+
+ 143 004c 02       		.uleb128 0x2
+ 144 004d 01       		.byte	0x1
+ 145 004e 08       		.byte	0x8
+ 146 004f 56000000 		.4byte	.LASF4
+ 147 0053 02       		.uleb128 0x2
+ 148 0054 02       		.byte	0x2
+ 149 0055 05       		.byte	0x5
+ 150 0056 4C000000 		.4byte	.LASF5
+ 151 005a 04       		.uleb128 0x4
+ 152 005b 04       		.byte	0x4
+ 153 005c 05       		.byte	0x5
+ 154 005d 696E7400 		.ascii	"int\000"
+ 155 0061 05       		.uleb128 0x5
+ 156 0062 01       		.byte	0x1
+ 157 0063 5B000000 		.4byte	.LASF9
+ 158 0067 01       		.byte	0x1
+ 159 0068 0A       		.byte	0xa
+ 160 0069 01       		.byte	0x1
+ 161 006a 00000000 		.4byte	.LFB0
+ 162 006e 70000000 		.4byte	.LFE0
+ 163 0072 00000000 		.4byte	.LLST0
+ 164 0076 06       		.uleb128 0x6
+ 165 0077 9F000000 		.4byte	.LASF10
+ 166 007b 01       		.byte	0x1
+ 167 007c 0A       		.byte	0xa
+ 168 007d 41000000 		.4byte	0x41
+ 169 0081 02       		.byte	0x2
+ 170 0082 91       		.byte	0x91
+ 171 0083 64       		.sleb128 -28
+ 172 0084 07       		.uleb128 0x7
+ 173 0085 6900     		.ascii	"i\000"
+ 174 0087 01       		.byte	0x1
+ 175 0088 0C       		.byte	0xc
+ 176 0089 41000000 		.4byte	0x41
+ 177 008d 02       		.byte	0x2
+ 178 008e 91       		.byte	0x91
+ 179 008f 6C       		.sleb128 -20
+ 180 0090 07       		.uleb128 0x7
+ 181 0091 6A00     		.ascii	"j\000"
+ 182 0093 01       		.byte	0x1
+ 183 0094 0D       		.byte	0xd
+ 184 0095 41000000 		.4byte	0x41
+ 185 0099 02       		.byte	0x2
+ 186 009a 91       		.byte	0x91
+ 187 009b 68       		.sleb128 -24
+ 188 009c 00       		.byte	0x0
+ 189 009d 00       		.byte	0x0
+ 190              		.section	.debug_abbrev
+ 191 0000 01       		.uleb128 0x1
+ 192 0001 11       		.uleb128 0x11
+ 193 0002 01       		.byte	0x1
+ 194 0003 25       		.uleb128 0x25
+ 195 0004 0E       		.uleb128 0xe
+ 196 0005 13       		.uleb128 0x13
+ 197 0006 0B       		.uleb128 0xb
+ 198 0007 03       		.uleb128 0x3
+ 199 0008 0E       		.uleb128 0xe
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc7IBC3y.s 			page 5
+
+
+ 200 0009 1B       		.uleb128 0x1b
+ 201 000a 0E       		.uleb128 0xe
+ 202 000b 11       		.uleb128 0x11
+ 203 000c 01       		.uleb128 0x1
+ 204 000d 12       		.uleb128 0x12
+ 205 000e 01       		.uleb128 0x1
+ 206 000f 10       		.uleb128 0x10
+ 207 0010 06       		.uleb128 0x6
+ 208 0011 00       		.byte	0x0
+ 209 0012 00       		.byte	0x0
+ 210 0013 02       		.uleb128 0x2
+ 211 0014 24       		.uleb128 0x24
+ 212 0015 00       		.byte	0x0
+ 213 0016 0B       		.uleb128 0xb
+ 214 0017 0B       		.uleb128 0xb
+ 215 0018 3E       		.uleb128 0x3e
+ 216 0019 0B       		.uleb128 0xb
+ 217 001a 03       		.uleb128 0x3
+ 218 001b 0E       		.uleb128 0xe
+ 219 001c 00       		.byte	0x0
+ 220 001d 00       		.byte	0x0
+ 221 001e 03       		.uleb128 0x3
+ 222 001f 16       		.uleb128 0x16
+ 223 0020 00       		.byte	0x0
+ 224 0021 03       		.uleb128 0x3
+ 225 0022 08       		.uleb128 0x8
+ 226 0023 3A       		.uleb128 0x3a
+ 227 0024 0B       		.uleb128 0xb
+ 228 0025 3B       		.uleb128 0x3b
+ 229 0026 0B       		.uleb128 0xb
+ 230 0027 49       		.uleb128 0x49
+ 231 0028 13       		.uleb128 0x13
+ 232 0029 00       		.byte	0x0
+ 233 002a 00       		.byte	0x0
+ 234 002b 04       		.uleb128 0x4
+ 235 002c 24       		.uleb128 0x24
+ 236 002d 00       		.byte	0x0
+ 237 002e 0B       		.uleb128 0xb
+ 238 002f 0B       		.uleb128 0xb
+ 239 0030 3E       		.uleb128 0x3e
+ 240 0031 0B       		.uleb128 0xb
+ 241 0032 03       		.uleb128 0x3
+ 242 0033 08       		.uleb128 0x8
+ 243 0034 00       		.byte	0x0
+ 244 0035 00       		.byte	0x0
+ 245 0036 05       		.uleb128 0x5
+ 246 0037 2E       		.uleb128 0x2e
+ 247 0038 01       		.byte	0x1
+ 248 0039 3F       		.uleb128 0x3f
+ 249 003a 0C       		.uleb128 0xc
+ 250 003b 03       		.uleb128 0x3
+ 251 003c 0E       		.uleb128 0xe
+ 252 003d 3A       		.uleb128 0x3a
+ 253 003e 0B       		.uleb128 0xb
+ 254 003f 3B       		.uleb128 0x3b
+ 255 0040 0B       		.uleb128 0xb
+ 256 0041 27       		.uleb128 0x27
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc7IBC3y.s 			page 6
+
+
+ 257 0042 0C       		.uleb128 0xc
+ 258 0043 11       		.uleb128 0x11
+ 259 0044 01       		.uleb128 0x1
+ 260 0045 12       		.uleb128 0x12
+ 261 0046 01       		.uleb128 0x1
+ 262 0047 40       		.uleb128 0x40
+ 263 0048 06       		.uleb128 0x6
+ 264 0049 00       		.byte	0x0
+ 265 004a 00       		.byte	0x0
+ 266 004b 06       		.uleb128 0x6
+ 267 004c 05       		.uleb128 0x5
+ 268 004d 00       		.byte	0x0
+ 269 004e 03       		.uleb128 0x3
+ 270 004f 0E       		.uleb128 0xe
+ 271 0050 3A       		.uleb128 0x3a
+ 272 0051 0B       		.uleb128 0xb
+ 273 0052 3B       		.uleb128 0x3b
+ 274 0053 0B       		.uleb128 0xb
+ 275 0054 49       		.uleb128 0x49
+ 276 0055 13       		.uleb128 0x13
+ 277 0056 02       		.uleb128 0x2
+ 278 0057 0A       		.uleb128 0xa
+ 279 0058 00       		.byte	0x0
+ 280 0059 00       		.byte	0x0
+ 281 005a 07       		.uleb128 0x7
+ 282 005b 34       		.uleb128 0x34
+ 283 005c 00       		.byte	0x0
+ 284 005d 03       		.uleb128 0x3
+ 285 005e 08       		.uleb128 0x8
+ 286 005f 3A       		.uleb128 0x3a
+ 287 0060 0B       		.uleb128 0xb
+ 288 0061 3B       		.uleb128 0x3b
+ 289 0062 0B       		.uleb128 0xb
+ 290 0063 49       		.uleb128 0x49
+ 291 0064 13       		.uleb128 0x13
+ 292 0065 02       		.uleb128 0x2
+ 293 0066 0A       		.uleb128 0xa
+ 294 0067 00       		.byte	0x0
+ 295 0068 00       		.byte	0x0
+ 296 0069 00       		.byte	0x0
+ 297              		.section	.debug_pubnames,"",%progbits
+ 298 0000 1E000000 		.4byte	0x1e
+ 299 0004 0200     		.2byte	0x2
+ 300 0006 00000000 		.4byte	.Ldebug_info0
+ 301 000a 9E000000 		.4byte	0x9e
+ 302 000e 61000000 		.4byte	0x61
+ 303 0012 4445565F 		.ascii	"DEV_DelayMs\000"
+ 303      44656C61 
+ 303      794D7300 
+ 304 001e 00000000 		.4byte	0x0
+ 305              		.section	.debug_pubtypes,"",%progbits
+ 306 0000 16000000 		.4byte	0x16
+ 307 0004 0200     		.2byte	0x2
+ 308 0006 00000000 		.4byte	.Ldebug_info0
+ 309 000a 9E000000 		.4byte	0x9e
+ 310 000e 41000000 		.4byte	0x41
+ 311 0012 55333200 		.ascii	"U32\000"
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc7IBC3y.s 			page 7
+
+
+ 312 0016 00000000 		.4byte	0x0
+ 313              		.section	.debug_aranges,"",%progbits
+ 314 0000 1C000000 		.4byte	0x1c
+ 315 0004 0200     		.2byte	0x2
+ 316 0006 00000000 		.4byte	.Ldebug_info0
+ 317 000a 04       		.byte	0x4
+ 318 000b 00       		.byte	0x0
+ 319 000c 0000     		.2byte	0x0
+ 320 000e 0000     		.2byte	0x0
+ 321 0010 00000000 		.4byte	.Ltext0
+ 322 0014 70000000 		.4byte	.Letext0-.Ltext0
+ 323 0018 00000000 		.4byte	0x0
+ 324 001c 00000000 		.4byte	0x0
+ 325              		.section	.debug_str,"MS",%progbits,1
+ 326              	.LASF6:
+ 327 0000 474E5520 		.ascii	"GNU C 4.5.2\000"
+ 327      4320342E 
+ 327      352E3200 
+ 328              	.LASF1:
+ 329 000c 756E7369 		.ascii	"unsigned int\000"
+ 329      676E6564 
+ 329      20696E74 
+ 329      00
+ 330              	.LASF8:
+ 331 0019 463A5C77 		.ascii	"F:\\workdir\\RTOS_Mindows\\project\000"
+ 331      6F726B64 
+ 331      69725C52 
+ 331      544F535F 
+ 331      4D696E64 
+ 332              	.LASF3:
+ 333 0039 73686F72 		.ascii	"short unsigned int\000"
+ 333      7420756E 
+ 333      7369676E 
+ 333      65642069 
+ 333      6E7400
+ 334              	.LASF5:
+ 335 004c 73686F72 		.ascii	"short int\000"
+ 335      7420696E 
+ 335      7400
+ 336              	.LASF4:
+ 337 0056 63686172 		.ascii	"char\000"
+ 337      00
+ 338              	.LASF9:
+ 339 005b 4445565F 		.ascii	"DEV_DelayMs\000"
+ 339      44656C61 
+ 339      794D7300 
+ 340              	.LASF2:
+ 341 0067 756E7369 		.ascii	"unsigned char\000"
+ 341      676E6564 
+ 341      20636861 
+ 341      7200
+ 342              	.LASF7:
+ 343 0075 2E2E2F73 		.ascii	"../srccode/unoptimize.c\000"
+ 343      7263636F 
+ 343      64652F75 
+ 343      6E6F7074 
+ 343      696D697A 
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc7IBC3y.s 			page 8
+
+
+ 344              	.LASF0:
+ 345 008d 6C6F6E67 		.ascii	"long unsigned int\000"
+ 345      20756E73 
+ 345      69676E65 
+ 345      6420696E 
+ 345      7400
+ 346              	.LASF10:
+ 347 009f 75694D73 		.ascii	"uiMs\000"
+ 347      00
+ 348              		.ident	"GCC: (Sourcery G++ Lite 2011.03-41) 4.5.2"
+ 349              		.section	.note.GNU-stack,"",%progbits
+ARM GAS  C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc7IBC3y.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 unoptimize.c
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc7IBC3y.s:21     .text:00000000 $a
+C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\cc7IBC3y.s:24     .text:00000000 DEV_DelayMs
+                       .ARM.extab:00000000 $d
+                       .ARM.exidx:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+__aeabi_unwind_cpp_pr1
